@@ -19,14 +19,21 @@ public class MapView extends Activity {
 		
 		style.set(MapStyle.MAP_SOURCE, MapStyle.OPEN_STREET_MAP);
 		
-		try{
+/*		try{
 			MapView mapView = factory.createMapView(this, style, null, null, arg4);
 			
 		}
 		catch(Exception e){
 			
 		}
+*/
 		
+		
+		
+	}
+	
+	public void dummyFnA(){
+		// This is a dummy function made by iMax
 	}
 
 }
