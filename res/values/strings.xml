@@ -2,5 +2,5 @@
 <resources>
     <string name="hello">This will be the WhatsUp application!</string>
     <string name="app_name">WhatsUp</string>
-    <string name="auth_imax">Committed by iMax</string>
+    <string name="auth_imax">Committed by Ablim</string>
 </resources>
