@@ -30,7 +30,7 @@ public class NetworkCalls {
 	 * @param latitudeB
 	 * @return
 	 */
-	public static String retrieveAnnotationsInRange(double latitudeA,
+	public static String retrieveAnnotationMarkers(double latitudeA,
 			double longitudeA, double latitudeB, double longitudeB) {
 		return performGetRequest(R.string.api_url + "nearby/" + latitudeA + ","
 				+ longitudeA + "," + latitudeB + "," + longitudeB + ".json");
