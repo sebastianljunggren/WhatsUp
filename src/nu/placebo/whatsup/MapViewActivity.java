@@ -7,6 +7,7 @@ import com.google.android.maps.*;
 public class MapViewActivity extends Activity {
 	
 	//private MapView mapView;
+	// Dummy comment
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
