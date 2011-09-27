@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="horizontal"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="?android:attr/listPreferredItemHeight"
+  android:padding="6dip" android:orientation="horizontal">
+    <LinearLayout android:layout_height="match_parent" android:id="@+id/linearLayout1" android:orientation="vertical" android:layout_weight="1" android:layout_width="wrap_content">
+        <LinearLayout android:id="@+id/linearLayout2" android:layout_width="match_parent" android:layout_weight="1" android:layout_height="0dp">
+            <TextView android:text="TextView" android:layout_weight="1" android:layout_height="wrap_content" android:layout_width="0dp" android:id="@+id/list_item_title" android:layout_gravity="top"></TextView>
+            <TextView android:text="TextView" android:layout_weight="1" android:layout_height="wrap_content" android:layout_width="0dp" android:layout_gravity="right" android:id="@+id/list_item_rating" android:gravity="right"></TextView>
+        </LinearLayout>
+        <TextView android:text="TextView" android:layout_weight="1" android:layout_width="wrap_content" android:layout_height="0dp" android:id="@+id/list_item_range"></TextView>
+    </LinearLayout>
+    <ImageView android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="wrap_content" android:id="@+id/list_item_icon"></ImageView>
     
 </LinearLayout>
