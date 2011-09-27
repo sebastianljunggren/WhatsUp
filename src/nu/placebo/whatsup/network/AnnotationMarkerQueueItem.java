@@ -1,5 +1,6 @@
 package nu.placebo.whatsup.network;
 
+
 public class AnnotationMarkerQueueItem implements NetworkQueueItem {
 	private double latitudeA;
 	private double longitudeA;

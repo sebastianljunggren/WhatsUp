@@ -2,14 +2,13 @@ package nu.placebo.whatsup.network;
 
 import java.io.IOException;
 
-import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
-
-import android.net.http.AndroidHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
  * 
@@ -18,8 +17,7 @@ import android.net.http.AndroidHttpClient;
  */
 
 public class NetworkCalls {
-	private static final AndroidHttpClient client = AndroidHttpClient
-			.newInstance("");
+	private static final DefaultHttpClient client = new DefaultHttpClient();
 
 	/**
 	 * Retrieves annotation marker data for a rectangular area.
@@ -32,8 +30,9 @@ public class NetworkCalls {
 	 */
 	public static String retrieveAnnotationMarkers(double latitudeA,
 			double longitudeA, double latitudeB, double longitudeB) {
-		return performGetRequest(R.string.api_url + "nearby/" + latitudeA + ","
-				+ longitudeA + "," + latitudeB + "," + longitudeB + ".json");
+		return performGetRequest(Constants.API_URL + "nearby/" + latitudeA
+				+ "," + longitudeA + "," + latitudeB + "," + longitudeB
+				+ ".json");
 	}
 
 	/**
@@ -44,11 +43,11 @@ public class NetworkCalls {
 	 * @return
 	 */
 	public static String retrieveAnnotation(int nid) {
-		return performGetRequest(R.string.api_url + nid + ".json");
+		return performGetRequest(Constants.API_URL + "node/" + nid + ".json");
 	}
 
 	private static String performGetRequest(String query) {
-		HttpGet request = new HttpGet("query");
+		HttpGet request = new HttpGet(query);
 		String result = null;
 		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
