@@ -3,9 +3,7 @@ package nu.placebo.whatsup.network;
 import java.io.IOException;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.R.string;
 
-import org.apache.commons.logging.Log;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -23,21 +21,44 @@ public class NetworkCalls {
 	private static final AndroidHttpClient client = AndroidHttpClient
 			.newInstance("");
 
-	public static String retrieveAnnotationsInRange(double longitudeA,
-			double latitudeA, double longitudeB, double latitudeB) {
-		HttpGet request = new HttpGet(R.string.api_url + "nearby/" +longitudeA
-				+ "," + latitudeA + "," + longitudeB + "," + latitudeB
-				+ ".json");
+	/**
+	 * Retrieves annotation marker data for a rectangular area.
+	 * 
+	 * @param longitudeA
+	 * @param latitudeA
+	 * @param longitudeB
+	 * @param latitudeB
+	 * @return
+	 */
+	public static String retrieveAnnotationsInRange(double latitudeA,
+			double longitudeA, double latitudeB, double longitudeB) {
+		return performGetRequest(R.string.api_url + "nearby/" + latitudeA + ","
+				+ longitudeA + "," + latitudeB + "," + longitudeB + ".json");
+	}
+
+	/**
+	 * Retrieves an annotation from the server
+	 * 
+	 * @param nid
+	 *            the ID of the annotation
+	 * @return
+	 */
+	public static String retrieveAnnotation(int nid) {
+		return performGetRequest(R.string.api_url + nid + ".json");
+	}
+
+	private static String performGetRequest(String query) {
+		HttpGet request = new HttpGet("query");
 		String result = null;
-        ResponseHandler<String> handler = new BasicResponseHandler();  
-        try {  
-            result = client.execute(request, handler);  
-        } catch (ClientProtocolException e) {  
-            e.printStackTrace();  
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        }  
-        client.getConnectionManager().shutdown(); 
-        return result;
+		ResponseHandler<String> handler = new BasicResponseHandler();
+		try {
+			result = client.execute(request, handler);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		client.getConnectionManager().shutdown();
+		return result;
 	}
 }
