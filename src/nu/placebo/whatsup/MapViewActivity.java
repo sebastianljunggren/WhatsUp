@@ -11,11 +11,19 @@ public class MapViewActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.map);
 		
 	}
 	
 	
 	
-	
+	private void addMarker(){
+		// Get map center
+		
+		// Create a marker (overlay item or something)
+		
+		// Place it on top of the map
+		
+		// Be happy =)
+	}
 }
