@@ -4,10 +4,26 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
+    
+	<TextView  
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="@string/hello"
     />
-<TextView android:text="@string/auth_imax" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textView1"></TextView>
+    
+    <MapView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/mapview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:clickable="true"
+	    android:apiKey="Your Maps API Key goes here"
+	/>
+	
+	<TextView 
+		android:text="@string/auth_imax" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:id="@+id/textView1">
+	</TextView>
 </LinearLayout>
