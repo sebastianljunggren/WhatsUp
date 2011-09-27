@@ -17,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 
 public class NetworkCalls {
-	private static final DefaultHttpClient client = new DefaultHttpClient();
 
 	/**
 	 * Retrieves annotation marker data for a rectangular area.
@@ -47,6 +46,7 @@ public class NetworkCalls {
 	}
 
 	private static String performGetRequest(String query) {
+		DefaultHttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet(query);
 		String result = null;
 		ResponseHandler<String> handler = new BasicResponseHandler();

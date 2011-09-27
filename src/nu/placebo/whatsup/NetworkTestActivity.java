@@ -14,9 +14,9 @@ public class NetworkTestActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.network_test_activity);
 		final TextView tv1 = (TextView) this.findViewById(R.id.networkResult1);
-		final TextView tv2 = (TextView) this.findViewById(R.id.neworkResult2);
-		tv1.setText("hej");
-		tv2.setText(NetworkCalls.retrieveAnnotation(103));
+		final TextView tv2 = (TextView) this.findViewById(R.id.networkResult2);
+		tv1.setText(NetworkCalls.retrieveAnnotation((int) (Math.random()*1000) + 1));
+		tv2.setText(NetworkCalls.retrieveAnnotationMarkers(0, 0, 90, 90));
 	}
 
 }
