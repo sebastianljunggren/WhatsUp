@@ -1,19 +1,20 @@
 package nu.placebo.whatsup;
 
-import android.app.Activity;
 import android.os.Bundle;
 import com.google.android.maps.*;
 
-public class MapViewActivity extends Activity {
-	
-	//private MapView mapView;
-	// Dummy comment
+public class MapViewActivity extends MapActivity {
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-		
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
 	}
 	
 	
