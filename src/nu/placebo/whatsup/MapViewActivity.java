@@ -5,11 +5,15 @@ import com.google.android.maps.*;
 
 public class MapViewActivity extends MapActivity {
 
+	private MapView mapView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
+		
+		mapView = (MapView) findViewById(R.id.mapview);
+		mapView.setBuiltInZoomControls(true);
 	}
 
 	@Override
