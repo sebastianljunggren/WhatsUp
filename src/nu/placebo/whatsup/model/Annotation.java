@@ -15,7 +15,7 @@ public class Annotation {
 
 	public Annotation(JSONObject json) throws JSONException {
 		JSONObject location = json.getJSONObject("location");
-		this.body = json.getJSONObject("body").getJSONObject("und")
+		this.body = json.getJSONObject("body").getJSONArray("und").getJSONObject(0)
 				.getString("safe_value");
 		this.geolocation = new GeoLocation(json.getInt("nid"),
 				location.getDouble("latitude"),
