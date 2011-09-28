@@ -17,7 +17,7 @@ public class ListMarker {
 	public String getRange(){
 		
 
-		return "range yet to be determined"
+		return "range yet to be determined";
 	}
 	
 	public String getRating(){
