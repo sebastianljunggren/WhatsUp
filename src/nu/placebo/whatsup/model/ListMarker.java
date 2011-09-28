@@ -13,4 +13,14 @@ public class ListMarker {
 	public String getTitle(){
 		return this.location.getTitle();
 	}
+	
+	public String getRange(){
+		
+
+		return "range yet to be determined"
+	}
+	
+	public String getRating(){
+		return "unknown";
+	}
 }

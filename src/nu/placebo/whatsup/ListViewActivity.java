@@ -5,8 +5,10 @@ import java.util.List;
 
 import android.view.*;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import nu.placebo.whatsup.model.ListMarker;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 /**
@@ -16,6 +18,11 @@ import android.os.Bundle;
  *
  */
 public class ListViewActivity extends Activity {
+	
+	private ProgressDialog m_ProgressDialog = null;
+	private ArrayList<ListMarker> m_markers = null;
+	private MarkerAdapter m_adapter;
+	private Runnable viewOrders;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +39,9 @@ public class ListViewActivity extends Activity {
 		
 		private ArrayList<ListMarker> markers;
 		public MarkerAdapter(Context context, int textViewResourceId,
-				List<ListMarker> objects) {
+				ArrayList<ListMarker> objects) {
 			super(context, textViewResourceId, objects);
-			
+			this.markers = objects;
 		}
 		
 		
@@ -47,7 +54,17 @@ public class ListViewActivity extends Activity {
 			}
 			ListMarker lm = markers.get(position);
 			if(lm != null){
-				// Find text views and fill them with info from ListMarker
+				TextView t_title = (TextView) v.findViewById(R.id.list_item_title);
+				TextView t_rating= (TextView) v.findViewById(R.id.list_item_rating);
+				TextView t_range = (TextView) v.findViewById(R.id.list_item_range);
+				
+				if(t_title != null)
+					t_title.setText(lm.getTitle());
+				if(t_range != null)
+					t_range.setText(lm.getRange());
+				if(t_title != null)
+					t_title.setText(lm.getRating());
+				
 			}
 			
 			return v;
