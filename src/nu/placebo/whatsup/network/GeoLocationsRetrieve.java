@@ -5,6 +5,10 @@ import java.util.List;
 
 import nu.placebo.whatsup.model.GeoLocation;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GeoLocationsRetrieve implements
 		ListenableNetworkOperation<List<GeoLocation>> {
 
@@ -27,6 +31,19 @@ public class GeoLocationsRetrieve implements
 				longitudeA, latitudeB, longitudeB);
 		// Todo: Parse the result into a list of GeoLocations
 		List<GeoLocation> geoLocations = new ArrayList<GeoLocation>();
+		JSONArray json = null;
+		try {
+			json = new JSONArray(result);
+			for (int i = 0; i < json.length(); i++) {
+				JSONObject j = json.getJSONObject(i);
+				geoLocations.add(new GeoLocation(j.getInt("nid"), j
+						.getDouble("latitude"), j.getDouble("longitude"), j
+						.getString("title")));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 		for (NetworkOperationListener<List<GeoLocation>> listener : this.listeners) {
 			listener.operationExcecuted(geoLocations);
 		}
