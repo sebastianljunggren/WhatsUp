@@ -4,16 +4,9 @@ public class GeoLocation {
 	private double latitude;
 	private double longitude;
 	private String title;
-	private String id;
+	private int id;
 	
-	public GeoLocation(){
-		this.latitude = 0;
-		this.longitude = 0;
-		this.title = "";
-		this.id = "";
-	}
-	
-	public GeoLocation(double latitude, double longitude, String id, String title){
+	public GeoLocation(int id,double latitude, double longitude, String title){
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.title = title;
@@ -23,7 +16,7 @@ public class GeoLocation {
 	/**
 	 * @return the ID
 	 */
-	public String getID() {
+	public int getID() {
 		return id;
 	}
 
