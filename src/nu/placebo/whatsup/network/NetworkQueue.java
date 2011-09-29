@@ -14,7 +14,7 @@ import nu.placebo.whatsup.constants.Constants;
 
 public class NetworkQueue {
 	private static NetworkQueue instance;
-	private List<NetworkOperation> queue = new LinkedList<NetworkOperation>();
+	private List<NetworkOperation<?>> queue = new LinkedList<NetworkOperation<?>>();
 	private int activeCalls = 0;
 
 	/**
@@ -35,7 +35,7 @@ public class NetworkQueue {
 		return instance;
 	}
 
-	public void add(NetworkOperation item){
+	public void add(NetworkOperation<?> item){
 		this.queue.add(item);
 		if(canStartNewCall()) {
 			nextCall();
