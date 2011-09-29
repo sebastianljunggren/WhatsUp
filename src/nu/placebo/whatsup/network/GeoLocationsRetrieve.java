@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GeoLocationsRetrieve implements
-		ListenableNetworkOperation<List<GeoLocation>> {
+		NetworkOperation<List<GeoLocation>> {
 
 	private List<NetworkOperationListener<List<GeoLocation>>> listeners = new ArrayList<NetworkOperationListener<List<GeoLocation>>>();
 	private double latitudeA;

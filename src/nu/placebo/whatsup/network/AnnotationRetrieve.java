@@ -7,7 +7,7 @@ import nu.placebo.whatsup.model.Annotation;
 
 import org.json.JSONException;
 
-public class AnnotationRetrieve implements ListenableNetworkOperation<Annotation> {
+public class AnnotationRetrieve implements NetworkOperation<Annotation> {
 	
 	private int nid;
 	private List<NetworkOperationListener<Annotation>> listeners = new ArrayList<NetworkOperationListener<Annotation>>();

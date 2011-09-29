@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class NetworkTestActivity extends Activity implements NetworkOperationListener<Annotation>{
+public class NetworkTestActivity extends Activity implements NetworkOperationListener<Annotation> {
 
 	private TextView tv1;
 	private TextView tv2;
