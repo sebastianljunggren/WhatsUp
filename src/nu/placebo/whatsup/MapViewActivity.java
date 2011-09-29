@@ -26,8 +26,8 @@ public class MapViewActivity extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3));
-		addMarker(new GeoPoint(0, 0), "TEST");
-		addMarker(new GeoPoint(1000, 1000), "TEST2");
+		addMarker(new GeoPoint(0, 0), "TEST1");
+		addMarker(new GeoPoint(0, 10000000), "TEST2");
 	}
 
 	@Override
