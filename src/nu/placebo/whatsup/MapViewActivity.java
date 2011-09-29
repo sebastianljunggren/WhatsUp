@@ -32,7 +32,6 @@ public class MapViewActivity extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		
-		
 		addMarker();
 	}
 
@@ -41,12 +40,9 @@ public class MapViewActivity extends MapActivity {
 		return false;
 	}
 	
-	
-	
-	
 	private void addMarker(){
 		geoPoint = new GeoPoint(57716666, 11983333);
-		overlayItem = new OverlayItem(geoPoint, "", "");
+		overlayItem = new OverlayItem(geoPoint, "Alfa", "Beta");
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin));
 		marker.addOverlay(overlayItem);		
 		overlays.add(marker);
