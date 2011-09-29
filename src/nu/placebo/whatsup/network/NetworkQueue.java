@@ -12,7 +12,7 @@ import nu.placebo.whatsup.constants.Constants;
  * 
  */
 
-public class NetworkQueue {
+public final class NetworkQueue {
 	private static NetworkQueue instance;
 	private List<NetworkOperation<?>> queue = new LinkedList<NetworkOperation<?>>();
 	private int activeCalls = 0;
