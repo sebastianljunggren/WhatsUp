@@ -33,7 +33,7 @@ public class Marker extends ItemizedOverlay<OverlayItem> {
 	@Override
 	public boolean onTap(int i) {
 		ExtendedOverlayItem item = (ExtendedOverlayItem) overlays.get(i);
-		Log.w("me", item.getId() + "");
+		Log.w("me", item.getTitle());
 		return true;
 	}
 }
