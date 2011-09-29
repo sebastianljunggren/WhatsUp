@@ -9,10 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GeoLocationsRetrieve implements
-		NetworkOperation<List<GeoLocation>> {
+public class GeoLocationsRetrieve extends
+		AbstractNetworkOperation<List<GeoLocation>> {
 
-	private List<NetworkOperationListener<List<GeoLocation>>> listeners = new ArrayList<NetworkOperationListener<List<GeoLocation>>>();
 	private double latitudeA;
 	private double longitudeA;
 	private double latitudeB;
@@ -29,7 +28,6 @@ public class GeoLocationsRetrieve implements
 	public void execute() {
 		String result = NetworkCalls.retrieveAnnotationMarkers(latitudeA,
 				longitudeA, latitudeB, longitudeB);
-		// Todo: Parse the result into a list of GeoLocations
 		List<GeoLocation> geoLocations = new ArrayList<GeoLocation>();
 		JSONArray json = null;
 		try {
@@ -43,14 +41,6 @@ public class GeoLocationsRetrieve implements
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		for (NetworkOperationListener<List<GeoLocation>> listener : this.listeners) {
-			listener.operationExcecuted(geoLocations);
-		}
-	}
-
-	public void addOperationListener(
-			NetworkOperationListener<List<GeoLocation>> listener) {
-		listeners.add(listener);
+		super.notifyListeners(geoLocations);
 	}
 }
