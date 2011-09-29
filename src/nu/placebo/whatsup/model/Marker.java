@@ -1,16 +1,13 @@
 package nu.placebo.whatsup.model;
 
 import java.util.ArrayList;
-
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class Marker extends ItemizedOverlay {
+public class Marker extends ItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
 	
@@ -35,7 +32,8 @@ public class Marker extends ItemizedOverlay {
 	
 	@Override
 	public boolean onTap(int i) {
-		Log.w("me", i + "");
+		ExtendedOverlayItem item = (ExtendedOverlayItem) overlays.get(i);
+		Log.w("me", item.getId() + "");
 		return true;
 	}
 }
