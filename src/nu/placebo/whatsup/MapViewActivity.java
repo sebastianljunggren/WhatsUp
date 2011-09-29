@@ -2,37 +2,32 @@ package nu.placebo.whatsup;
 
 import java.util.List;
 
+import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.Marker;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 public class MapViewActivity extends MapActivity {
 
 	private MapView mapView;
 	private Marker marker;
 	private List<Overlay> overlays;
-	private GeoPoint geoPoint;
-	private OverlayItem overlayItem;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-		
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
-		
-		addMarker();
+		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3));
+		addMarker(new GeoPoint(0, 0), "TEST");
+		addMarker(new GeoPoint(1000, 1000), "TEST2");
 	}
 
 	@Override
@@ -40,11 +35,8 @@ public class MapViewActivity extends MapActivity {
 		return false;
 	}
 	
-	private void addMarker(){
-		geoPoint = new GeoPoint(57716666, 11983333);
-		overlayItem = new OverlayItem(geoPoint, "Alfa", "Beta");
-		marker = new Marker(this.getResources().getDrawable(R.drawable.pin));
-		marker.addOverlay(overlayItem);		
+	private void addMarker(GeoPoint point, String title) {
+		marker.addOverlay(new ExtendedOverlayItem(point, title, 0));	//TODO add a real id	
 		overlays.add(marker);
 	}
 	
