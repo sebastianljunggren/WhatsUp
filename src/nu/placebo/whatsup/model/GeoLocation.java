@@ -1,16 +1,29 @@
 package nu.placebo.whatsup.model;
 
+import com.google.android.maps.GeoPoint;
+
+
+
 public class GeoLocation {
-	private double latitude;
-	private double longitude;
+	private GeoPoint gp;
 	private String title;
 	private int id;
 	
-	public GeoLocation(int id,double latitude, double longitude, String title){
-		this.latitude = latitude;
-		this.longitude = longitude;
+	public GeoLocation(int id, int microLat, int microLong, String title){
+		this.gp = new GeoPoint(microLat, microLong);
 		this.title = title;
 		this.id = id;
+	}
+	
+	public GeoLocation(GeoLocation gl){
+		this.gp = gl.gp;
+		this.title = gl.title;
+		this.id = gl.id;
+	}
+	
+	public GeoLocation(int id, double latitude, double longitude, String title){
+		this(id, (int) (latitude * 1000000 + 0.5), (int) (longitude * 1000000 + 0.5), title);
+		
 	}
 	
 	/**
@@ -19,22 +32,21 @@ public class GeoLocation {
 	public int getID() {
 		return id;
 	}
-
+	
+	
 	/**
-	 * @return the latitude
+	 * @return the gp
 	 */
-	public double getLatitude() {
-		return latitude;
+	public GeoPoint getGp() {
+		return gp;
 	}
 
-
 	/**
-	 * @return the longitude
+	 * @param gp the gp to set
 	 */
-	public double getLongitude() {
-		return longitude;
+	public void setGp(GeoPoint gp) {
+		this.gp = gp;
 	}
-
 
 	/**
 	 * @return the title
@@ -43,21 +55,6 @@ public class GeoLocation {
 		return title;
 	}
 
-
-	/**
-	 * @param latitude the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-
-	/**
-	 * @param longitude the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
 
 
 	/**
