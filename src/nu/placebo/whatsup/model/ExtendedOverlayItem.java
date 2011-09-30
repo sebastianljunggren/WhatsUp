@@ -8,8 +8,8 @@ public class ExtendedOverlayItem extends OverlayItem {
 	private int id;
 	
 	public ExtendedOverlayItem(GeoLocation g) {
-		super(new GeoPoint(0, 0), null, null);
-		//this.id = id;
+		super(g.getLocation(), g.getTitle(), null);
+		id = g.getId();
 	}
 
 	public int getId() {

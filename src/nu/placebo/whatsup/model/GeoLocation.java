@@ -27,24 +27,23 @@ public class GeoLocation {
 	}
 	
 	/**
-	 * @return the ID
+	 * @return the id
 	 */
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 	
-	
 	/**
-	 * @return the gp
+	 * @return the location
 	 */
-	public GeoPoint getGp() {
+	public GeoPoint getLocation() {
 		return gp;
 	}
 
 	/**
 	 * @param gp the gp to set
 	 */
-	public void setGp(GeoPoint gp) {
+	public void setLocation(GeoPoint gp) {
 		this.gp = gp;
 	}
 
@@ -54,8 +53,6 @@ public class GeoLocation {
 	public String getTitle() {
 		return title;
 	}
-
-
 
 	/**
 	 * @param title the title to set
