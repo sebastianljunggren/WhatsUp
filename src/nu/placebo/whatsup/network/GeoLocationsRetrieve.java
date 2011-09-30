@@ -34,7 +34,7 @@ public class GeoLocationsRetrieve extends
 			json = new JSONArray(result);
 			for (int i = 0; i < json.length(); i++) {
 				JSONObject j = json.getJSONObject(i);
-				geoLocations.add(new GeoLocation(j);
+				geoLocations.add(new GeoLocation(j));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
