@@ -7,6 +7,6 @@
     <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
         <Button android:text="Refresh" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="match_parent"></Button>
     </LinearLayout>
-    <ListView android:id="@+id/listView1" android:layout_height="wrap_content" android:layout_width="match_parent"></ListView>
+    <ListView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/android:list"></ListView>
     
 </LinearLayout>
