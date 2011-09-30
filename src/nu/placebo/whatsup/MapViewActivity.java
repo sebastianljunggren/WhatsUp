@@ -55,8 +55,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 
 	public void onClick(View arg0) {
 		Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
-		this.startActivity(intent);
-		this.finish();		
+		this.startActivity(intent);	
 	}
 	
 }
