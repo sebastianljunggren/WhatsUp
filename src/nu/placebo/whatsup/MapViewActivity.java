@@ -3,6 +3,7 @@ package nu.placebo.whatsup;
 import java.util.List;
 
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
+import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +27,8 @@ public class MapViewActivity extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3));
-		addMarker(new GeoPoint(0, 0), "TEST1");
-		addMarker(new GeoPoint(0, 10000000), "TEST2");
+		//addMarker(new GeoPoint(0, 0), "TEST1");
+		//addMarker(new GeoPoint(0, 10000000), "TEST2");
 	}
 
 	@Override
@@ -35,8 +36,8 @@ public class MapViewActivity extends MapActivity {
 		return false;
 	}
 	
-	private void addMarker(GeoPoint point, String title) {
-		marker.addOverlay(new ExtendedOverlayItem(point, title, 0));	//TODO add a real id	
+	private void addMarker(GeoLocation g) {
+		marker.addOverlay(new ExtendedOverlayItem(g));	//TODO add a real id	
 		overlays.add(marker);
 	}
 	

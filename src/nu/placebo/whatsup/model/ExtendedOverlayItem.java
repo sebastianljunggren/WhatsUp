@@ -7,9 +7,9 @@ public class ExtendedOverlayItem extends OverlayItem {
 	
 	private int id;
 	
-	public ExtendedOverlayItem(GeoPoint p, String title, int id) {
-		super(p, title, null);
-		this.id = id;
+	public ExtendedOverlayItem(GeoLocation g) {
+		super(new GeoPoint(0, 0), null, null);
+		//this.id = id;
 	}
 
 	public int getId() {
