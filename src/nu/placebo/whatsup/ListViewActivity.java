@@ -6,8 +6,10 @@ import java.util.List;
 import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -17,7 +19,7 @@ import android.os.Bundle;
  * @author max
  *
  */
-public class ListViewActivity extends Activity {
+public class ListViewActivity extends ListActivity {
 	
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<ListMarker> m_markers = null;
@@ -28,6 +30,12 @@ public class ListViewActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.listview);
+		
+		GeoLocation ref = new GeoLocation(0, 57.688337, 11.979132, "The Hubben");
+		
+		this.m_markers = new ArrayList<ListMarker>();
+		m_markers.add(new ListMarker(new GeoLocation(1, 56, 12, "Test"), ref));
+		
 	}
 	
 	
