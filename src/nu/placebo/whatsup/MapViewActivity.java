@@ -15,6 +15,12 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
+/**
+ * Activity that holds the map and control map actions. It's the "main" activity.
+ * 
+ * 
+ * @author Ablim
+ */
 public class MapViewActivity extends MapActivity implements OnClickListener {
 
 	private MapView mapView;
@@ -29,10 +35,12 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3));
-		addMarker(new GeoLocation(0, 0, 0, "F�rsta"));
+
+		addMarker(new GeoLocation(0, 0, 0, "Första"));
 		addMarker(new GeoLocation(1, 0, 10000000, "Andra"));
 		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
 		annotationBtn.setOnClickListener(this);
+		
 	}
 
 	@Override
