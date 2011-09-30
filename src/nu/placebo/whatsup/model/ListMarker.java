@@ -5,9 +5,8 @@ public class ListMarker {
 	private double range;
 	
 	public ListMarker(GeoLocation location, GeoLocation reference){
-		this.location = new GeoLocation(location.getID(), location.getLatitude(), location.getLongitude(), location.getTitle());
-		this.range = Math.sqrt(Math.pow((reference.getLatitude() - location.getLatitude()), 2) + 
-				Math.pow((reference.getLongitude() - location.getLongitude()), 2));
+		this.location = new GeoLocation(location);
+		
 	}
 	
 	public String getTitle(){
