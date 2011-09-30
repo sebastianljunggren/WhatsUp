@@ -24,28 +24,57 @@ public class ListViewActivity extends ListActivity {
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<ListMarker> m_markers = null;
 	private MarkerAdapter m_adapter;
-	private Runnable viewOrders;
+	private Runnable viewMarkers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.listview);
 		
-		GeoLocation ref = new GeoLocation(0, 57.688337, 11.979132, "The Hubben");
+		m_markers = new ArrayList<ListMarker>();
+		this.m_adapter = new MarkerAdapter(this, R.layout.list_item, m_markers);
+		setListAdapter(this.m_adapter);
 		
-		this.m_markers = new ArrayList<ListMarker>();
-		m_markers.add(new ListMarker(new GeoLocation(1, 56, 12, "Test"), ref));
+		viewMarkers = new Runnable(){
+			public void run(){
+				getMarkers();
+			}
+		};
+		Thread thread = new Thread(null, viewMarkers, "MagnetoBackground");
+		thread.start();		
 		
 	}
 	
+	private void getMarkers(){
+		try{
+			GeoLocation ref = new GeoLocation(0, 57.688337, 11.979132, "The Hubben");
+			m_markers = new ArrayList<ListMarker>();
+			
+			m_markers.add(new ListMarker(new GeoLocation(1, 57.706325, 11.937160, "Lindholmen"), ref));
+		} catch (Exception e) {
+			
+		}
+		runOnUiThread(returnRes);
+	}
 	
-	
-	
+	private Runnable returnRes = new Runnable() {
+
+		public void run() {
+			if(m_markers != null && m_markers.size() > 0){
+                m_adapter.notifyDataSetChanged();
+                for(int i=0;i<m_markers.size();i++)
+                m_adapter.add(m_markers.get(i));
+            }
+           // m_ProgressDialog.dismiss();
+            m_adapter.notifyDataSetChanged();			
+		}
+    };
 	
 	
 	private class MarkerAdapter extends ArrayAdapter<ListMarker> {
 		
 		private ArrayList<ListMarker> markers;
+		
 		public MarkerAdapter(Context context, int textViewResourceId,
 				ArrayList<ListMarker> objects) {
 			super(context, textViewResourceId, objects);
@@ -71,7 +100,7 @@ public class ListViewActivity extends ListActivity {
 				if(t_range != null)
 					t_range.setText(lm.getRange());
 				if(t_title != null)
-					t_title.setText(lm.getRating());
+					t_rating.setText(lm.getRating());
 				
 			}
 			
