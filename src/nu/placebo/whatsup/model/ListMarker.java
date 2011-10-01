@@ -22,4 +22,8 @@ public class ListMarker {
 	public String getRating(){
 		return "unknown";
 	}
+	
+	public int getId(){
+		return location.getId();
+	}
 }

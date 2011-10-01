@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -51,6 +52,7 @@ public class ListViewActivity extends ListActivity {
 			m_markers = new ArrayList<ListMarker>();
 			
 			m_markers.add(new ListMarker(new GeoLocation(1, 57.706325, 11.937160, "Lindholmen"), ref));
+			m_markers.add(new ListMarker(new GeoLocation(2, 57.706325, 11.937160, "Liseberg"), ref));
 		} catch (Exception e) {
 			
 		}
@@ -71,7 +73,7 @@ public class ListViewActivity extends ListActivity {
     };
 	
 	
-	private class MarkerAdapter extends ArrayAdapter<ListMarker> {
+	private class MarkerAdapter extends ArrayAdapter<ListMarker> implements OnClickListener{
 		
 		private ArrayList<ListMarker> markers;
 		
@@ -101,10 +103,16 @@ public class ListViewActivity extends ListActivity {
 					t_range.setText(lm.getRange());
 				if(t_title != null)
 					t_rating.setText(lm.getRating());
-				
+				v.setId(lm.getId());
+				v.setOnClickListener(this);
 			}
-			
 			return v;
+		}
+
+
+		public void onClick(View v) {
+			System.out.println("test");
+			
 		}
 		
 		
