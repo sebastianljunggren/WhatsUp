@@ -6,9 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
-import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
 /**
  * Class that contains overlays for a map, and represents them with a drawable.

@@ -1,6 +1,5 @@
 package nu.placebo.whatsup.model;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.OverlayItem;
 
 /**
