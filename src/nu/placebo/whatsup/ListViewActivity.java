@@ -8,6 +8,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -111,9 +112,10 @@ public class ListViewActivity extends ListActivity {
 
 
 		public void onClick(View v) {
-			System.out.println("test");
+			Log.w("ListItem", "test - id: "+ v.getId());
 			
 		}
+		
 		
 		
 	}
