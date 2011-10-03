@@ -2,23 +2,26 @@ package nu.placebo.whatsup.model;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import nu.placebo.whatsup.balloon.*;
 
 /**
  * Class that contains overlays for a map, and represents them with a drawable.
  * 
  * @author Ablim
  */
-public class Marker extends ItemizedOverlay<OverlayItem> {
+public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
 	
-	public Marker(Drawable defaultMarker) {
-		super(boundCenterBottom(defaultMarker));
+	public Marker(Drawable defaultMarker, MapView mapView) {
+		super(boundCenter(defaultMarker), mapView);
 	}
 
 	@Override
@@ -37,10 +40,7 @@ public class Marker extends ItemizedOverlay<OverlayItem> {
 	}
 	
 	@Override
-	public boolean onTap(int i) {
-		ExtendedOverlayItem item = (ExtendedOverlayItem) overlays.get(i);
-		Log.w("me", item.getTitle());
-		Log.w("me", i + "");
+	protected boolean onBalloonTap(int index, OverlayItem item) {
 		return true;
 	}
 	

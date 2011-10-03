@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 /**
  * Activity that holds the map and control map actions. It's the "main" activity.
@@ -34,10 +36,9 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
-		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3));
-
-		addMarker(new GeoLocation(0, 0, 0, "Första"));
-		addMarker(new GeoLocation(1, 0, 10000000, "Andra"));
+		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView);
+		
+		addMarker(new GeoLocation(0, 57716666, 11983333, "Göteborg"));
 		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
 		annotationBtn.setOnClickListener(this);
 		
