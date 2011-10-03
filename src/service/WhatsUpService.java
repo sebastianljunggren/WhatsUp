@@ -4,6 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+/**
+ * The service that runs network calls in the background.
+ */
+
 public class WhatsUpService extends Service {
 	private WhatsUpBinder binder = new WhatsUpBinder();
 

@@ -23,6 +23,6 @@
 			
 		</activity>
 		<activity android:name=".AnnotationActivity"></activity>
-		<service android:name="service.WhatsUpService" android:process=":service"></service>
+		<service android:name="service.WhatsUpService"></service>
 	</application>
 </manifest>

@@ -3,12 +3,15 @@ package service;
 import nu.placebo.whatsup.model.DataProvider;
 import android.os.Binder;
 
+/**
+ * Used to run network tasks in the service.
+ */
+
 public class WhatsUpBinder extends Binder {
 	private DataProvider dataProvider = DataProvider.getDataProvider();
 
 	public void retrieveAnnotation(int nid) {
 		this.dataProvider.retrieveAnnotation(nid);
-
 	}
 
 	public void retrieveGeolocations(double latitudeA, double longitudeA,
