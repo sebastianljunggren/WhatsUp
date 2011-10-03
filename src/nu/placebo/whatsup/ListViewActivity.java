@@ -7,11 +7,14 @@ import nu.placebo.whatsup.model.ListMarker;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -75,13 +78,14 @@ public class ListViewActivity extends ListActivity {
 	
 	
 	private class MarkerAdapter extends ArrayAdapter<ListMarker> implements OnClickListener{
-		
+		private Context ctx;
 		private ArrayList<ListMarker> markers;
 		
 		public MarkerAdapter(Context context, int textViewResourceId,
 				ArrayList<ListMarker> objects) {
 			super(context, textViewResourceId, objects);
 			this.markers = objects;
+			this.ctx = context;
 		}
 		
 		
@@ -106,15 +110,20 @@ public class ListViewActivity extends ListActivity {
 					t_rating.setText(lm.getRating());
 				v.setId(lm.getId());
 				v.setOnClickListener(this);
+				
 			}
 			return v;
 		}
-
-
+		
 		public void onClick(View v) {
 			Log.w("ListItem", "test - id: "+ v.getId());
-			
+			Intent intent = new Intent(ctx, AnnotationActivity.class);
+			intent.putExtra("nid", v.getId());
+			ctx.startActivity(intent);
 		}
+
+
+		
 		
 		
 		
