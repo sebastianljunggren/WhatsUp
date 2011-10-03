@@ -1,20 +1,11 @@
 package nu.placebo.whatsup.model;
 
-import java.io.IOException;
 import java.util.List;
 
-import nu.placebo.whatsup.constants.Constants;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import nu.placebo.whatsup.network.AnnotationRetrieve;
+import nu.placebo.whatsup.network.GeoLocationsRetrieve;
+import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.NetworkQueue;
 
 public class DataProvider {
 
@@ -27,6 +18,7 @@ public class DataProvider {
 	private static final DataProvider instance = new DataProvider();
 
 	private DatabaseHelper dbHelper = new DatabaseHelper(null);
+	private NetworkQueue networkQueue = NetworkQueue.getInstance();
 
 	public static DataProvider getDataProvider() {
 		return instance;
@@ -46,7 +38,16 @@ public class DataProvider {
 	public void retrieveAnnotation(int nid) {
 		// Fetches an annotation from the server and stores it in the local
 		// database.
-		// TODO Auto-generated method stub
+		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
+		ar.addOperationListener(new NetworkOperationListener<Annotation>() {
+
+			public void operationExcecuted(Annotation result) {
+				// TODO Store in local db
+				// TODO Notify those interested in the result (binder).				
+			}
+			
+		});
+		this.networkQueue.add(ar);
 
 	}
 
@@ -54,7 +55,16 @@ public class DataProvider {
 			double latitudeB, double longitudeB) {
 		// Fetches GeoLocations from the server and stores them in the local
 		// database.
-		// TODO Auto-generated method stub
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(latitudeA,
+				longitudeA, latitudeB, longitudeB);
+		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
 
+			public void operationExcecuted(List<GeoLocation> result) {
+				// TODO Store in local db
+				// TODO Notify those interested in the result (binder).
+			}
+
+		});
+		this.networkQueue.add(gr);
 	}
 }
