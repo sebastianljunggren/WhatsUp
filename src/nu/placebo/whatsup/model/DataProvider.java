@@ -31,13 +31,13 @@ public class DataProvider {
 		return instance;
 	}
 	
-	public Annotation getAnnotation(int nid) {
+	public DataReturn<Annotation> getAnnotation(int nid) {
 		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
 		//cache, and means of acquiring the data fetched from remote server
 		return null;
 	}
 	
-	public List<GeoLocation> getAnnotationMarkers(double latitudeA,
+	public DataReturn<List<GeoLocation>> getAnnotationMarkers(double latitudeA,
 			double longitudeA, double latitudeB, double longitudeB) {
 		//Same idea as above
 		return null;

@@ -1,5 +1,8 @@
 package nu.placebo.whatsup.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +11,8 @@ public class Annotation {
 	private String body;
 	private int uid;
 	private String author;
+	
+	private List<Comment> comments = new LinkedList<Comment>();
 
 	public Annotation(GeoLocation geoLocation, String body, int uid,
 			String author) {

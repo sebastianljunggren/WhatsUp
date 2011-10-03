@@ -20,8 +20,7 @@ public final class NetworkQueue {
 	/**
 	 * Private constructor to ensure that the class is singleton.
 	 */
-	private NetworkQueue() {
-	}
+	private NetworkQueue() {}
 
 	/**
 	 * Gives access to the instance of the NetworkQueue.
@@ -46,14 +45,21 @@ public final class NetworkQueue {
 		if(!this.queue.isEmpty()) {
 			this.activeCalls++;
 			new Thread(new Runnable() {
-				public void run() {        
+				public void run() {       
 					queue.remove(0).execute();
 					activeCalls--;
+					itemFinished();
 				}
 			}).start();
 		}
 	}
 
+	private synchronized void itemFinished() {
+		if(canStartNewCall()) {
+			nextCall();
+		}
+	}
+	
 	private boolean canStartNewCall() {
 		return this.activeCalls <= Constants.ALLOWED_CONCURRENT_CALLS;
 	}
