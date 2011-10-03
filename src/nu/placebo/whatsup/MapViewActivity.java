@@ -11,11 +11,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 /**
  * Activity that holds the map and control map actions. It's the "main" activity.
@@ -56,6 +54,9 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 
 	public void onClick(View arg0) {
 		Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("nid", 1234);
+		intent.putExtras(bundle);
 		this.startActivity(intent);	
 
 	}
