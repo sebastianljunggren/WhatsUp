@@ -12,17 +12,17 @@
 		<uses-library android:name="com.google.android.maps" />
 				
 		<activity 
-			android:name=".MapViewActivity" 
+			android:name=".activity.MapViewActivity" 
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"></action>
 				<category android:name="android.intent.category.LAUNCHER"></category>
 			</intent-filter>
 		</activity>
-		<activity android:name=".ListViewActivity">
+		<activity android:name=".activity.ListViewActivity">
 			
 		</activity>
-		<activity android:name=".AnnotationActivity"></activity>
+		<activity android:name=".activity.AnnotationActivity"></activity>
 		<service android:name="service.WhatsUpService"></service>
 	</application>
 </manifest>

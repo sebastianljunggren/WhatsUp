@@ -36,6 +36,7 @@ import com.google.android.maps.OverlayItem;
 
 /**
  * NOTICE!!! NOT OUR CODE!!!
+ * Link to original code: https://github.com/jgilfelt/android-mapviewballoons 
  * 
  * An abstract extension of ItemizedOverlay for displaying an information balloon
  * upon screen-tap of each marker overlay.

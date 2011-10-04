@@ -1,7 +1,10 @@
-package nu.placebo.whatsup;
+package nu.placebo.whatsup.activity;
 
 import java.util.ArrayList;
 
+import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.R.id;
+import nu.placebo.whatsup.R.layout;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import android.app.ListActivity;

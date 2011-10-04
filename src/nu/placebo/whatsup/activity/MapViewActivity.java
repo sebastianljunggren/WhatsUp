@@ -1,7 +1,11 @@
-package nu.placebo.whatsup;
+package nu.placebo.whatsup.activity;
 
 import java.util.List;
 
+import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.R.drawable;
+import nu.placebo.whatsup.R.id;
+import nu.placebo.whatsup.R.layout;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
@@ -34,9 +38,9 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
-		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView);
+		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView, this);
 		
-		addMarker(new GeoLocation(0, 57716666, 11983333, "Göteborg"));
+		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
 		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
 		annotationBtn.setOnClickListener(this);
 		

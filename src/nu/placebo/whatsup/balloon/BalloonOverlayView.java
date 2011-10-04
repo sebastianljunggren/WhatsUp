@@ -29,6 +29,7 @@ import com.google.android.maps.OverlayItem;
 
 /**
  * NOTICE!!! NOT OUR CODE!!!
+ * Link to original code: https://github.com/jgilfelt/android-mapviewballoons
  * 
  * A view representing a MapView marker information balloon.
  * <p>
