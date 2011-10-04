@@ -1,4 +1,4 @@
-package service;
+package nu.placebo.whatsup.service;
 
 import nu.placebo.whatsup.model.DataProvider;
 import android.os.Binder;

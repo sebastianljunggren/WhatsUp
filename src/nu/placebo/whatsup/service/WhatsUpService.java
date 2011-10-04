@@ -1,4 +1,4 @@
-package service;
+package nu.placebo.whatsup.service;
 
 import android.app.Service;
 import android.content.Intent;
