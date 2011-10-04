@@ -52,6 +52,8 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		annotationBtn.setOnClickListener(this);
 		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
+		Button logInBtn = (Button) this.findViewById(R.id.log_in);
+		logInBtn.setOnClickListener(this);
 		
 	}
 
@@ -73,11 +75,14 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 			bundle.putInt("nid", 1234);
 			intent.putExtras(bundle);
 			this.startActivity(intent);
-		}
-		if(v.getId() == R.id.map_goto_list){
+		} else if(v.getId() == R.id.map_goto_list){
 			Intent intent = new Intent(MapViewActivity.this, ListViewActivity.class);
 			this.startActivity(intent);
 			this.finish();
+		} else if (v.getId() == R.id.log_in) {
+			Intent intent = new Intent(MapViewActivity.this, LogInActivity.class);
+			this.startActivity(intent);
+			
 		}
 
 	}
