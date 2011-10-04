@@ -39,10 +39,19 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView, this);
-		
 		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
+		
+		setupToolbar();
+		
+		
+	}
+
+	private void setupToolbar() {
+		
 		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
 		annotationBtn.setOnClickListener(this);
+		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
+		gotoListBtn.setOnClickListener(this);
 		
 	}
 
@@ -56,12 +65,20 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		overlays.add(marker);
 	}
 
-	public void onClick(View arg0) {
-		Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putInt("nid", 1234);
-		intent.putExtras(bundle);
-		this.startActivity(intent);	
+	public void onClick(View v) {
+		
+		if(v.getId() == R.id.showAnnotation){
+			Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("nid", 1234);
+			intent.putExtras(bundle);
+			this.startActivity(intent);
+		}
+		if(v.getId() == R.id.map_goto_list){
+			Intent intent = new Intent(MapViewActivity.this, ListViewActivity.class);
+			this.startActivity(intent);
+			this.finish();
+		}
 
 	}
 	
