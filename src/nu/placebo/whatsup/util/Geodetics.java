@@ -37,4 +37,13 @@ public class Geodetics {
 		
 		return Math.sqrt(x*x + y*y);
 	}
+	
+	public static String distanceWithUnit(double dist){
+		String result = "";
+		
+		
+		
+		
+		return result;
+	}
 }
