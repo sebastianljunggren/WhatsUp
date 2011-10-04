@@ -7,6 +7,7 @@ import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 public class AnnotationActivity extends Activity implements NetworkOperationListener<Annotation>{
@@ -39,7 +40,7 @@ public class AnnotationActivity extends Activity implements NetworkOperationList
 	public void setAnnotation(Annotation annotation) {
 		this.annotation = annotation;
 		this.title.setText(annotation.getGeoLocation().getTitle());
-		this.body.setText(annotation.getBody());
+		this.body.setText(Html.fromHtml(annotation.getBody()));
 		this.author.setText("by " + annotation.getAuthor());
 	}
 
