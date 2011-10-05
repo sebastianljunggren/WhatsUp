@@ -1,12 +1,18 @@
 package nu.placebo.whatsup.network;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import nu.placebo.whatsup.constants.Constants;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -59,5 +65,18 @@ public class NetworkCalls {
 		}
 		client.getConnectionManager().shutdown();
 		return result;
+	}
+
+	public static HttpResponse performPostRequest(String query,
+			List<NameValuePair> body, List<NameValuePair> headers) throws ClientProtocolException, IOException {
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpPost request = new HttpPost(query);
+		if (body != null) {
+			request.setEntity(new UrlEncodedFormEntity(body));
+		}
+		HttpResponse response = client.execute(request);
+		client.getConnectionManager().shutdown();
+		return response;
+
 	}
 }
