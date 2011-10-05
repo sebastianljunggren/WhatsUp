@@ -8,13 +8,13 @@
 		android:layout_height="50dp">
 
 		<Button android:layout_height="wrap_content" android:id="@+id/map_refresh"
-			android:layout_width="wrap_content" android:drawableLeft="@drawable/add">
+			android:layout_width="wrap_content" android:drawableLeft="@drawable/refresh">
 		</Button>
 		<Button android:drawableLeft="@drawable/list" android:id="@+id/map_goto_list"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 		<Button android:drawableLeft="@drawable/remove" android:id="@+id/log_in"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-		<Button android:drawableLeft="@drawable/refresh" android:id="@+id/refresh"
+		<Button android:drawableLeft="@drawable/add" android:id="@+id/add_annotation"
 			android:layout_width="wrap_content" android:layout_height="wrap_content">
 		</Button>
 
