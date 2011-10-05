@@ -1,12 +1,15 @@
 package nu.placebo.whatsup.model;
 
+import nu.placebo.whatsup.util.Geodetics;
+
 public class ListMarker {
 	private GeoLocation location;
+	private GeoLocation ref;
 	private double range;
 	
 	public ListMarker(GeoLocation location, GeoLocation reference){
 		this.location = new GeoLocation(location);
-		
+		this.ref = new GeoLocation(reference);
 	}
 	
 	public String getTitle(){
@@ -14,9 +17,7 @@ public class ListMarker {
 	}
 	
 	public String getRange(){
-		
-
-		return "range yet to be determined";
+		return Geodetics.distanceWithUnit(location.getLocation(), ref.getLocation());
 	}
 	
 	public String getRating(){

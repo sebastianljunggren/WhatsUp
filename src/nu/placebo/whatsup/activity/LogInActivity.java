@@ -1,6 +1,10 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.network.Login;
+import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class LogInActivity extends Activity implements OnClickListener {
+public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<OperationResult<Boolean>> {
 
 	private TextView userName;
 	private TextView password;
@@ -27,7 +31,26 @@ public class LogInActivity extends Activity implements OnClickListener {
 	}
 
 	public void onClick(View view) {
-		this.result.setText("User: " + this.userName.getText()
-				+ " Password: " + password.getText());
+		this.result.setText("User: " + this.userName.getText() + " Password: "
+				+ password.getText());
+		Login login = new Login(this.userName.getText().toString(),
+				this.password.getText().toString());
+		login.addOperationListener(this);
+		NetworkQueue.getInstance().add(login);
+		this.result.setText("Logging in...");
+	}
+
+	public void operationExcecuted(final OperationResult<Boolean> r) {
+		this.runOnUiThread(new Runnable() {
+
+			public void run() {
+				if (!r.hasErrors()) {
+					result.setText("Successfully logged in!");
+				} else {
+					result.setText("Failed to login: " + r.getStatusMessage());
+				}
+			}
+			
+		});
 	}
 }

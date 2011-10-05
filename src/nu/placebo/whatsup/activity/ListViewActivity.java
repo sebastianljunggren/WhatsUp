@@ -1,12 +1,17 @@
 package nu.placebo.whatsup.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.R.id;
 import nu.placebo.whatsup.R.layout;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
+import nu.placebo.whatsup.network.GeoLocationsRetrieve;
+import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,11 +31,13 @@ import android.widget.TextView;
  * @author max
  *
  */
-public class ListViewActivity extends ListActivity implements OnClickListener {
+public class ListViewActivity extends ListActivity implements OnClickListener, NetworkOperationListener<List<GeoLocation>> {
 	
 	private ArrayList<ListMarker> m_markers = null;
 	private MarkerAdapter m_adapter;
 	private Runnable viewMarkers;
+	private GeoLocation ref;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +49,21 @@ public class ListViewActivity extends ListActivity implements OnClickListener {
 		this.m_adapter = new MarkerAdapter(this, R.layout.list_item, m_markers);
 		setListAdapter(this.m_adapter);
 		
+		this.ref = new GeoLocation(0, 57.688328, 11.979196, "Hubben");
+		
+		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008, 9.667969, 68.974164, 24.785156);
+		glr.addOperationListener(this);
+		NetworkQueue.getInstance().add(glr);
+		
+		
+/*		TODO: May be removed
 		viewMarkers = new Runnable(){
 			public void run(){
 				getMarkers();
 			}
 		};
 		Thread thread = new Thread(null, viewMarkers, "MagnetoBackground");
-		thread.start();		
+		thread.start(); */		
 		
 	}
 	
@@ -57,7 +72,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener {
 		mapBtn.setOnClickListener(this);
 		
 	}
-
+/*		TODO: May be removed, handled by operationExecuted()
 	private void getMarkers(){
 		try{
 			GeoLocation ref = new GeoLocation(0, 57.688337, 11.979132, "The Hubben");
@@ -70,7 +85,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener {
 		}
 		runOnUiThread(returnRes);
 	}
-	
+*/	
 	private Runnable returnRes = new Runnable() {
 
 		public void run() {
@@ -91,6 +106,17 @@ public class ListViewActivity extends ListActivity implements OnClickListener {
     		this.finish();
     	}
     }
+    
+    public void operationExcecuted(List<GeoLocation> result) {
+    	// Get active reference point
+    	
+    	m_markers = new ArrayList<ListMarker>();
+    	
+		for(GeoLocation item : result){
+			m_markers.add(new ListMarker(item, ref));
+		}
+		runOnUiThread(returnRes);
+	}
 	
 	private class MarkerAdapter extends ArrayAdapter<ListMarker> implements OnClickListener{
 		private Context ctx;
@@ -143,4 +169,6 @@ public class ListViewActivity extends ListActivity implements OnClickListener {
 		
 		
 	}
+
+	
 }

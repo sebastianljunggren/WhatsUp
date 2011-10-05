@@ -24,6 +24,13 @@ public class GeoLocationsRetrieve extends
 		this.latitudeB = latitudeB;
 		this.longitudeB = longitudeB;
 	}
+	
+	public GeoLocationsRetrieve(double[] area){
+		this.latitudeA = area[0];
+		this.longitudeA = area[1];
+		this.latitudeB = area[2];
+		this.longitudeB = area[3];
+	}
 
 	public void execute() {
 		String result = NetworkCalls.retrieveAnnotationMarkers(latitudeA,

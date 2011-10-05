@@ -7,39 +7,28 @@ public class OperationResult<T> {
 	private boolean hasErrors;
 	private T result;
 
-	public int getStatusCode() {
-		return this.statusCode;
+	public OperationResult(boolean hasErrors, int statusCode,
+			String statusMessage, T result) {
+		this.statusCode = statusCode;
+		this.statusMessage = statusMessage;
+		this.hasErrors = hasErrors;
+		this.result = result;
 	}
 
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
-		
+	public int getStatusCode() {
+		return this.statusCode;
 	}
 
 	public String getStatusMessage() {
 		return this.statusMessage;
 	}
 
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-		
-	}
-
 	public boolean hasErrors() {
 		return this.hasErrors;
 	}
 
-	public void setErrors(boolean hasErrors) {
-		this.hasErrors = hasErrors;
-		
-	}
-
 	public T getResult() {
 		return this.result;
-	}
-
-	public void setResult(T result) {
-		this.result = result;
 	}
 
 }

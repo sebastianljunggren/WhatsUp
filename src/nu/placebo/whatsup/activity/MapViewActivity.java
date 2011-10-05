@@ -6,8 +6,6 @@ import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
-import nu.placebo.whatsup.network.Login;
-import nu.placebo.whatsup.network.NetworkQueue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +31,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		NetworkQueue.getInstance().add(new Login());
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
@@ -42,19 +39,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
 		
 		setupToolbar();
-		
-		
 	}
 
 	private void setupToolbar() {
-		
-		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
-		annotationBtn.setOnClickListener(this);
 		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
 		Button logInBtn = (Button) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
-		
 	}
 
 	@Override
@@ -68,14 +59,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		
-		if(v.getId() == R.id.showAnnotation){
-			Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putInt("nid", 1234);
-			intent.putExtras(bundle);
-			this.startActivity(intent);
-		} else if(v.getId() == R.id.map_goto_list){
+		if(v.getId() == R.id.map_goto_list){
 			Intent intent = new Intent(MapViewActivity.this, ListViewActivity.class);
 			this.startActivity(intent);
 			this.finish();
