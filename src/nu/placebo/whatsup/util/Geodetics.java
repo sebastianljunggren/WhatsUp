@@ -1,6 +1,5 @@
 package nu.placebo.whatsup.util;
 
-import nu.placebo.whatsup.activity.ListViewActivity;
 import nu.placebo.whatsup.R;
 import android.content.res.Resources;
 
@@ -49,18 +48,28 @@ public class Geodetics {
 		return Math.sqrt(x*x + y*y)*6371;
 	}
 	
-	public static String distanceWithUnit(double dist){
+	/**
+	 * Produces a formatted string with a convenient unit depending on the actual distance.
+	 * 
+	 * Distances between 1 and 1000 m are presented: "123 m" (ex. dist = 123.4567)
+	 * Distances between 1000 and 100 000 m are presented "12.3 km" (ex. dist = 12345.67)
+	 * Distances exceeding 100 km will result in a "far away" string (ex. dist = 123456.7) 
+	 * 
+	 * @param distance
+	 * @return String with formatted value and approperiate unit
+	 */
+	public static String distanceWithUnit(double distance){
 		String result = "";
-		if(dist<0)
-			dist = -dist;
+		if(distance<0)
+			distance = -distance;
 		
 		
-		if(dist < 1000){
-			dist = Math.round(dist);
-			result = dist+" m";
-		} else if(dist < 100000){
-			dist = Math.round((dist/100))/10;
-			result = dist+" km";
+		if(distance < 1000){
+			distance = Math.round(distance);
+			result = distance+" m";
+		} else if(distance < 100000){
+			distance = Math.round((distance/100))/10;
+			result = distance+" km";
 		} else {
 			result = Resources.getSystem().getString(R.string.distance_far_away);
 		}
