@@ -6,8 +6,6 @@ import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
-import nu.placebo.whatsup.network.Login;
-import nu.placebo.whatsup.network.NetworkQueue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +31,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		NetworkQueue.getInstance().add(new Login());
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);

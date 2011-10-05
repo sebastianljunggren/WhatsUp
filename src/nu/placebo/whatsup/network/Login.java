@@ -22,9 +22,18 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class Login extends AbstractNetworkOperation<IOperationResult<Boolean>> {
+	
+	private String username;
+	private String password;
+
+	public Login(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
 
 	public void execute() {
 		IOperationResult<Boolean> operationResult = new OperationResult<Boolean>();
+		operationResult.setErrors(true);
 		DefaultHttpClient client = new DefaultHttpClient();
 
 		// Try to get a session id to use when logging in.
@@ -35,10 +44,6 @@ public class Login extends AbstractNetworkOperation<IOperationResult<Boolean>> {
 		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
 			response = client.execute(request);
-			operationResult.setStatusCode(response.getStatusLine()
-					.getStatusCode());
-			operationResult.setStatusMessage(response.getStatusLine()
-					.getReasonPhrase());
 			result = handler.handleResponse(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -58,15 +63,11 @@ public class Login extends AbstractNetworkOperation<IOperationResult<Boolean>> {
 		request = new HttpPost(Constants.API_URL + "user/login.json");
 		try {
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("username", "test"));
-			nameValuePairs.add(new BasicNameValuePair("password", "WhatsUp!"));
+			nameValuePairs.add(new BasicNameValuePair("username", this.username));
+			nameValuePairs.add(new BasicNameValuePair("password", this.password));
 			nameValuePairs.add(new BasicNameValuePair("sessid", sessid));
 			request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			response = client.execute(request);
-			operationResult.setStatusCode(response.getStatusLine()
-					.getStatusCode());
-			operationResult.setStatusMessage(response.getStatusLine()
-					.getReasonPhrase());
 			result = handler.handleResponse(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -83,10 +84,15 @@ public class Login extends AbstractNetworkOperation<IOperationResult<Boolean>> {
 			json = json.getJSONObject("user");
 			Log.w("WhatsUp", "User " + json.getString("name") + " with uid "
 					+ json.getString("uid") + " logged in.");
+			operationResult.setResult(true);
+			operationResult.setErrors(false);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		operationResult.setStatusCode(response.getStatusLine()
+				.getStatusCode());
+		operationResult.setStatusMessage(response.getStatusLine()
+				.getReasonPhrase());
 		client.getConnectionManager().shutdown();
 		super.notifyListeners(operationResult);
 
