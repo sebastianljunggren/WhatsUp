@@ -12,12 +12,15 @@ import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
@@ -27,11 +30,12 @@ import com.google.android.maps.Overlay;
  * 
  * @author Ablim
  */
-public class MapViewActivity extends MapActivity implements OnClickListener, NetworkOperationListener<GeoLocation> {
+public class MapViewActivity extends MapActivity implements OnClickListener, NetworkOperationListener<List<GeoLocation>> {
 
 	private MapView mapView;
 	private Marker marker;
 	private List<Overlay> overlays;
+	private GeoPoint[] geopoints;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +46,17 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView, this);
-		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
 		
 		setupToolbar();
-		
-		/*Bundle bundle = getIntent().getExtras();
-		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(getBottom(), getLeft(), getTop(), getRight());
-		gr.addOperationListener(this);
-		NetworkQueue.getInstance().add(gr);*/
 	}
-
+	
 	private void setupToolbar() {
 		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
 		Button logInBtn = (Button) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
+		Button refresh = (Button) this.findViewById(R.id.refresh);
+		refresh.setOnClickListener(this);
 	}
 
 	@Override
@@ -67,6 +67,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 	private void addMarker(GeoLocation g) {
 		marker.addOverlay(new ExtendedOverlayItem(g));
 		overlays.add(marker);
+		mapView.invalidate();
+	}
+	
+	private void addMarkers(List<GeoLocation> g) {
+		for (GeoLocation h : g) {
+			addMarker(h);
+		}
 	}
 
 	public void onClick(View v) {
@@ -77,15 +84,24 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		} else if (v.getId() == R.id.log_in) {
 			Intent intent = new Intent(MapViewActivity.this, LogInActivity.class);
 			this.startActivity(intent);
-			
+		} else if (v.getId() == R.id.refresh) {
+			refresh();
 		}
-
+	}
+	
+	public void refresh() {
+		GeoPoint[] p = GeoPointUtil.getBottomLeftToTopRightPoints(mapView.getMapCenter(), mapView.getLatitudeSpan(), 
+				mapView.getLongitudeSpan());
+		double[] d = GeoPointUtil.convertAreaToDoubles(p[0], p[1]);
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2], d[3]);
+		gr.addOperationListener(this);
+		NetworkQueue.getInstance().add(gr);
 	}
 
-	public void operationExcecuted(GeoLocation result) {
+	public void operationExcecuted(final List<GeoLocation> result) {
 		this.runOnUiThread(new Runnable() {
 			public void run() {
-				
+				addMarkers(result);
 			}	
 		});
 	}
