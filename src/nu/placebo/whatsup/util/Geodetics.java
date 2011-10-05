@@ -1,7 +1,10 @@
 package nu.placebo.whatsup.util;
 
+import nu.placebo.whatsup.activity.ListViewActivity;
+import nu.placebo.whatsup.R;
+import android.content.res.Resources;
+
 import com.google.android.maps.GeoPoint;
-import java.math.*;
 public class Geodetics {
 	
 	/**
@@ -27,7 +30,7 @@ public class Geodetics {
 	}
 	
 	/**
-	 * Pythagoras theorem with a transverse mercator projection. Efficient and accurate enough on short distances.
+	 * Pythagoras theorem with a  mercator projection. Efficient and accurate enough on short distances.
 	 * 
 	 * @param a - GeoPoint
 	 * @param b - GeoPoint
@@ -39,10 +42,11 @@ public class Geodetics {
 		double aLong = Math.toRadians((double)a.getLongitudeE6()/100000);
 		double bLong = Math.toRadians((double)b.getLongitudeE6()/100000);
 		
+		
 		double x =  (bLong-aLong) * Math.cos((aLat+bLat)/2);
 		double y = (bLat - aLat);
 		
-		return Math.sqrt(x*x + y*y);
+		return Math.sqrt(x*x + y*y)*6371;
 	}
 	
 	public static String distanceWithUnit(double dist){
@@ -54,9 +58,18 @@ public class Geodetics {
 		if(dist < 1000){
 			dist = Math.round(dist);
 			result = dist+" m";
+		} else if(dist < 100000){
+			dist = Math.round((dist/100))/10;
+			result = dist+" km";
+		} else {
+			result = Resources.getSystem().getString(R.string.distance_far_away);
 		}
 		
 		
 		return result;
+	}
+	
+	public static String distanceWithUnit(GeoPoint a, GeoPoint b){
+		return distanceWithUnit(distanceCoarse(a,b));
 	}
 }
