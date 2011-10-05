@@ -14,10 +14,11 @@ public class Annotation {
 	private List<Comment> comments = new LinkedList<Comment>();
 
 	public Annotation(GeoLocation geoLocation, String body,
-			String author) {
+			String author, List<Comment> comments2) {
 		this.geoLocation = new GeoLocation(geoLocation);
 		this.body = body;
 		this.author = author;
+		this.comments = comments2;
 	}
 
 	public Annotation(String json) throws JSONException {

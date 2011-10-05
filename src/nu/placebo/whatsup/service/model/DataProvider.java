@@ -1,8 +1,12 @@
 package nu.placebo.whatsup.service.model;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
@@ -36,8 +40,7 @@ public class DataProvider {
 					+ "nid INTEGER,"
 					+ "latitude REAL,"
 					+ "longitude REAL,"
-					+ "title TEXT,"
-					+ "vote INTEGER"
+					+ "title TEXT"
 					+ ");");
 			db.execSQL("CREATE TABLE " + ANNOTATION_TABLE + " ("
 					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -46,32 +49,20 @@ public class DataProvider {
 					+ "author TEXT"
 					+ ");");
 			db.execSQL("CREATE TABLE " + COMMENT_TABLE + " ("
-					+ "comment TEXT");
-			db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE);
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT"
+					+ "nid REAL," 
+					+ "comment TEXT,"
+					+ "author TEXT,"
+					+ "title TEXT,"
+					+ "added_date TEXT"
+					+ ");");
+			//db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " + GEOLOCATION_TABLE);
 			onCreate(db);
-		}
-		
-		public List<GeoLocation> retrieveAnnotationMarkers(double latitudeA,
-			double longitudeA, double latitudeB, double longitudeB) {
-			/* UNDER CONSTRUCTION
-			SQLiteDatabase db = getReadableDatabase();
-			Cursor c = db.query(ANNOTATION_MARKER_TABLE, null, "", selectionArgs, groupBy, having, orderBy);
-			*/
-			return null;
-		}
-		
-		public Annotation retrieveAnnotation(int nid) {
-			/* UNDER CONSTRUCTION
-			SQLiteDatabase db = getReadableDatabase();
-			Cursor c = db.query(ANNOTATION_MARKER_TABLE, null, "nid = " + nid, null, null, null, null);
-			c.
-			*/
-			return null;
 		}
 	}
 	
@@ -93,17 +84,59 @@ public class DataProvider {
 		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
 		//cache, and means of acquiring the data fetched from remote server
 		
-		//dbHelper.getReadableDatabase().query(
-				//DatabaseHelper.ANNOTATION_TABLE, 
-				//columns, 
-				//selection, 
-				//selectionArgs, 
-				//groupBy, 
-				//having, 
-				//orderBy);
+		Cursor c = dbHelper.getReadableDatabase().query(
+				DatabaseHelper.ANNOTATION_TABLE, 
+				null, 
+				"nid = " + nid, 
+				null, 
+				null, 
+				null, 
+				null);
 		
+		c.moveToFirst();
+		String author = c.getString(c.getColumnIndex("author"));
+		String body = c.getString(c.getColumnIndex("body"));
 		
-		return null;
+		c = dbHelper.getReadableDatabase().query(
+				DatabaseHelper.GEOLOCATION_TABLE, 
+				null, 
+				"nid = " + nid, 
+				null, 
+				null, 
+				null, 
+				null);
+		
+		c.moveToFirst();
+		int latitude = c.getInt(c.getColumnIndex("latitude"));
+		int longitude = c.getInt(c.getColumnIndex("longitude"));
+		String title = c.getString(c.getColumnIndex("title"));
+		
+		c = dbHelper.getReadableDatabase().query(
+				DatabaseHelper.COMMENT_TABLE, 
+				null, 
+				"", 
+				null, 
+				null, 
+				null, 
+				null);
+		
+		c.moveToFirst();
+		List<Comment> comments = new ArrayList<Comment>();
+		do {
+			String comment = c.getString(c.getColumnIndex("comment"));
+			String cTitle = c.getString(c.getColumnIndex("title"));
+			String cAuthor = c.getString(c.getColumnIndex("author"));
+			Date cDate = new Date(c.getLong(c.getColumnIndex("added_date")));
+			comments.add(new Comment(cAuthor, comment, cTitle, cDate));
+		} while(!c.isLast());
+		
+		DataReturn<Annotation> result = new DataReturn<Annotation>(new Annotation(
+				new GeoLocation(nid, latitude, longitude, title), 
+				body, author, comments));
+		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
+		ar.addOperationListener(result);
+		networkQueue.add(ar);
+		return result;
 	}
 	
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(double latitudeA,
@@ -119,7 +152,7 @@ public class DataProvider {
 
 			public void operationExcecuted(Annotation result) {
 				// TODO Store in local db
-				// TODO Notify those interested in the result (binder).				
+				// TODO Notify those interested in the result (binder).		
 			}
 			
 		});
