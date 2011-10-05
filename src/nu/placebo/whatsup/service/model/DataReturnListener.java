@@ -1,4 +1,4 @@
-package nu.placebo.whatsup.model;
+package nu.placebo.whatsup.service.model;
 
 public interface DataReturnListener {
 	

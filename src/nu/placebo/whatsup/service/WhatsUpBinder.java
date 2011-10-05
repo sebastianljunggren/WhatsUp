@@ -1,6 +1,6 @@
 package nu.placebo.whatsup.service;
 
-import nu.placebo.whatsup.model.DataProvider;
+import nu.placebo.whatsup.service.model.DataProvider;
 import android.os.Binder;
 
 /**
