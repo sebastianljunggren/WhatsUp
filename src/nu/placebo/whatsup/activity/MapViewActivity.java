@@ -54,8 +54,10 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		gotoListBtn.setOnClickListener(this);
 		Button logInBtn = (Button) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
-		Button refresh = (Button) this.findViewById(R.id.refresh);
-		refresh.setOnClickListener(this);
+		Button refreshBtn = (Button) this.findViewById(R.id.map_refresh);
+		
+		if(refreshBtn != null)
+			refreshBtn.setOnClickListener(this); 
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		} else if (v.getId() == R.id.log_in) {
 			Intent intent = new Intent(MapViewActivity.this, LogInActivity.class);
 			this.startActivity(intent);
-		} else if (v.getId() == R.id.refresh) {
+		} else if (v.getId() == R.id.map_refresh) {
 			refresh();
 		}
 	}

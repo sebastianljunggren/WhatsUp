@@ -46,25 +46,28 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
 		this.m_adapter = new MarkerAdapter(this, R.layout.list_item, m_markers);
 		setListAdapter(this.m_adapter);
 		
-		this.ref = new GeoLocation(0, 57.688328, 11.979196, "Hubben");
-		
+		this.ref = new GeoLocation(0, 57.688328, 11.979196, "Hubben");			
+		refresh();
+	}
+	
+	private void refresh() {
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008, 9.667969, 68.974164, 24.785156);
 		glr.addOperationListener(this);
 		NetworkQueue.getInstance().add(glr);
-			
-		
 	}
-	
+
 	private void buildToolbar() {
 		Button mapBtn = (Button) this.findViewById(R.id.list_goto_map);
 		mapBtn.setOnClickListener(this);
-		
+		Button refreshBtn = (Button) this.findViewById(R.id.list_refresh);
+		refreshBtn.setOnClickListener(this);
 	}
 
 	private Runnable returnRes = new Runnable() {
 
 		public void run() {
 			if(m_markers != null && m_markers.size() > 0){
+				m_adapter.markers.clear();
                 m_adapter.notifyDataSetChanged();
                 for(int i=0;i<m_markers.size();i++)
                 m_adapter.add(m_markers.get(i));
@@ -79,6 +82,9 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
     		Intent intent = new Intent(this, MapViewActivity.class);
     		this.startActivity(intent);
     		this.finish();
+    	}
+    	if(v.getId() == R.id.list_refresh){
+    		this.refresh();
     	}
     }
     
