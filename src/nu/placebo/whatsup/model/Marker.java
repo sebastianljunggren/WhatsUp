@@ -52,4 +52,8 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 		return true;
 	}
 	
+	public void clear() {
+		overlays.clear();
+	}
+	
 }

@@ -35,7 +35,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 	private MapView mapView;
 	private Marker marker;
 	private List<Overlay> overlays;
-	private GeoPoint[] geopoints;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +89,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 	}
 	
 	public void refresh() {
+		marker.clear();
 		GeoPoint[] p = GeoPointUtil.getBottomLeftToTopRightPoints(mapView.getMapCenter(), mapView.getLatitudeSpan(), 
 				mapView.getLongitudeSpan());
 		double[] d = GeoPointUtil.convertAreaToDoubles(p[0], p[1]);
