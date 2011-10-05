@@ -6,7 +6,7 @@ public class GeoPointUtil {
 	
 	
 	/**
-	 * Converts two GeoPoints and delivers an array with decimal degrees doubles in the order:
+	 * Converts two GeoPoints and delivers an array with decimal degree doubles in the order:
 	 * 
 	 * minLat, minLong, maxLat, maxLong
 	 * 
@@ -27,5 +27,20 @@ public class GeoPointUtil {
 		return result;
 	}
 	
+	/**
+	 * Converts a single GeoPoint to an array of decimal degree doubles
+	 * 
+	 * 
+	 * @param a
+	 * @return [lat, long]
+	 */
+	public static double[] convertGeoPointToDoubles(GeoPoint a){
+		double[] result = new double[2];
+		
+		result[0] = ((double)a.getLatitudeE6()) / 1000000;
+		result[1] = ((double)a.getLongitudeE6()) / 1000000;
+		
+		return result;
+	}
 	
 }
