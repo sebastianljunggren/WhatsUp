@@ -7,17 +7,17 @@
 		android:orientation="horizontal" android:layout_width="match_parent"
 		android:layout_height="50dp">
 
-		<Button android:layout_height="wrap_content" android:text="Add marker"
-			android:id="@+id/button1" android:layout_width="wrap_content">
+		<Button android:layout_height="wrap_content" android:id="@+id/map_refresh"
+			android:layout_width="wrap_content" android:background="@drawable/add">
 		</Button>
-		<Button android:text="Show List" android:id="@+id/map_goto_list" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-		<Button android:text="Log in" android:id="@+id/log_in" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-		<Button 
-			android:text="Refresh" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" android:id="@+id/map_refresh">
+		<Button android:background="@drawable/list" android:id="@+id/map_goto_list"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+		<Button android:background="@drawable/remove" android:id="@+id/log_in"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+		<Button android:background="@drawable/refresh" android:id="@+id/refresh"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
 		</Button>
-		
+
 
 	</LinearLayout>
 
