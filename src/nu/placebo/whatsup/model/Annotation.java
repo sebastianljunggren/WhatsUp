@@ -9,17 +9,15 @@ import org.json.JSONObject;
 public class Annotation {
 	private GeoLocation geoLocation;
 	private String body;
-	private int uid;
 	private String author;
 	
 	private List<Comment> comments = new LinkedList<Comment>();
 
-	public Annotation(GeoLocation geoLocation, String body, int uid,
+	public Annotation(GeoLocation geoLocation, String body,
 			String author) {
 		this.geoLocation = new GeoLocation(geoLocation);
 		this.body = body;
 		this.author = author;
-		this.uid = uid;
 	}
 
 	public Annotation(String json) throws JSONException {
@@ -33,7 +31,6 @@ public class Annotation {
 		this.geoLocation = new GeoLocation(json.getInt("nid"),
 				location.getDouble("latitude"),
 				location.getDouble("longitude"), json.getString("title"));
-		this.uid = json.getInt("uid");
 		this.author = json.getString("name");
 	}
 
@@ -43,10 +40,6 @@ public class Annotation {
 
 	public String getBody() {
 		return body;
-	}
-
-	public int getUid() {
-		return uid;
 	}
 
 	public String getAuthor() {

@@ -19,8 +19,4 @@ public class ExtendedOverlayItem extends OverlayItem {
 	public int getId() {
 		return id;
 	}
-	
-	public String getTitle() {
-		return super.getTitle();
-	}
 }

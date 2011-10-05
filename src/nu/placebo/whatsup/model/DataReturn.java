@@ -1,5 +1,7 @@
 package nu.placebo.whatsup.model;
 
+import nu.placebo.whatsup.network.NetworkOperationListener;
+
 /**
  * This class holds the data gained from any possible local cache,
  * and by listening to it (through DataReturnListener), the new data
@@ -14,7 +16,7 @@ package nu.placebo.whatsup.model;
  * @author Wange
  * @param <T> the type wanted as return.
  */
-public class DataReturn<T> {
+public class DataReturn<T> implements NetworkOperationListener<T> {
 
 	private T localData;
 	private T serverData;
@@ -25,6 +27,13 @@ public class DataReturn<T> {
 		this.localData = localData;
 	}
 	
+	/**
+	 * Gets the locally returned data. If this is null, it means no
+	 * local data was found and the owner of this DataReturn object
+	 * will have to wait for their DataReturnListener-method triggering.
+	 * 
+	 * @return the data acquired locally. Null if nothing found.
+	 */
 	public T getLocalData() {
 		return localData;
 	}
@@ -42,22 +51,30 @@ public class DataReturn<T> {
 		return (canFetchNewData ? serverData : null);
 	}
 	
-	void fillInServerData(T serverData) throws NoListenerException {
-		if(this.listener == null) {
-			throw new NoListenerException();
-		}
-		if(!localData.equals(serverData)) {
-			this.serverData = serverData;
-			canFetchNewData  = true;
-			listener.newDataReceived(true);
-		} else {
-			listener.newDataReceived(false);
-		}
-	}
-	
 	public void addDataReturnListener(DataReturnListener listener) {
 		if(this.listener == null) {
 			this.listener = listener;
+			notifyAll();
+		}
+	}
+
+	public void operationExcecuted(T result) {
+		boolean threadInterupted = false;
+		while(this.listener == null || threadInterupted) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				threadInterupted = true;
+			}
+		}
+		if(!threadInterupted) {
+			if(!localData.equals(result)) {
+				this.serverData = result;
+				canFetchNewData  = true;
+				listener.newDataReceived(true);
+			} else {
+				listener.newDataReceived(false);
+			}
 		}
 	}
 }
