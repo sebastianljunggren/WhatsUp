@@ -36,16 +36,16 @@ public class Geodetics {
 	 * @return distance in meters
 	 */
 	public static double distanceCoarse(GeoPoint a, GeoPoint b){
-		double aLat = Math.toRadians((double)a.getLatitudeE6()/1000000);
-		double bLat = Math.toRadians((double)b.getLatitudeE6()/1000000);
-		double aLong = Math.toRadians((double)a.getLongitudeE6()/100000);
-		double bLong = Math.toRadians((double)b.getLongitudeE6()/100000);
+		double aLat = Math.toRadians(((double)a.getLatitudeE6())/1000000);
+		double bLat = Math.toRadians(((double)b.getLatitudeE6())/1000000);
+		double aLong = Math.toRadians(((double)a.getLongitudeE6())/100000);
+		double bLong = Math.toRadians(((double)b.getLongitudeE6())/100000);
 		
 		
 		double x =  (bLong-aLong) * Math.cos((aLat+bLat)/2);
 		double y = (bLat - aLat);
 		
-		return Math.sqrt(x*x + y*y)*6371;
+		return Math.sqrt(x*x + y*y)*6371000;
 	}
 	
 	/**
@@ -67,11 +67,11 @@ public class Geodetics {
 		if(distance < 1000){
 			distance = Math.round(distance);
 			result = distance+" m";
-		} else if(distance < 100000){
+		} else if(distance < 1000000){
 			distance = Math.round((distance/100))/10;
 			result = distance+" km";
 		} else {
-			result = Resources.getSystem().getString(R.string.distance_far_away);
+			result = "Very far away";
 		}
 		
 		
