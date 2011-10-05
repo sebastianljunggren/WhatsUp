@@ -3,9 +3,15 @@ package nu.placebo.whatsup.activity;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
+import nu.placebo.whatsup.network.AnnotationRetrieve;
+import nu.placebo.whatsup.network.GeoLocationsRetrieve;
+import nu.placebo.whatsup.network.Login;
+import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.NetworkQueue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,10 +25,9 @@ import com.google.android.maps.Overlay;
 /**
  * Activity that holds the map and control map actions. It's the "main" activity.
  * 
- * 
  * @author Ablim
  */
-public class MapViewActivity extends MapActivity implements OnClickListener {
+public class MapViewActivity extends MapActivity implements OnClickListener, NetworkOperationListener<GeoLocation> {
 
 	private MapView mapView;
 	private Marker marker;
@@ -31,6 +36,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
@@ -39,6 +45,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
 		
 		setupToolbar();
+		
+		/*Bundle bundle = getIntent().getExtras();
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(getBottom(), getLeft(), getTop(), getRight());
+		gr.addOperationListener(this);
+		NetworkQueue.getInstance().add(gr);*/
 	}
 
 	private void setupToolbar() {
@@ -69,6 +80,14 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 			
 		}
 
+	}
+
+	public void operationExcecuted(GeoLocation result) {
+		this.runOnUiThread(new Runnable() {
+			public void run() {
+				
+			}	
+		});
 	}
 	
 }
