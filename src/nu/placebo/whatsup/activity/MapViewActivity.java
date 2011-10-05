@@ -42,19 +42,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 		addMarker(new GeoLocation(1234, 57716666, 11983333, "Göteborg"));
 		
 		setupToolbar();
-		
-		
 	}
 
 	private void setupToolbar() {
-		
-		Button annotationBtn = (Button) this.findViewById(R.id.showAnnotation);
-		annotationBtn.setOnClickListener(this);
 		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
 		Button logInBtn = (Button) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
-		
 	}
 
 	@Override
@@ -68,14 +62,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		
-		if(v.getId() == R.id.showAnnotation){
-			Intent intent = new Intent(MapViewActivity.this, AnnotationActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putInt("nid", 1234);
-			intent.putExtras(bundle);
-			this.startActivity(intent);
-		} else if(v.getId() == R.id.map_goto_list){
+		if(v.getId() == R.id.map_goto_list){
 			Intent intent = new Intent(MapViewActivity.this, ListViewActivity.class);
 			this.startActivity(intent);
 			this.finish();

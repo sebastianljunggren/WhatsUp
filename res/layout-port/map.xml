@@ -10,8 +10,6 @@
 		<Button android:layout_height="wrap_content" android:text="Add marker"
 			android:id="@+id/button1" android:layout_width="wrap_content">
 		</Button>
-		<Button android:layout_height="wrap_content" android:id="@+id/showAnnotation"
-			android:text="A" android:layout_width="wrap_content"></Button>
 		<Button android:text="Show List" android:id="@+id/map_goto_list" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 		<Button android:text="Log in" android:id="@+id/log_in" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 
