@@ -1,7 +1,6 @@
 package nu.placebo.whatsup.network;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import nu.placebo.whatsup.constants.Constants;

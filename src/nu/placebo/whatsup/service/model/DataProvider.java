@@ -2,16 +2,15 @@ package nu.placebo.whatsup.service.model;
 
 import java.util.List;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataProvider {
 

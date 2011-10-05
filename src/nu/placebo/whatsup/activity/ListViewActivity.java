@@ -1,19 +1,16 @@
 package nu.placebo.whatsup.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.R.id;
-import nu.placebo.whatsup.R.layout;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
-import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,16 +51,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008, 9.667969, 68.974164, 24.785156);
 		glr.addOperationListener(this);
 		NetworkQueue.getInstance().add(glr);
-		
-		
-/*		TODO: May be removed
-		viewMarkers = new Runnable(){
-			public void run(){
-				getMarkers();
-			}
-		};
-		Thread thread = new Thread(null, viewMarkers, "MagnetoBackground");
-		thread.start(); */		
+			
 		
 	}
 	
@@ -72,20 +60,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
 		mapBtn.setOnClickListener(this);
 		
 	}
-/*		TODO: May be removed, handled by operationExecuted()
-	private void getMarkers(){
-		try{
-			GeoLocation ref = new GeoLocation(0, 57.688337, 11.979132, "The Hubben");
-			m_markers = new ArrayList<ListMarker>();
-			
-			m_markers.add(new ListMarker(new GeoLocation(1, 57.706325, 11.937160, "Lindholmen"), ref));
-			m_markers.add(new ListMarker(new GeoLocation(2, 57.706325, 11.937160, "Liseberg"), ref));
-		} catch (Exception e) {
-			
-		}
-		runOnUiThread(returnRes);
-	}
-*/	
+
 	private Runnable returnRes = new Runnable() {
 
 		public void run() {
@@ -108,13 +83,15 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
     }
     
     public void operationExcecuted(List<GeoLocation> result) {
-    	// Get active reference point
+    	// TODO: Get active reference point
     	
     	m_markers = new ArrayList<ListMarker>();
     	
 		for(GeoLocation item : result){
 			m_markers.add(new ListMarker(item, ref));
 		}
+		
+		Collections.sort(m_markers);
 		runOnUiThread(returnRes);
 	}
 	

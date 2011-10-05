@@ -1,8 +1,6 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.R.id;
-import nu.placebo.whatsup.R.layout;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;

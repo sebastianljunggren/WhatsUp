@@ -20,7 +20,6 @@ package nu.placebo.whatsup.balloon;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
-
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
