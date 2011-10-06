@@ -61,6 +61,10 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		return false;
 	}
 	
+	/**
+	 * Creates overlays and adds them to the map.
+	 * @param g
+	 */
 	private void addMarkers(List<GeoLocation> g) {
 		for (GeoLocation h : g) {
 			marker.addOverlay(new ExtendedOverlayItem(h));
@@ -92,6 +96,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		gr.addOperationListener(this);
 		NetworkQueue.getInstance().add(gr);
 	}
+
 
 	public void operationExcecuted(final OperationResult<List<GeoLocation>> result) {
 		if(!result.hasErrors()) {
