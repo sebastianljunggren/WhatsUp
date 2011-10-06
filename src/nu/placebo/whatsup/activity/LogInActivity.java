@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
@@ -12,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<OperationResult<Boolean>> {
+public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<OperationResult<SessionInfo>> {
 
 	private TextView userName;
 	private TextView password;
@@ -40,7 +41,7 @@ public class LogInActivity extends Activity implements OnClickListener, NetworkO
 		this.result.setText("Logging in...");
 	}
 
-	public void operationExcecuted(final OperationResult<Boolean> r) {
+	public void operationExcecuted(final OperationResult<SessionInfo> r) {
 		this.runOnUiThread(new Runnable() {
 
 			public void run() {
