@@ -39,7 +39,10 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	
 	public void addOverlay(OverlayItem overlay) {
 	    overlays.add(overlay);
-	    populate();
+	}
+	
+	public void callPopulate() {
+		populate();
 	}
 	
 	@Override

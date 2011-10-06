@@ -55,9 +55,8 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		Button logInBtn = (Button) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
 		Button refreshBtn = (Button) this.findViewById(R.id.map_refresh);
-		
-		if(refreshBtn != null)
-			refreshBtn.setOnClickListener(this); 
+		refreshBtn.setOnClickListener(this);
+			 
 	}
 
 	@Override
@@ -65,16 +64,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		return false;
 	}
 	
-	private void addMarker(GeoLocation g) {
-		marker.addOverlay(new ExtendedOverlayItem(g));
-		overlays.add(marker);
-		mapView.invalidate();
-	}
-	
 	private void addMarkers(List<GeoLocation> g) {
 		for (GeoLocation h : g) {
-			addMarker(h);
+			marker.addOverlay(new ExtendedOverlayItem(h));
 		}
+		marker.callPopulate();
+		overlays.add(marker);
+		mapView.invalidate();
 	}
 
 	public void onClick(View v) {
