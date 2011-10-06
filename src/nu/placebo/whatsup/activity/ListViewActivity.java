@@ -70,7 +70,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener, N
 				m_adapter.markers.clear();
                 m_adapter.notifyDataSetChanged();
                 for(int i=0;i<m_markers.size();i++)
-                m_adapter.add(m_markers.get(i));
+                	m_adapter.add(m_markers.get(i));
             }
            // m_ProgressDialog.dismiss();
             m_adapter.notifyDataSetChanged();			
