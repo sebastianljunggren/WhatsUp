@@ -54,7 +54,8 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		logInBtn.setOnClickListener(this);
 		Button refreshBtn = (Button) this.findViewById(R.id.map_refresh);
 		refreshBtn.setOnClickListener(this);
-			 
+		Button addAnnotationButton = (Button) findViewById(R.id.add_annotation);
+		addAnnotationButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -85,6 +86,9 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 			this.startActivity(intent);
 		} else if (v.getId() == R.id.map_refresh) {
 			refresh();
+		} else if (v.getId() == R.id.add_annotation) {
+			Intent intent = new Intent(MapViewActivity.this, PositionPickerActivity.class);
+			this.startActivity(intent);
 		}
 	}
 	
