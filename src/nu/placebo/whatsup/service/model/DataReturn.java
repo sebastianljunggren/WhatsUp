@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.service.model;
 
 import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.OperationResult;
 
 /**
  * This class holds the data gained from any possible local cache,
@@ -58,7 +59,7 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 		}
 	}
 
-	public void operationExcecuted(T result) {
+	public void operationExcecuted(OperationResult<T> result) {
 		boolean threadInterupted = false;
 		while(this.listener == null || threadInterupted) {
 			try {
@@ -69,7 +70,7 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 		}
 		if(!threadInterupted) {
 			if(!localData.equals(result)) {
-				this.serverData = result;
+				this.serverData = result.getResult();
 				canFetchNewData  = true;
 				listener.newDataReceived(true);
 			} else {

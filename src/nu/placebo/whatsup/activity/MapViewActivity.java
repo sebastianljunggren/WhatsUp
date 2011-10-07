@@ -3,19 +3,16 @@ package nu.placebo.whatsup.activity;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
-import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
-import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -96,12 +93,14 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		NetworkQueue.getInstance().add(gr);
 	}
 
-	public void operationExcecuted(final List<GeoLocation> result) {
-		this.runOnUiThread(new Runnable() {
-			public void run() {
-				addMarkers(result);
-			}	
-		});
+	public void operationExcecuted(final OperationResult<List<GeoLocation>> result) {
+		if(!result.hasErrors()) {
+			this.runOnUiThread(new Runnable() {
+				public void run() {
+					addMarkers(result.getResult());
+				}	
+			});			
+		}
 	}
 	
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -12,6 +11,7 @@ import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -151,7 +151,7 @@ public class DataProvider {
 		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
 		ar.addOperationListener(new NetworkOperationListener<Annotation>() {
 
-			public void operationExcecuted(Annotation result) {
+			public void operationExcecuted(OperationResult<Annotation> result) {
 				// TODO Store in local db
 				// TODO Notify those interested in the result (binder).		
 			}
@@ -169,7 +169,7 @@ public class DataProvider {
 				longitudeA, latitudeB, longitudeB);
 		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
 
-			public void operationExcecuted(List<GeoLocation> result) {
+			public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
 				// TODO Store in local db
 				// TODO Notify those interested in the result (binder).
 			}

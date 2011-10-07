@@ -11,9 +11,9 @@ public abstract class AbstractNetworkOperation<T> implements
 	public final void addOperationListener(NetworkOperationListener<T> listener) {
 		this.listeners.add(listener);
 	}
-	
-	public final void notifyListeners(T result) {
-		for (NetworkOperationListener<T> listener: this.listeners){
+
+	public final void notifyListeners(OperationResult<T> result) {
+		for (NetworkOperationListener<T> listener : this.listeners) {
 			listener.operationExcecuted(result);
 		}
 	}

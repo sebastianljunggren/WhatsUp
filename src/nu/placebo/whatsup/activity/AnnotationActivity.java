@@ -6,12 +6,20 @@ import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
 
-public class AnnotationActivity extends Activity implements NetworkOperationListener<Annotation>{
+/**
+ * 
+ * Activity that shows annotations.
+ *
+ */
+
+public class AnnotationActivity extends Activity implements
+		NetworkOperationListener<Annotation> {
 
 	private TextView title;
 	private TextView body;
@@ -45,16 +53,17 @@ public class AnnotationActivity extends Activity implements NetworkOperationList
 		this.author.setText("by " + annotation.getAuthor());
 	}
 
-	public void operationExcecuted(final Annotation result) {
-		this.runOnUiThread(new Runnable() {
+	public void operationExcecuted(final OperationResult<Annotation> result) {
+		if (!result.hasErrors()) {
+			this.runOnUiThread(new Runnable() {
 
-			public void run() {
-				setAnnotation(result);	
-				
-			}
-			
-		});
-		
+				public void run() {
+					setAnnotation(result.getResult());
+
+				}
+
+			});
+		}
 	}
 
 }

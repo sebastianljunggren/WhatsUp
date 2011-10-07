@@ -22,7 +22,7 @@ import android.util.Log;
  * Handles the necessary network calls to log in.
  */
 public class Login extends
-		AbstractNetworkOperation<OperationResult<SessionInfo>> {
+		AbstractNetworkOperation<SessionInfo> {
 
 	private String username;
 	private String password;
@@ -56,9 +56,6 @@ public class Login extends
 					+ "user/login.json", body, null);
 			result = handler.handleResponse(response);
 			this.parseLogIn(result);
-			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -13,7 +13,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<OperationResult<SessionInfo>> {
+/**
+ * 
+ * Activity with the log in form.
+ *
+ */
+
+public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<SessionInfo> {
 
 	private TextView userName;
 	private TextView password;
