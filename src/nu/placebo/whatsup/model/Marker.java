@@ -15,7 +15,7 @@ import com.google.android.maps.OverlayItem;
 /**
  * Class that contains overlays for a map, and represents them with a drawable.
  * 
- * @author Ablim
+ * @author Albin Bramstång
  */
 public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 

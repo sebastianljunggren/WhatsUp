@@ -1,7 +1,6 @@
 package nu.placebo.whatsup.activity;
 
 import java.util.List;
-
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -13,10 +12,13 @@ import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.MovementMethod;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
-
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -25,7 +27,7 @@ import com.google.android.maps.Overlay;
 /**
  * Activity that holds the map and control map actions. It's the "main" activity.
  * 
- * @author Ablim
+ * @author Albin Bramstång
  */
 public class MapViewActivity extends MapActivity implements OnClickListener, NetworkOperationListener<List<GeoLocation>> {
 
@@ -42,7 +44,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView, this);
-		
 		setupToolbar();
 	}
 	
@@ -87,6 +88,9 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		}
 	}
 	
+	/**
+	 * Retrieves information about the current location on the map, and sends it to the server. 
+	 */
 	public void refresh() {
 		marker.clear();
 		GeoPoint[] p = GeoPointUtil.getBottomLeftToTopRightPoints(mapView.getMapCenter(), mapView.getLatitudeSpan(), 
@@ -97,7 +101,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		NetworkQueue.getInstance().add(gr);
 	}
 
-
 	public void operationExcecuted(final OperationResult<List<GeoLocation>> result) {
 		if(!result.hasErrors()) {
 			this.runOnUiThread(new Runnable() {
@@ -107,5 +110,5 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 			});			
 		}
 	}
-	
+
 }
