@@ -21,8 +21,7 @@ import android.util.Log;
 /**
  * Handles the necessary network calls to log in.
  */
-public class Login extends
-		AbstractNetworkOperation<SessionInfo> {
+public class Login extends AbstractNetworkOperation<SessionInfo> {
 
 	private String username;
 	private String password;
@@ -46,7 +45,7 @@ public class Login extends
 					+ "system/connect.json", null, null);
 			result = handler.handleResponse(response);
 			this.parseConnect(result);
-			
+
 			// Actually send the user name and password to the server.
 			List<NameValuePair> body = new ArrayList<NameValuePair>(2);
 			body.add(new BasicNameValuePair("username", this.username));
@@ -70,7 +69,7 @@ public class Login extends
 		try {
 			JSONObject json = new JSONObject(result);
 			this.sessionId = json.getString("sessid");
-			Log.w("WhatsUp", "sessid: " + this.sessionId);
+			Log.w("WhatsUp", "Connected with session ID " + this.sessionId);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -81,9 +80,9 @@ public class Login extends
 		try {
 			JSONObject json = new JSONObject(result);
 			this.sessionId = json.getString("sessid");
-			Log.w("WhatsUp", "Sessid: " + this.sessionId);
 			sessionName = json.getString("session_name");
-			Log.w("WhatsUp", "Session name: " + sessionName);
+			Log.w("WhatsUp", "Logged in with session name " + sessionName
+					+ " and session ID: " + this.sessionId);
 			json = json.getJSONObject("user");
 			Log.w("WhatsUp", "User " + json.getString("name") + " with uid "
 					+ json.getString("uid") + " logged in.");

@@ -3,6 +3,11 @@ package nu.placebo.whatsup.network;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * Abstract class that helps NetworkOperations to handle their listeners.
+ *
+ */
 public abstract class AbstractNetworkOperation<T> implements
 		NetworkOperation<T> {
 
