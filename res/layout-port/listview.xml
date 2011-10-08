@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent" android:weightSum="1">
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <Button android:layout_width="wrap_content" android:layout_height="match_parent" android:id="@+id/list_goto_map" android:text="Show Map"></Button>
-        <Button android:id="@+id/list_refresh" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Refresh"></Button>
-    </LinearLayout>
-    <ListView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/android:list"></ListView>
-    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:weightSum="1">
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_width="match_parent" android:layout_height="wrap_content">
+		<ImageButton android:src="@drawable/map"
+			android:layout_width="wrap_content" android:layout_height="match_parent"
+			android:id="@+id/list_goto_map"></ImageButton>
+		<ImageButton android:src="@drawable/refresh" android:id="@+id/list_refresh"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"></ImageButton>
+	</LinearLayout>
+	<ListView android:layout_height="wrap_content"
+		android:layout_width="match_parent" android:id="@+id/android:list"></ListView>
+
 </LinearLayout>

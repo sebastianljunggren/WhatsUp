@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.activity;
 
 import java.util.List;
+
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -12,13 +13,10 @@ import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.MovementMethod;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
+import android.widget.ImageButton;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -48,13 +46,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 	}
 	
 	private void setupToolbar() {
-		Button gotoListBtn = (Button) this.findViewById(R.id.map_goto_list);
+		ImageButton gotoListBtn = (ImageButton) this.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
-		Button logInBtn = (Button) this.findViewById(R.id.log_in);
+		ImageButton logInBtn = (ImageButton) this.findViewById(R.id.log_in);
 		logInBtn.setOnClickListener(this);
-		Button refreshBtn = (Button) this.findViewById(R.id.map_refresh);
+		ImageButton refreshBtn = (ImageButton) this.findViewById(R.id.map_refresh);
 		refreshBtn.setOnClickListener(this);
-		Button addAnnotationButton = (Button) findViewById(R.id.add_annotation);
+		ImageButton addAnnotationButton = (ImageButton) findViewById(R.id.add_annotation);
 		addAnnotationButton.setOnClickListener(this);
 	}
 

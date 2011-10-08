@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
@@ -60,9 +60,9 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 	}
 
 	private void buildToolbar() {
-		Button mapBtn = (Button) this.findViewById(R.id.list_goto_map);
+		ImageButton mapBtn = (ImageButton) this.findViewById(R.id.list_goto_map);
 		mapBtn.setOnClickListener(this);
-		Button refreshBtn = (Button) this.findViewById(R.id.list_refresh);
+		ImageButton refreshBtn = (ImageButton) this.findViewById(R.id.list_refresh);
 		refreshBtn.setOnClickListener(this);
 	}
 
