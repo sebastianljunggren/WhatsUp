@@ -3,6 +3,7 @@ package nu.placebo.whatsup.activity;
 import com.google.android.maps.GeoPoint;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.util.GeoPointUtil;
@@ -20,11 +21,11 @@ public class CreateAnnotationActivity extends Activity implements
 	private GeoPoint gp;
 	private TextView titleField;
 	private TextView descField;
-	private boolean hasSubmit = false;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setResult(Constants.ACTIVITY_INTERRUPTED);
 		
 		Bundle bundle = this.getIntent().getExtras();
 		if(GeoPointUtil.bundleHasGeoPoint(bundle)){
@@ -51,8 +52,7 @@ public class CreateAnnotationActivity extends Activity implements
 
 	public void onClick(View v) {
 		if(v.getId() == R.id.create_annot_submit){
-			this.hasSubmit = true;
-			
+			setResult(Constants.ACTIVITY_FINISHED_OK);
 		/*	String title = (String) titleField.getText();
 			String desc = (String) titleField.getText();
 			if (title != null && title != "") {
@@ -69,11 +69,6 @@ public class CreateAnnotationActivity extends Activity implements
 	 */
 	@Override
 	protected void onDestroy() {
-		if(hasSubmit){
-			this.setResult(R.string.ACTIVITY_FINISH_OK);
-		} else {
-			this.setResult(R.string.ACTIVITY_DID_INTERRUPT);
-		}
 		super.onDestroy();
 	}
 	

@@ -38,7 +38,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener, Net
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.map);
-		mapView = (MapView) findViewById(R.id.mapview);
+		mapView = (MapView) findViewById(R.id.mapviewactivity_mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3), mapView, this);

@@ -16,7 +16,7 @@
 	</LinearLayout>
 
 	<FrameLayout android:layout_height="match_parent"
-		android:id="@+id/mapFrameLayout" android:layout_width="match_parent">
+		android:layout_width="match_parent" android:id="@+id/position_picker_mapFrameLayout">
 
 		<com.google.android.maps.MapView
 			android:id="@+id/position_picker_mapview" android:layout_width="fill_parent"

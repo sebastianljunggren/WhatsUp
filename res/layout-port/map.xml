@@ -22,12 +22,12 @@
 	</RelativeLayout>
 
 	<FrameLayout android:layout_height="match_parent"
-		android:id="@+id/mapFrameLayout" android:layout_width="match_parent">
+		android:layout_width="match_parent" android:id="@+id/mapview_mapFrameLayout">
 
 		<com.google.android.maps.MapView
-			android:id="@+id/mapview" android:layout_width="fill_parent"
+			android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:clickable="true"
-			android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA" />
+			android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA" android:id="@+id/mapviewactivity_mapview"/>
 
 	</FrameLayout>
 

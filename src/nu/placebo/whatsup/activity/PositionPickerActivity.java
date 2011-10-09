@@ -2,6 +2,7 @@ package nu.placebo.whatsup.activity;
 
 import android.content.Intent;
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,16 +70,15 @@ public class PositionPickerActivity extends MapActivity implements OnClickListen
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == R.string.ACTIVITY_FINISH_OK){
+		Log.d("whatsup", "Returned to PositionPickerActivity with resultCode: "+resultCode);
+		if(resultCode == Constants.ACTIVITY_FINISHED_OK){
 			Log.d("whatsup", "CreateAnnotationActivity finished OK");
-			
 			this.finish();
 		}
-		if(resultCode == R.string.ACTIVITY_DID_INTERRUPT){
+		if(resultCode == Constants.ACTIVITY_INTERRUPTED){
 			Log.d("whatsup", "CreateAnnotationActivity did interrupt");
 		}
-		
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }
