@@ -23,7 +23,15 @@ public class AnnotationCreate extends AbstractNetworkOperation<Annotation> { // 
 
 	private String author, title, body;
 	private GeoPoint pos;
-
+	
+	
+	/**
+	 * 
+	 * @param author
+	 * @param title
+	 * @param body
+	 * @param pos
+	 */
 	public AnnotationCreate(String author, String title, String body, GeoPoint pos) {
 		this.author = author;
 		this.title = title;

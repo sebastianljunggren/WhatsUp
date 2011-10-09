@@ -26,5 +26,6 @@
 		<service android:name="service.WhatsUpService"></service>
 		<activity android:name=".activity.LogInActivity"></activity>
 		<activity android:name=".activity.PositionPickerActivity"></activity>
+		<activity android:name=".activity.CreateAnnotationActivity"></activity>
 	</application>
 </manifest>

@@ -1,5 +1,6 @@
 package nu.placebo.whatsup.util;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
@@ -54,4 +55,27 @@ public class GeoPointUtil {
 		return new GeoPoint[] {new GeoPoint(bottom, left), new GeoPoint(top, right)};
 	}
 	
+	public static Bundle pushGeoPoint(GeoPoint p){
+		Bundle bundle = new Bundle();
+		bundle.putInt("lat", p.getLatitudeE6());
+		bundle.putInt("long", p.getLongitudeE6());
+		
+		return bundle;
+	}
+	
+	public static GeoPoint popGeoPoint(Bundle bundle){
+		GeoPoint p = new GeoPoint(bundle.getInt("lat"), bundle.getInt("long"));
+		
+		return p;
+	}
+	
+	public static boolean bundleHasGeoPoint(Bundle b){
+		boolean hasGP = true;
+		if(!b.containsKey("lat"))
+			hasGP = false;
+		if(!b.containsKey("long"))
+			hasGP = false;
+		
+		return hasGP;
+	}
 }

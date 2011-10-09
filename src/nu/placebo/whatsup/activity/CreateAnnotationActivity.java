@@ -4,8 +4,11 @@ import com.google.android.maps.GeoPoint;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.network.AnnotationCreate;
+import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,21 +25,24 @@ public class CreateAnnotationActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		Bundle gPBundle = this.getIntent().getExtras();
-
-		// if bundle does not contain a GeoPoint
-		// kill self.
-		// else
-		// gp = gPBundle.getGeoPoint();
-
-		/*
-		 * if SessionHandler has no session kill self
-		 */
-
+		
+		Bundle bundle = this.getIntent().getExtras();
+		if(GeoPointUtil.bundleHasGeoPoint(bundle)){
+			this.gp = GeoPointUtil.popGeoPoint(bundle);
+			
+		} else {
+			this.finish();
+		}
+		
+		
 		this.setContentView(R.layout.create_annotation);
 		this.titleField = (TextView) this.findViewById(R.id.create_annot_title);
 		this.descField = (TextView) this.findViewById(R.id.create_annot_desc);
+		TextView debugLat = (TextView) this.findViewById(R.id.create_annot_debug_lat);
+		TextView debugLong = (TextView) this.findViewById(R.id.create_annot_debug_long);
+		
+		debugLat.setText(Integer.toString(gp.getLatitudeE6()));
+		debugLong.setText(Integer.toString(gp.getLongitudeE6()));
 
 		Button submitBtn = (Button) this.findViewById(R.id.create_annot_submit);
 		submitBtn.setOnClickListener(this);
@@ -46,11 +52,14 @@ public class CreateAnnotationActivity extends Activity implements
 	public void onClick(View v) {
 		if(v.getId() == R.id.create_annot_submit){
 			this.hasSubmit = true;
-			String title = (String) titleField.getText();
+			
+		/*	String title = (String) titleField.getText();
 			String desc = (String) titleField.getText();
 			if (title != null && title != "") {
 				
-			}
+			//	AnnotationCreate acOp = new AnnotationCreate("author", title, desc, gp);
+			} */
+			this.finish();
 		}
 
 	}

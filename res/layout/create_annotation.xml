@@ -13,5 +13,9 @@
     <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="match_parent" android:padding="10dp">
         <Button android:layout_weight="1" android:layout_gravity="center_vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Submit" android:id="@+id/create_annot_submit"></Button>
     </LinearLayout>
+    <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_width="match_parent">
+        <TextView android:layout_height="wrap_content" android:text="TextView" android:layout_width="match_parent" android:layout_weight="1" android:id="@+id/create_annot_debug_lat"></TextView>
+        <TextView android:layout_height="wrap_content" android:layout_width="match_parent" android:text="TextView" android:layout_weight="1" android:id="@+id/create_annot_debug_long"></TextView>
+    </LinearLayout>
     
 </LinearLayout>
