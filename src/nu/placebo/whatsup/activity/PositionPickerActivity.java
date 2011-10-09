@@ -20,13 +20,14 @@ import com.google.android.maps.MapView;
  * @author Max Witt
  */
 
-public class PositionPickerActivity extends MapActivity implements OnClickListener {
-	
+public class PositionPickerActivity extends MapActivity implements
+		OnClickListener {
+
 	private MapView mapView;
 	private boolean isCreateAnnotation;
 
 	@Override
-	public void onCreate(Bundle savedInstance){
+	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 
 		/*
@@ -44,8 +45,8 @@ public class PositionPickerActivity extends MapActivity implements OnClickListen
 		this.isCreateAnnotation = true;
 		Button selectPosition = (Button) findViewById(R.id.select_position);
 		selectPosition.setOnClickListener(this);
-	}			
-	
+	}
+
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
@@ -70,12 +71,13 @@ public class PositionPickerActivity extends MapActivity implements OnClickListen
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d("whatsup", "Returned to PositionPickerActivity with resultCode: "+resultCode);
-		if(resultCode == Constants.ACTIVITY_FINISHED_OK){
+		Log.d("whatsup", "Returned to PositionPickerActivity with resultCode: "
+				+ resultCode);
+		if (resultCode == Constants.ACTIVITY_FINISHED_OK) {
 			Log.d("whatsup", "CreateAnnotationActivity finished OK");
 			this.finish();
 		}
-		if(resultCode == Constants.ACTIVITY_INTERRUPTED){
+		if (resultCode == Constants.ACTIVITY_INTERRUPTED) {
 			Log.d("whatsup", "CreateAnnotationActivity did interrupt");
 		}
 		super.onActivityResult(requestCode, resultCode, data);

@@ -60,9 +60,11 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 	}
 
 	private void buildToolbar() {
-		ImageButton mapBtn = (ImageButton) this.findViewById(R.id.list_goto_map);
+		ImageButton mapBtn = (ImageButton) this
+				.findViewById(R.id.list_goto_map);
 		mapBtn.setOnClickListener(this);
-		ImageButton refreshBtn = (ImageButton) this.findViewById(R.id.list_refresh);
+		ImageButton refreshBtn = (ImageButton) this
+				.findViewById(R.id.list_refresh);
 		refreshBtn.setOnClickListener(this);
 	}
 
