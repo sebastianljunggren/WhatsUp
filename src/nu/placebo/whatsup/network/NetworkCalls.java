@@ -3,6 +3,8 @@ package nu.placebo.whatsup.network;
 import java.io.IOException;
 import java.util.List;
 
+import nu.placebo.whatsup.model.SessionInfo;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -10,6 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 
 /**
  * 
@@ -35,7 +38,7 @@ public class NetworkCalls {
 	}
 
 	public static HttpResponse performPostRequest(String query,
-			List<NameValuePair> body, List<NameValuePair> headers) {
+			List<NameValuePair> body, SessionInfo sessionInfo) {
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpPost request = new HttpPost(query);
 
@@ -44,12 +47,15 @@ public class NetworkCalls {
 			if (body != null) {
 				request.setEntity(new UrlEncodedFormEntity(body));
 			}
+			if (sessionInfo != null) {
+				request.addHeader(new BasicHeader("Cookie:"
+						+ sessionInfo.getSessionName(), sessionInfo
+						.getSessionId()));
+			}
 			response = client.execute(request);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		client.getConnectionManager().shutdown();

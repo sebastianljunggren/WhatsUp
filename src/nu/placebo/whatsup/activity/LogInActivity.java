@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
@@ -21,27 +22,25 @@ import android.widget.TextView;
 
 public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<SessionInfo> {
 
-	private TextView userName;
-	private TextView password;
-	private Button logIn;
+	private String userName;
+	private String password;
 	private TextView result;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.login);
-		this.userName = (TextView) this.findViewById(R.id.user_name);
-		this.password = (TextView) this.findViewById(R.id.password);
-		this.logIn = (Button) this.findViewById(R.id.log_in);
-		this.logIn.setOnClickListener(this);
+		Button logIn = (Button) this.findViewById(R.id.log_in);
+		logIn.setOnClickListener(this);
 		this.result = (TextView) this.findViewById(R.id.result);
 	}
 
 	public void onClick(View view) {
-		this.result.setText("User: " + this.userName.getText() + " Password: "
-				+ password.getText());
-		Login login = new Login(this.userName.getText().toString(),
-				this.password.getText().toString());
+		this.userName = ((TextView) this.findViewById(R.id.user_name)).getText().toString();
+		this.password = ((TextView) this.findViewById(R.id.password)).getText().toString();
+		this.result.setText("Logging in...");
+		Login login = new Login(this.userName,
+				this.password);
 		login.addOperationListener(this);
 		NetworkQueue.getInstance().add(login);
 		this.result.setText("Logging in...");
@@ -53,6 +52,9 @@ public class LogInActivity extends Activity implements OnClickListener, NetworkO
 			public void run() {
 				if (!r.hasErrors()) {
 					result.setText("Successfully logged in!");
+					SessionHandler sh = SessionHandler.getInstance(getApplicationContext());
+					sh.saveSession(r.getResult());
+					sh.saveCredentials(userName, password);
 				} else {
 					result.setText("Failed to login: " + r.getStatusMessage());
 				}

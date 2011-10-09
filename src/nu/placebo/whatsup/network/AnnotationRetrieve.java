@@ -48,7 +48,8 @@ public class AnnotationRetrieve extends AbstractNetworkOperation<Annotation> {
 					response.getStatusLine().getStatusCode(), response
 							.getStatusLine().getReasonPhrase(), annotation));
 		} else {
-			super.notifyListeners(new OperationResult<Annotation>(hasErrors, 0, "Problems with the network", null));
+			super.notifyListeners(new OperationResult<Annotation>(hasErrors, 0,
+					"Problems with the network", null));
 		}
 	}
 }

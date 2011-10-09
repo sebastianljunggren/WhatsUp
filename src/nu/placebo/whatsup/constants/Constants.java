@@ -7,5 +7,5 @@ public class Constants {
 	public static final int ACTIVITY_INTERRUPTED = 417;
 	public static final int REFERENCE_POINT = 603;
 	public static final int ANNOTATION = 606;
-
+	public static final String PREFERENCES_FILE = "preferences";
 }

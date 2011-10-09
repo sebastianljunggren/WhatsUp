@@ -1,7 +1,7 @@
 package nu.placebo.whatsup.network;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.AbstractQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import nu.placebo.whatsup.constants.Constants;
 
@@ -14,7 +14,7 @@ import nu.placebo.whatsup.constants.Constants;
 
 public final class NetworkQueue {
 	private static NetworkQueue instance;
-	private List<NetworkOperation<?>> queue = new LinkedList<NetworkOperation<?>>();
+	private AbstractQueue<NetworkOperation<?>> queue = new ConcurrentLinkedQueue<NetworkOperation<?>>();
 	private int activeCalls = 0;
 
 	/**
@@ -46,7 +46,7 @@ public final class NetworkQueue {
 			this.activeCalls++;
 			new Thread(new Runnable() {
 				public void run() {       
-					queue.remove(0).execute();
+					queue.poll().execute();
 					activeCalls--;
 					itemFinished();
 				}
@@ -61,6 +61,6 @@ public final class NetworkQueue {
 	}
 	
 	private boolean canStartNewCall() {
-		return this.activeCalls <= Constants.ALLOWED_CONCURRENT_CALLS;
+		return this.activeCalls < Constants.ALLOWED_CONCURRENT_CALLS;
 	}
 }

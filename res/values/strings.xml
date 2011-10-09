@@ -3,6 +3,5 @@
     <string name="hello">This will be the WhatsUp application!</string>
     <string name="app_name">WhatsUp</string>
     <string name="auth_imax">Committed by Ablim</string>
-    <string name="api_url">http://whatsup.placebo.nu/api/</string>
     <string name="distance_far_away">Very far away</string>
 </resources>
