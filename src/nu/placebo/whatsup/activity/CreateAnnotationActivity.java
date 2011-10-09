@@ -17,6 +17,7 @@ public class CreateAnnotationActivity extends Activity implements
 	private GeoPoint gp;
 	private TextView titleField;
 	private TextView descField;
+	private boolean hasSubmit = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +44,13 @@ public class CreateAnnotationActivity extends Activity implements
 	}
 
 	public void onClick(View v) {
-
-		String title = (String) titleField.getText();
-		String desc = (String) titleField.getText();
-
-		if (title != null && title != "") {
-			// Annotation a = new Annotation();
+		if(v.getId() == R.id.create_annot_submit){
+			this.hasSubmit = true;
+			String title = (String) titleField.getText();
+			String desc = (String) titleField.getText();
+			if (title != null && title != "") {
+				
+			}
 		}
 
 	}
@@ -58,7 +60,11 @@ public class CreateAnnotationActivity extends Activity implements
 	 */
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
+		if(hasSubmit){
+			this.setResult(R.string.ACTIVITY_FINISH_OK);
+		} else {
+			this.setResult(R.string.ACTIVITY_DID_INTERRUPT);
+		}
 		super.onDestroy();
 	}
 	

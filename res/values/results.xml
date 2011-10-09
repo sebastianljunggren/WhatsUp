@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ACTIVITY_FINISH_OK">Activity finished without interrupt</string>
+    <string name="ACTIVITY_DID_INTERRUPT">Activity was interrupted</string>
+    
+</resources>
