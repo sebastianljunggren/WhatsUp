@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.GeoLocation;
 
 import org.apache.http.HttpResponse;
@@ -60,22 +61,30 @@ public class GeoLocationsRetrieve extends
 		}
 		List<GeoLocation> geoLocations = this.parse(result);
 
-		super.notifyListeners(new OperationResult<List<GeoLocation>>(
-				this.hasErrors, response.getStatusLine().getStatusCode(),
-				response.getStatusLine().getReasonPhrase(), geoLocations));
+		if (response != null) {
+			super.notifyListeners(new OperationResult<List<GeoLocation>>(
+					this.hasErrors, response.getStatusLine().getStatusCode(),
+					response.getStatusLine().getReasonPhrase(), geoLocations));
+		} else {
+			super.notifyListeners(new OperationResult<List<GeoLocation>>(
+					hasErrors, 0, "Problems with the network", null));
+		}
+
 	}
 
 	private List<GeoLocation> parse(String result) {
 		List<GeoLocation> geoLocations = new ArrayList<GeoLocation>();
-		try {
-			JSONArray json = new JSONArray(result);
-			for (int i = 0; i < json.length(); i++) {
-				JSONObject j = json.getJSONObject(i);
-				geoLocations.add(new GeoLocation(j));
+		if (result != null) {
+			try {
+				JSONArray json = new JSONArray(result);
+				for (int i = 0; i < json.length(); i++) {
+					JSONObject j = json.getJSONObject(i);
+					geoLocations.add(new GeoLocation(j));
+				}
+				this.hasErrors = false;
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-			this.hasErrors = false;
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 		return geoLocations;
 	}

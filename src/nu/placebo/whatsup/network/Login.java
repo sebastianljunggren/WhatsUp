@@ -58,11 +58,15 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		super.notifyListeners(new OperationResult<SessionInfo>(this.hasErrors,
-				response.getStatusLine().getStatusCode(), response
-						.getStatusLine().getReasonPhrase(), new SessionInfo(
-						null, null)));
+		if (response != null) {
+			super.notifyListeners(new OperationResult<SessionInfo>(
+					this.hasErrors, response.getStatusLine().getStatusCode(),
+					response.getStatusLine().getReasonPhrase(),
+					new SessionInfo(null, null)));
+		} else {
+			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
+					0, "Problems with the network", null));
+		}
 	}
 
 	private void parseConnect(String result) {
