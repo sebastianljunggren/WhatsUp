@@ -5,7 +5,12 @@ import com.google.android.maps.GeoPoint;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.model.SessionHandler;
+import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationCreate;
+import nu.placebo.whatsup.network.NetworkOperationListener;
+import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class CreateAnnotationActivity extends Activity implements
-		OnClickListener {
+		OnClickListener, NetworkOperationListener<Annotation> {
 
 	private GeoPoint gp;
 	private TextView titleField;
@@ -53,16 +58,15 @@ public class CreateAnnotationActivity extends Activity implements
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.create_annot_submit) {
-			setResult(Constants.ACTIVITY_FINISHED_OK);
-			/*
-			 * String title = (String) titleField.getText(); String desc =
-			 * (String) titleField.getText(); if (title != null && title != "")
-			 * {
-			 * 
-			 * // AnnotationCreate acOp = new AnnotationCreate("author", title,
-			 * desc, gp); }
-			 */
-			this.finish();
+			
+			String title = titleField.getText().toString();
+			String desc = descField.getText().toString();
+			SessionInfo sInfo = SessionHandler.getInstance(this).getSession();
+			String author = SessionHandler.getInstance(this).getUserName();
+			
+			AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
+			ac.addOperationListener(this);
+			NetworkQueue.getInstance().add(ac);
 		}
 
 	}
@@ -76,7 +80,12 @@ public class CreateAnnotationActivity extends Activity implements
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-	
-	
 
+	public void operationExcecuted(OperationResult<Annotation> result) {
+		// TODO Auto-generated method stub
+		if(!result.hasErrors()){
+			setResult(Constants.ACTIVITY_FINISHED_OK);
+			this.finish();
+		}
+	}
 }

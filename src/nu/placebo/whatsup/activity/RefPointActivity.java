@@ -20,12 +20,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class RefPointActivity extends ListActivity {
-
+	
+	private ArrayList<GeoLocation> refs;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MarkerAdapter adapter = new MarkerAdapter(this, R.layout.ref_item, null);
+		this.setListAdapter(adapter);
+		
+		refs = new ArrayList<GeoLocation>();
+		refs.add(new GeoLocation(1, 57708759, 11937507, "Lindholmen"));
+		refs.add(new GeoLocation(2, 57687959, 11978865, "Linsen"));
+		
+		
 	}
-
+	
 	private class MarkerAdapter extends ArrayAdapter<GeoLocation> implements
 			OnClickListener {
 		private Context ctx;
