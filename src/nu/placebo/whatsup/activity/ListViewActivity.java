@@ -66,6 +66,9 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		ImageButton refreshBtn = (ImageButton) this
 				.findViewById(R.id.list_refresh);
 		refreshBtn.setOnClickListener(this);
+		ImageButton addAnnotBtn = (ImageButton) this.findViewById(R.id.add_annotation);
+		addAnnotBtn.setOnClickListener(this);
+		
 	}
 
 	private Runnable returnRes = new Runnable() {
@@ -91,6 +94,12 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		if (v.getId() == R.id.list_refresh) {
 			this.refresh();
 		}
+		if(v.getId() == R.id.add_annotation){
+			Intent intent = new Intent(this,
+					PositionPickerActivity.class);
+			this.startActivity(intent);
+		}
+		
 	}
 
 	public void operationExcecuted(OperationResult<List<GeoLocation>> result) {

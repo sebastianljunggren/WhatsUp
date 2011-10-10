@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent" android:weightSum="1">
-	<LinearLayout android:id="@+id/linearLayout1"
+	android:weightSum="1" android:layout_height="wrap_content">
+	<RelativeLayout android:id="@+id/RelativeLayout1"
 		android:layout_width="match_parent" android:layout_height="wrap_content">
-		<ImageButton android:src="@drawable/map"
-			android:layout_width="wrap_content" android:layout_height="match_parent"
-			android:id="@+id/list_goto_map"></ImageButton>
-		<ImageButton android:src="@drawable/refresh" android:id="@+id/list_refresh"
+		<ImageButton android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:src="@drawable/map"
+			android:layout_width="wrap_content" android:id="@+id/list_goto_map" android:layout_height="wrap_content"></ImageButton>
+		<ImageButton android:layout_toRightOf="@+id/list_goto_map" android:layout_alignBaseline="@+id/list_goto_map" android:layout_alignParentTop="true" android:src="@drawable/refresh" android:id="@+id/list_refresh"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"></ImageButton>
-	</LinearLayout>
+		<ImageButton android:layout_alignBaseline="@+id/list_goto_map" android:layout_alignParentTop="true" android:src="@drawable/add" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="left" android:layout_alignParentRight="true" android:id="@+id/add_annotation"></ImageButton>
+	</RelativeLayout>
 	<ListView android:layout_height="wrap_content"
 		android:layout_width="match_parent" android:id="@+id/android:list"></ListView>
 

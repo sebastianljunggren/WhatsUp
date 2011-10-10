@@ -45,7 +45,7 @@ public class Geodetics {
 		
 		if(distance < 1000){
 			distance = Math.round(distance);
-			result = distance+" m";
+			result = ((int)distance)+" m";
 		} else if(distance < 1000000){
 			distance =((double) Math.round((distance/100)))/10;
 			result = distance+" km";
