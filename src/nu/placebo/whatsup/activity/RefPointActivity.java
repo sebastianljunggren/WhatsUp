@@ -26,12 +26,21 @@ public class RefPointActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MarkerAdapter adapter = new MarkerAdapter(this, R.layout.ref_item, null);
-		this.setListAdapter(adapter);
+		this.setContentView(R.layout.ref_point_activity);
 		
 		refs = new ArrayList<GeoLocation>();
+		MarkerAdapter adapter = new MarkerAdapter(this, R.layout.ref_item, refs);
+		this.setListAdapter(adapter);
+		
+		
 		refs.add(new GeoLocation(1, 57708759, 11937507, "Lindholmen"));
 		refs.add(new GeoLocation(2, 57687959, 11978865, "Linsen"));
+		
+		adapter.clear();
+		for(int i=0; i< refs.size(); i++){
+			adapter.add(refs.get(i));
+		}
+		adapter.notifyDataSetChanged();
 		
 		
 	}

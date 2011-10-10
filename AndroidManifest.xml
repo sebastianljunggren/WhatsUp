@@ -14,10 +14,7 @@
 		<activity 
 			android:name=".activity.MapViewActivity" 
 			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"></action>
-				<category android:name="android.intent.category.LAUNCHER"></category>
-			</intent-filter>
+			
 		</activity>
 		<activity android:name=".activity.ListViewActivity">
 			
@@ -28,5 +25,11 @@
 		<activity android:name=".activity.PositionPickerActivity">
 		</activity>
 		<activity android:name=".activity.CreateAnnotationActivity"></activity>
+		<activity android:name=".activity.RefPointActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"></action>
+				<category android:name="android.intent.category.LAUNCHER"></category>
+			</intent-filter>
+		</activity>
 	</application>
 </manifest>
