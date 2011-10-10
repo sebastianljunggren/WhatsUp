@@ -11,10 +11,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-
-import android.util.Log;
+import org.apache.http.protocol.HTTP;
 
 /**
  * 
@@ -47,7 +47,8 @@ public class NetworkCalls {
 		HttpResponse response = null;
 		try {
 			if (body != null) {
-				request.setEntity(new UrlEncodedFormEntity(body));
+				AbstractHttpEntity ent=new UrlEncodedFormEntity(body, HTTP.UTF_8);
+				request.setEntity(ent);
 			}
 			if (sessionInfo != null) {
 				request.addHeader(new BasicHeader("Cookie", sessionInfo
