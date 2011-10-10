@@ -24,8 +24,11 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 	private DataReturnListener listener;
 	private boolean canFetchNewData = false;
 	
-	public DataReturn(T localData) {
+	private int id;
+	
+	public DataReturn(T localData, int id) {
 		this.localData = localData;
+		this.id = id;
 	}
 	
 	/**
@@ -73,8 +76,10 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 				this.serverData = result.getResult();
 				canFetchNewData  = true;
 				listener.newDataReceived(true);
+				DataProvider.getDataProvider(null).newDataRecieved(true, id);
 			} else {
 				listener.newDataReceived(false);
+				DataProvider.getDataProvider(null).newDataRecieved(false, id);
 			}
 		}
 	}

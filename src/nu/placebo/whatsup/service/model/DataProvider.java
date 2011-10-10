@@ -9,9 +9,8 @@ import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
-import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
-import nu.placebo.whatsup.network.OperationResult;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -57,7 +56,12 @@ public class DataProvider {
 					+ "title TEXT,"
 					+ "added_date TEXT"
 					+ ");");
-			//db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE);
+			db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE + " ("
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT"
+					+ "name TEXT,"
+					+ "latitude REAL,"
+					+ "longitude REAL"
+					+ ");");
 		}
 
 		@Override
@@ -68,7 +72,7 @@ public class DataProvider {
 	}
 	
 	/**
-	 * Class is Singelton, disallow creation
+	 * Class is Singelton, disallow outside creation
 	 */
 	private DataProvider(Context c) {
 		dbHelper = new DatabaseHelper(c);
@@ -136,9 +140,14 @@ public class DataProvider {
 			comments.add(new Comment(cAuthor, comment, cTitle, cDate));
 		} while(!c.isLast());
 		
-		DataReturn<Annotation> result = new DataReturn<Annotation>(new Annotation(
+		DataReturn<Annotation> result;
+		
+		synchronized(this) {
+			result = new DataReturn<Annotation>(new Annotation(
 				new GeoLocation(nid, latitude, longitude, title), 
-				body, author, comments));
+				body, author, comments), activeObjects.size());
+		}
+		activeObjects.add(result);
 		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
 		ar.addOperationListener(result);
 		networkQueue.add(ar);
@@ -149,46 +158,81 @@ public class DataProvider {
 			double longitudeA, double latitudeB, double longitudeB) {
 		//Database part here
 		List<GeoLocation> locations = new ArrayList<GeoLocation>();
+		String maxLat = Double.toHexString(Math.max(latitudeA, latitudeB));
+		String maxLong = Double.toHexString(Math.max(longitudeA, longitudeB));
+		String minLat = Double.toHexString(Math.min(latitudeA, latitudeB));
+		String minLong = Double.toHexString(Math.min(longitudeA, longitudeB));
+		String[] selectionArgs = {maxLat, maxLong, minLat, minLong};
 		
-		DataReturn<List<GeoLocation>> result = new DataReturn<List<GeoLocation>>(
-												locations);
+		dbHelper.getReadableDatabase().query(DatabaseHelper.ANNOTATION_TABLE,
+				null,
+				"latitude < ? AND longitude < ? AND latitude > ? AND longitude > ?",
+				selectionArgs,
+				null,
+				null,
+				null);
+		
+		DataReturn<List<GeoLocation>> result;
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(
 				latitudeA, longitudeA, latitudeB, longitudeB);
+		
+		synchronized(this) {
+			result = new DataReturn<List<GeoLocation>>(
+												locations, activeObjects.size());
+			activeObjects.add(result);
+		}
 		glr.addOperationListener(result);
 		networkQueue.add(glr);
-		return null;
+		return result;
 	}
-
-	public void retrieveAnnotation(int nid) {
-		// Fetches an annotation from the server and stores it in the local
-		// database.
-		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
-		ar.addOperationListener(new NetworkOperationListener<Annotation>() {
-
-			public void operationExcecuted(OperationResult<Annotation> result) {
-				// TODO Store in local db
-				// TODO Notify those interested in the result (binder).		
-			}
+	
+	/**
+	 * Called by DataReturn object to notify the DataProvider about new data
+	 * to insert into the local database.
+	 * 
+	 * @param newData whether the data differs from that in the local database
+	 * @param id 
+	 */
+	@SuppressWarnings("unchecked")
+	void newDataRecieved(boolean newData, int id) {
+		if(newData) {
+			Object data = activeObjects.get(id).getNewData();
 			
-		});
-		this.networkQueue.add(ar);
-
-	}
-
-	public void retrieveGeoLocations(double latitudeA, double longitudeA,
-			double latitudeB, double longitudeB) {
-		// Fetches GeoLocations from the server and stores them in the local
-		// database.
-		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(latitudeA,
-				longitudeA, latitudeB, longitudeB);
-		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
-
-			public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
-				// TODO Store in local db
-				// TODO Notify those interested in the result (binder).
+			//Test what type the new data has		
+			if(data.getClass() == Annotation.class) {
+				if(!insertData((Annotation) data)) {
+					//TODO Error handling
+				}
+			} else if(data.getClass() == List.class) {
+				if(!insertData((List<GeoLocation>) data)) {
+					//TODO Error handling
+				}
 			}
-
-		});
-		this.networkQueue.add(gr);
+		}
+		activeObjects.remove(id);
 	}
+	
+	private boolean insertData(Annotation a) {
+		ContentValues values = new ContentValues();
+		
+		values.put("nid", a.getId());
+		values.put("body", a.getBody());
+		values.put("author", a.getAuthor());
+		dbHelper.getWritableDatabase().insert(DatabaseHelper.ANNOTATION_TABLE,
+				null,
+				values);
+		
+		values.clear();
+		values.put("nid", a.getId());
+		values.put("latitude", a.getGeoLocation().getLocation().getLatitudeE6());
+		values.put("longitude", a.getGeoLocation().getLocation().getLongitudeE6());
+		values.put("title", a.getGeoLocation().getTitle());
+		return false;
+	}
+
+	private boolean insertData(List<GeoLocation> glList) {
+		return false;
+	}
+
+	private List<DataReturn<?>> activeObjects = new ArrayList<DataReturn<?>>();
 }

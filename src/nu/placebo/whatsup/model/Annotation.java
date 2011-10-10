@@ -48,4 +48,8 @@ public class Annotation {
 	public String getAuthor() {
 		return author;
 	}
+	
+	public int getId() {
+		return geoLocation.getId();
+	}
 }

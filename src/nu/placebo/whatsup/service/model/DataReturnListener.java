@@ -9,6 +9,7 @@ public interface DataReturnListener {
 	 * 
 	 * @param dataIsNew whether the data differs from the local data
 	 * or not.
+	 * @param id the id of the object
 	 */
 	public void newDataReceived(boolean dataIsNew);
 }
