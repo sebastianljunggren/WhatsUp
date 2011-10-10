@@ -9,7 +9,6 @@ import nu.placebo.whatsup.model.SessionInfo;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,10 +61,11 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 			super.notifyListeners(new OperationResult<SessionInfo>(
 					this.hasErrors, response.getStatusLine().getStatusCode(),
 					response.getStatusLine().getReasonPhrase(),
-					new SessionInfo(this.sessionName, this.sessionId)));
+					new SessionInfo(this.sessionName, this.sessionId),
+					Action.LOG_IN));
 		} else {
 			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
-					0, "Problems with the network", null));
+					0, "Problems with the network", null, Action.LOG_IN));
 		}
 	}
 

@@ -45,10 +45,11 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 		if (response != null) {
 			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
 					response.getStatusLine().getStatusCode(), response
-							.getStatusLine().getReasonPhrase(), sessionInfo));
+							.getStatusLine().getReasonPhrase(), sessionInfo,
+					Action.TEST_SESSION));
 		} else {
 			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
-					0, "Problems with the network", null));
+					0, "Problems with the network", null, Action.TEST_SESSION));
 		}
 	}
 
@@ -60,11 +61,13 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 				int uid = json.getJSONObject("user").getInt("uid");
 				if (uid != 0) {
 					hasErrors = false;
-					Log.w("WhatsUp", "Session " +sessionInfo.getSessionName() +  " is valid");
+					Log.w("WhatsUp", "Session " + sessionInfo.getSessionName()
+							+ " is valid");
 				}
 
 			} catch (JSONException e) {
-				Log.w("WhatsUp", "Session " +sessionInfo.getSessionName() +  " is invalid");
+				Log.w("WhatsUp", "Session " + sessionInfo.getSessionName()
+						+ " is invalid");
 				e.printStackTrace();
 			}
 		}
