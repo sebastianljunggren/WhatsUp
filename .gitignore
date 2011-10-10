@@ -2,3 +2,7 @@
 /gen
 local.properties
 build.xml
+/WhatsUpTest/bin
+/WhatsUpTest/gen
+/WhatsUpTestlocal.properties
+/WhatsUpTestbuild.xml
