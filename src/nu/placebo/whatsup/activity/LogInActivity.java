@@ -55,6 +55,8 @@ public class LogInActivity extends Activity implements OnClickListener, NetworkO
 					SessionHandler sh = SessionHandler.getInstance(getApplicationContext());
 					sh.saveSession(r.getResult());
 					sh.saveCredentials(userName, password);
+					sh.testSession();
+					
 				} else {
 					result.setText("Failed to login: " + r.getStatusMessage());
 				}

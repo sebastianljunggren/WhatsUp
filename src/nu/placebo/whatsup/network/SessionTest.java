@@ -60,11 +60,11 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 				int uid = json.getJSONObject("user").getInt("uid");
 				if (uid != 0) {
 					hasErrors = false;
-					Log.w("WhatsUp", "Session is valid");
+					Log.w("WhatsUp", "Session " +sessionInfo.getSessionName() +  " is valid");
 				}
 
 			} catch (JSONException e) {
-				Log.w("WhatsUp", "Session is invalid");
+				Log.w("WhatsUp", "Session " +sessionInfo.getSessionName() +  " is invalid");
 				e.printStackTrace();
 			}
 		}

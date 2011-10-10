@@ -62,7 +62,7 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 			super.notifyListeners(new OperationResult<SessionInfo>(
 					this.hasErrors, response.getStatusLine().getStatusCode(),
 					response.getStatusLine().getReasonPhrase(),
-					new SessionInfo(null, null)));
+					new SessionInfo(this.sessionName, this.sessionId)));
 		} else {
 			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
 					0, "Problems with the network", null));

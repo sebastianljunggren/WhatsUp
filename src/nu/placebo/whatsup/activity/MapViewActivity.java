@@ -47,7 +47,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3),
 				mapView, this);
 		setupToolbar();
-		SessionHandler.getInstance(this.getApplicationContext());
+		SessionHandler.getInstance(this.getApplicationContext()).testSession();
 		}
 
 	private void setupToolbar() {

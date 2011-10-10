@@ -14,6 +14,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 
+import android.util.Log;
+
 /**
  * 
  * Static methods for making calls to the server.
@@ -48,9 +50,8 @@ public class NetworkCalls {
 				request.setEntity(new UrlEncodedFormEntity(body));
 			}
 			if (sessionInfo != null) {
-				request.addHeader(new BasicHeader("Cookie:"
-						+ sessionInfo.getSessionName(), sessionInfo
-						.getSessionId()));
+				request.addHeader(new BasicHeader("Cookie", sessionInfo
+						.getSessionName() + "=" + sessionInfo.getSessionId()));
 			}
 			response = client.execute(request);
 		} catch (ClientProtocolException e) {

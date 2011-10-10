@@ -30,7 +30,7 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		this.read();
 	}
 
-	private void testSession() {
+	public void testSession() {
 		SessionTest ts = new SessionTest(new SessionInfo(this.sessionName, this.sessionId));
 		ts.addOperationListener(this);
 		NetworkQueue.getInstance().add(ts);
@@ -82,11 +82,6 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	}
 
 	public void operationExcecuted(OperationResult<SessionInfo> result) {
-		if(!result.hasErrors()) {
-			Log.w("WhatsUp", "Session is valid");
-		} else {
-			Log.w("WhatsUp", "Session is not valid");
-		}
 		
 	}
 }
