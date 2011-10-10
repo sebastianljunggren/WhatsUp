@@ -38,8 +38,8 @@ public class DataProvider {
 			db.execSQL("CREATE TABLE " + GEOLOCATION_TABLE + " ("
 					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ "nid INTEGER,"
-					+ "latitude REAL,"
-					+ "longitude REAL,"
+					+ "latitude INTEGER,"
+					+ "longitude INTEGER,"
 					+ "title TEXT"
 					+ ");");
 			db.execSQL("CREATE TABLE " + ANNOTATION_TABLE + " ("
@@ -154,8 +154,8 @@ public class DataProvider {
 		return result;
 	}
 	
-	public DataReturn<List<GeoLocation>> getAnnotationMarkers(double latitudeA,
-			double longitudeA, double latitudeB, double longitudeB) {
+	public DataReturn<List<GeoLocation>> getAnnotationMarkers(int latitudeA,
+			int longitudeA, int latitudeB, int longitudeB) {
 		//Database part here
 		List<GeoLocation> locations = new ArrayList<GeoLocation>();
 		String maxLat = Double.toHexString(Math.max(latitudeA, latitudeB));
