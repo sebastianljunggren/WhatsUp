@@ -15,11 +15,11 @@ public class Annotation {
 
 	public Annotation(GeoLocation geoLocation, String body,
 
-			String author, List<Comment> comments2) {
+			String author, List<Comment> comments) {
 		this.geoLocation = new GeoLocation(geoLocation);
 		this.body = body;
 		this.author = author;
-		this.comments = comments2;
+		this.comments = comments;
 
 	}
 

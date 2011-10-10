@@ -8,10 +8,7 @@ import nu.placebo.whatsup.network.SessionTest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
 import android.util.Log;
-
-
 
 /**
  * Makes it possible to log in and stores session data.
@@ -31,10 +28,14 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	}
 
 	public void testSession() {
-		SessionTest ts = new SessionTest(new SessionInfo(this.sessionName, this.sessionId));
-		ts.addOperationListener(this);
-		NetworkQueue.getInstance().add(ts);
-		Log.w("WhatsUp", this.sessionId + this.sessionName);
+		if (this.hasSession()) {
+			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
+					this.sessionId));
+			ts.addOperationListener(this);
+			NetworkQueue.getInstance().add(ts);
+		} else {
+			Log.w("WhatsUp", "No session to test.");
+		}
 	}
 
 	private boolean hasSession() {
@@ -44,7 +45,7 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	public static SessionHandler getInstance(Context c) {
 		if (instance == null) {
 			context = c;
-			instance = new SessionHandler();			
+			instance = new SessionHandler();
 		}
 		return instance;
 	}
@@ -60,28 +61,35 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		this.sessionId = sessionInfo.getSessionId();
 		this.write();
 	}
-	
+
 	public SessionInfo getSession() {
 		return new SessionInfo(this.sessionName, this.sessionId);
 	}
+	
+	public String getUserName() {
+		return this.userName;
+	}
+
 	private void write() {
-		Editor editor = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE).edit();
+		Editor editor = context.getSharedPreferences(
+				Constants.PREFERENCES_FILE, Context.MODE_PRIVATE).edit();
 		editor.putString("userName", this.userName);
 		editor.putString("password", this.password);
 		editor.putString("sessionName", this.sessionName);
 		editor.putString("sessionId", this.sessionId);
 		editor.commit();
 	}
-	
+
 	private void read() {
-		SharedPreferences prefs = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+		SharedPreferences prefs = context.getSharedPreferences(
+				Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
 		this.userName = prefs.getString("userName", null);
 		this.password = prefs.getString("password", null);
-		this.sessionName =  prefs.getString("sessionName", null);
-		this.sessionId =  prefs.getString("sessionId", null);
+		this.sessionName = prefs.getString("sessionName", null);
+		this.sessionId = prefs.getString("sessionId", null);
 	}
 
 	public void operationExcecuted(OperationResult<SessionInfo> result) {
-		
+
 	}
 }
