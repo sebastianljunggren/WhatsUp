@@ -70,14 +70,19 @@ public class DataProvider {
 	/**
 	 * Class is Singelton, disallow creation
 	 */
-	private DataProvider() {}
+	private DataProvider(Context c) {
+		dbHelper = new DatabaseHelper(c);
+	}
 
-	private static final DataProvider instance = new DataProvider();
+	private static DataProvider instance;
 
-	private DatabaseHelper dbHelper = new DatabaseHelper(null);
+	private DatabaseHelper dbHelper;
 	private NetworkQueue networkQueue = NetworkQueue.getInstance();
 
-	public static DataProvider getDataProvider() {
+	public static DataProvider getDataProvider(Context c) {
+		if(instance == null) {
+			instance = new DataProvider(c);
+		}
 		return instance;
 	}
 	
@@ -142,6 +147,15 @@ public class DataProvider {
 	
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(double latitudeA,
 			double longitudeA, double latitudeB, double longitudeB) {
+		//Database part here
+		List<GeoLocation> locations = new ArrayList<GeoLocation>();
+		
+		DataReturn<List<GeoLocation>> result = new DataReturn<List<GeoLocation>>(
+												locations);
+		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(
+				latitudeA, longitudeA, latitudeB, longitudeB);
+		glr.addOperationListener(result);
+		networkQueue.add(glr);
 		return null;
 	}
 
