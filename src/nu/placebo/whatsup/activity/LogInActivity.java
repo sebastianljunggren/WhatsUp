@@ -52,7 +52,7 @@ public class LogInActivity extends Activity implements OnClickListener, NetworkO
 			public void run() {
 				if (!r.hasErrors()) {
 					result.setText("Successfully logged in!");
-					SessionHandler sh = SessionHandler.getInstance(getApplicationContext());
+					SessionHandler sh = SessionHandler.getInstance(LogInActivity.this);
 					sh.saveSession(r.getResult());
 					sh.saveCredentials(userName, password);
 					sh.testSession();

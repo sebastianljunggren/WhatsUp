@@ -6,16 +6,22 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * 
+ * Data carrier with all information an annotation consists of.
+ * 
+ */
+
 public class Annotation {
 	private GeoLocation geoLocation;
 	private String body;
 	private String author;
-	
+
 	private List<Comment> comments = new LinkedList<Comment>();
 
 	public Annotation(GeoLocation geoLocation, String body,
 
-			String author, List<Comment> comments) {
+	String author, List<Comment> comments) {
 		this.geoLocation = new GeoLocation(geoLocation);
 		this.body = body;
 		this.author = author;
@@ -48,7 +54,7 @@ public class Annotation {
 	public String getAuthor() {
 		return author;
 	}
-	
+
 	public int getId() {
 		return geoLocation.getId();
 	}

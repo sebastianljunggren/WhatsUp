@@ -1,6 +1,8 @@
 package nu.placebo.whatsup.model;
 
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.network.Action;
+import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
 import nu.placebo.whatsup.network.OperationResult;
@@ -8,10 +10,14 @@ import nu.placebo.whatsup.network.SessionTest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
- * Makes it possible to log in and stores session data.
+ * 
+ * Stores session data and handles automatic log in and log off.
+ * 
  */
 
 public class SessionHandler implements NetworkOperationListener<SessionInfo> {
@@ -65,7 +71,7 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	public SessionInfo getSession() {
 		return new SessionInfo(this.sessionName, this.sessionId);
 	}
-	
+
 	public String getUserName() {
 		return this.userName;
 	}
@@ -90,6 +96,31 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	}
 
 	public void operationExcecuted(OperationResult<SessionInfo> result) {
+		if (result.getAction() == Action.LOG_IN && !result.hasErrors()) {
+			this.saveSession(result.getResult());
+			this.showToast("Logged in");
+		} else if (result.getAction() == Action.TEST_SESSION) {
+			if (!result.hasErrors()) {
+				this.showToast("Logged in");
+			} else if (result.hasErrors() && this.hasCredentials()) {
+				this.attemptLogIn();
+			}
+		}
+	}
 
+	private void showToast(String msg) {
+		Looper.prepare();
+		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+		Looper.loop();
+	}
+
+	private void attemptLogIn() {
+		Login logIn = new Login(this.userName, this.password);
+		logIn.addOperationListener(this);
+		NetworkQueue.getInstance().add(logIn);
+	}
+
+	public boolean hasCredentials() {
+		return this.userName != null && this.password != null;
 	}
 }
