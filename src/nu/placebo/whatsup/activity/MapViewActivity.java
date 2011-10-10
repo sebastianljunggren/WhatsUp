@@ -48,7 +48,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 				mapView, this);
 		setupToolbar();
 		SessionHandler.getInstance(this.getApplicationContext()).testSession();
-		}
+	}
 
 	private void setupToolbar() {
 		ImageButton gotoListBtn = (ImageButton) this
@@ -111,8 +111,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 				mapView.getMapCenter(), mapView.getLatitudeSpan(),
 				mapView.getLongitudeSpan());
 		double[] d = GeoPointUtil.convertAreaToDoubles(p[0], p[1]);
-		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2],
-				d[3]);
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2], d[3]);
 		gr.addOperationListener(this);
 		NetworkQueue.getInstance().add(gr);
 	}

@@ -12,7 +12,7 @@ public class ExtendedOverlayItem extends OverlayItem {
 	private int id;
 	
 	public ExtendedOverlayItem(GeoLocation g) {
-		super(g.getLocation(), g.getTitle(), null);
+		super(g.getLocation(), g.getTitle(), "Rating: 0");
 		id = g.getId();
 	}
 
