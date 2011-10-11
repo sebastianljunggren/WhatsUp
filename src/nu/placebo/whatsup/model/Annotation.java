@@ -76,4 +76,18 @@ public class Annotation {
 			return false;
 		}
 	}
+	
+	@Override
+	public int hashCode() {
+		int result = 0;
+		
+		for(Comment c : comments) {
+			result += c.hashCode();
+		}
+		result += body.hashCode();
+		result += author.hashCode();
+		result += geoLocation.hashCode();
+		
+		return result;
+	}
 }

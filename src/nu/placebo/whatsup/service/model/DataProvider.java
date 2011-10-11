@@ -86,7 +86,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		dbHelper = new DatabaseHelper(c);
 	}
 
-	private static DataProvider instance;
+	private static volatile DataProvider instance;
 
 	private DatabaseHelper dbHelper;
 	private NetworkQueue networkQueue = NetworkQueue.getInstance();

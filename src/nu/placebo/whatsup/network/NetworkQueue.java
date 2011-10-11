@@ -13,7 +13,7 @@ import nu.placebo.whatsup.constants.Constants;
  */
 
 public final class NetworkQueue {
-	private static NetworkQueue instance;
+	private volatile static NetworkQueue instance;
 	private AbstractQueue<NetworkOperation<?>> queue = new ConcurrentLinkedQueue<NetworkOperation<?>>();
 	private int activeCalls = 0;
 

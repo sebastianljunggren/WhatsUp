@@ -29,8 +29,24 @@ public class ListMarker implements Comparable<ListMarker>{
 		return location.getId();
 	}
 
+	public boolean equals(Object o) {
+		if(o instanceof ListMarker) {
+			ListMarker other = (ListMarker) o;
+			return this.range == other.range;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 0;
+		result += location.hashCode();
+		result += ref.hashCode();
+		result += range;
+		return result;
+	}
+	
 	public int compareTo(ListMarker another) {
-		
 		return (int)(this.range-another.range);
 	}
 }

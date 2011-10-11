@@ -79,4 +79,13 @@ public class GeoLocation {
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		int result = 0;
+		result += gp.hashCode();
+		result += id;
+		result += title.hashCode();
+		return result;
+	}
 }
