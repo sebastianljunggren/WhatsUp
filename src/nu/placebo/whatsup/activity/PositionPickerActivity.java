@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -31,10 +32,11 @@ public class PositionPickerActivity extends MapActivity implements
 	@Override
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
-
+		setContentView(R.layout.position_picker_view);
+		
 		this.requestCode = this.getIntent().getExtras().getInt("requestCode");
 		TextView typeText = (TextView) this.findViewById(R.id.activity_name);
-		TextView refName = (TextView) this.findViewById(R.id.position_name);
+		EditText refName = (EditText) this.findViewById(R.id.position_name);
 		
 		if(this.requestCode == Constants.ANNOTATION){
 			
@@ -50,7 +52,7 @@ public class PositionPickerActivity extends MapActivity implements
 			this.finish();
 		}
 		
-		setContentView(R.layout.position_picker_view);
+		
 		mapView = (MapView) findViewById(R.id.position_picker_mapview);
 		mapView.setBuiltInZoomControls(true);
 		Button selectPosition = (Button) findViewById(R.id.select_position);
@@ -73,7 +75,7 @@ public class PositionPickerActivity extends MapActivity implements
 			}
 			
 			if (this.requestCode == Constants.REFERENCE_POINT){
-				String refName = ((TextView) this.findViewById(R.id.position_name)).getText().toString();
+				String refName = ((EditText) this.findViewById(R.id.position_name)).getText().toString();
 				if(!refName.equals("")){
 					DataProvider.getDataProvider(this).addReferencePoint(p, refName);
 					this.finish();

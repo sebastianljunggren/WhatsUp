@@ -2,6 +2,7 @@
 /gen
 local.properties
 build.xml
+stats.sh
 /WhatsUpTest/bin
 /WhatsUpTest/gen
 /WhatsUpTestlocal.properties
