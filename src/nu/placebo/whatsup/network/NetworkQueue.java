@@ -3,6 +3,8 @@ package nu.placebo.whatsup.network;
 import java.util.AbstractQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import android.util.Log;
+
 import nu.placebo.whatsup.constants.Constants;
 
 /**
@@ -25,8 +27,9 @@ public final class NetworkQueue {
 	/**
 	 * Gives access to the instance of the NetworkQueue.
 	 * 
-	 * @return
+	 * @return the only instance of NetworkQueue
 	 */
+	
 	public static NetworkQueue getInstance() {
 		if (instance == null) {
 			instance = new NetworkQueue();
@@ -43,15 +46,27 @@ public final class NetworkQueue {
 
 	private void nextCall() {
 		if(!this.queue.isEmpty()) {
-			this.activeCalls++;
+			this.increaseActiveCalls();
+			Log.w("WhatsUp", "NQ started new call");
 			new Thread(new Runnable() {
 				public void run() {       
 					queue.poll().execute();
-					activeCalls--;
+					decreaseActiveCalls();
 					itemFinished();
+					Log.w("WhatsUp", "NQ finished call");
 				}
 			}).start();
 		}
+	}
+
+	private synchronized void increaseActiveCalls() {
+		this.activeCalls++;
+		
+	}
+	
+	private synchronized void decreaseActiveCalls() {
+		this.activeCalls--;
+		
 	}
 
 	private synchronized void itemFinished() {

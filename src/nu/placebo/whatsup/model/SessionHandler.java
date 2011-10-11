@@ -35,12 +35,12 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 
 	public void testSession() {
 		if (this.hasSession()) {
-			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
-					this.sessionId));
-			ts.addOperationListener(this);
-			NetworkQueue.getInstance().add(ts);
-		} else {
-			Log.w("WhatsUp", "No session to test.");
+//			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
+//					this.sessionId));
+//			ts.addOperationListener(this);
+//			NetworkQueue.getInstance().add(ts);
+//		} else {
+//			Log.w("WhatsUp", "No session to test.");
 		}
 	}
 
