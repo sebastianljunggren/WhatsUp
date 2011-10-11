@@ -44,7 +44,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		mapView = (MapView) findViewById(R.id.mapviewactivity_mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
-		marker = new Marker(this.getResources().getDrawable(R.drawable.pin3),
+		marker = new Marker(this.getResources().getDrawable(R.drawable.pin),
 				mapView, this);
 		setupToolbar();
 		SessionHandler.getInstance(this).testSession();

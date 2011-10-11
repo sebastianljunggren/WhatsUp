@@ -23,7 +23,7 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	private Activity activity;
 	
 	public Marker(Drawable defaultMarker, MapView mapView, Activity a) {
-		super(boundCenter(defaultMarker), mapView);
+		super(boundCenterBottom(defaultMarker), mapView);
 		activity = a;
 	}
 
