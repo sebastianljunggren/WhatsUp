@@ -71,7 +71,7 @@ public class GeoLocation {
 	}
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof GeoLocation) {
+		if(o != null && o instanceof GeoLocation) {
 			GeoLocation other = (GeoLocation) o;
 			return this.getId() == other.getId() &&
 				   this.getTitle().equals(other.getTitle()) &&

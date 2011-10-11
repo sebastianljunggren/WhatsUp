@@ -11,8 +11,11 @@ import nu.placebo.whatsup.network.OperationResult;
  * much time, or block for a number of reasons - not interfere with
  * the running of application.
  *
- * Classes getting an object of this type in return must instantly register
- * themselves as listeners for it, or else they might miss the server data.
+ * Classes getting an object of this type in return must register as listeners
+ * to said object. To avoid any kind of problems where the server data is returned
+ * before the class has registered as a listener, either through bad programming or
+ * bad thread scheduling, this method will block its own listener method until there
+ * is someone listening for it.
  *
  * @author Wange
  * @param <T> the type wanted as return.
@@ -20,7 +23,7 @@ import nu.placebo.whatsup.network.OperationResult;
 public class DataReturn<T> implements NetworkOperationListener<T> {
 
 	private T localData;
-	private T serverData;
+	private OperationResult<T> serverData;
 	private DataReturnListener listener;
 	private boolean canFetchNewData = false;
 	
@@ -51,7 +54,7 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 	 * or if this method is called despite the listener call returning
 	 * false.
 	 */
-	public T getNewData() {
+	public OperationResult <T> getNewData() {
 		return (canFetchNewData ? serverData : null);
 	}
 	
@@ -72,8 +75,9 @@ public class DataReturn<T> implements NetworkOperationListener<T> {
 			}
 		}
 		if(!threadInterupted) {
-			if(!localData.equals(result)) {
-				this.serverData = result.getResult();
+			if(result != null && result.getResult() != null &&
+					!localData.equals(result.getResult())) {
+				this.serverData = result;
 				canFetchNewData  = true;
 				listener.newDataReceived(true);
 				DataProvider.getDataProvider(null).newDataRecieved(true, id);

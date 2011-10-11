@@ -10,6 +10,7 @@ import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.OperationResult;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -197,8 +198,12 @@ public class DataProvider {
 	@SuppressWarnings("unchecked")
 	void newDataRecieved(boolean newData, int id) {
 		if(newData) {
-			Object data = activeObjects.get(id).getNewData();
+			OperationResult<?> result = activeObjects.get(id).getNewData();
 			
+			if(result.hasErrors()) {
+				return;
+			}
+			Object data = result.getResult();
 			if(data != null) {
 				//Test what type the new data has		
 				if(data.getClass() == Annotation.class) {

@@ -65,7 +65,7 @@ public class Annotation {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof Annotation) {
+		if(o != null && o instanceof Annotation) {
 			Annotation other = (Annotation) o;
 			return this.getId() == other.getId() && 
 				   this.getAuthor().equals(other.getAuthor()) &&
