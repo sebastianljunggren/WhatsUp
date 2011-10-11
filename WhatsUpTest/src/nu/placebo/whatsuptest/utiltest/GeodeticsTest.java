@@ -47,6 +47,6 @@ public class GeodeticsTest extends AndroidTestCase {
 		
 		String result = Geodetics.distanceWithUnit(nearlyFar);
 		
-		assertEquals("999.970 m returns far away", "very far away", result);
+		assertEquals("999.970 m returns far away", "Very far away", result);
 	}
 }
