@@ -261,15 +261,17 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 				null,
 				null,
 				null);
-		c.moveToFirst();
+		
 		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
-		do {
-			glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
-					new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
-					c.getInt(c.getColumnIndex("longitude"))), 
-					c.getString(c.getColumnIndex("title"))));
-			c.moveToNext();
-		} while(c.isLast());
+		if(c.moveToFirst()) {
+			do {
+				glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
+						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
+						c.getInt(c.getColumnIndex("longitude"))), 
+						c.getString(c.getColumnIndex("title"))));
+				c.moveToNext();
+			} while(!c.isLast());
+		}
 		
 		//TODO Add physical position to the list
 		return glList;
@@ -347,6 +349,10 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
 		ac.addOperationListener(listener);
 		networkQueue.add(ac);
+	}
+	
+	public void createComment(int nid, String author, String commentText, String title) {
+		new Comment(author, commentText, title, new Date());
 	}
 	
 	/**
