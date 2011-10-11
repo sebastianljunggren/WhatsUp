@@ -10,8 +10,11 @@ import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
+import nu.placebo.whatsup.model.SessionInfo;
+import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
+import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
 import nu.placebo.whatsup.network.OperationResult;
 import android.content.ContentValues;
@@ -20,7 +23,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DataProvider {
+public class DataProvider implements NetworkOperationListener<Annotation> {
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
@@ -338,8 +341,12 @@ public class DataProvider {
 				null);
 	}
 	
-	public void createAnnotation() {
-		
+	public void createAnnotation(String title, String desc, String author, 
+			GeoPoint gp, SessionInfo sInfo, 
+			NetworkOperationListener<Annotation> listener) {
+		AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
+		ac.addOperationListener(listener);
+		networkQueue.add(ac);
 	}
 	
 	/**
@@ -431,4 +438,10 @@ public class DataProvider {
 	private List<DataReturn<?>> activeObjects = new ArrayList<DataReturn<?>>();
 	private ReferencePoint currentReferencePoint;
 	private boolean firstRequest = true;
+
+	public void operationExcecuted(OperationResult<Annotation> result) {
+		if(!result.hasErrors()) {
+			insertData(result.getResult());
+		}
+	}
 }

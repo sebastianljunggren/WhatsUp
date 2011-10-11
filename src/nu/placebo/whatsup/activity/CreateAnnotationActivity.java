@@ -7,10 +7,9 @@ import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
-import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
 import nu.placebo.whatsup.network.OperationResult;
+import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
@@ -63,9 +62,8 @@ public class CreateAnnotationActivity extends Activity implements
 			SessionInfo sInfo = SessionHandler.getInstance(this).getSession();
 			String author = SessionHandler.getInstance(this).getUserName();
 			
-			AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
-			ac.addOperationListener(this);
-			NetworkQueue.getInstance().add(ac);
+			DataProvider.getDataProvider(getApplicationContext()).createAnnotation(
+					title, desc, author, gp, sInfo, this);
 		}
 
 	}
