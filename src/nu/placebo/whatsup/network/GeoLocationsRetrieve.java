@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.GeoLocation;
 
 import org.apache.http.HttpResponse;

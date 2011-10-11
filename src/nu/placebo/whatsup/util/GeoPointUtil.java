@@ -1,7 +1,6 @@
 package nu.placebo.whatsup.util;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 

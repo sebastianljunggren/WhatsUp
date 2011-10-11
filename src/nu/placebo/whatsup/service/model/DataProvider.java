@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
+
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
+import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkQueue;
@@ -50,7 +53,7 @@ public class DataProvider {
 					+ "author TEXT"
 					+ ");");
 			db.execSQL("CREATE TABLE " + COMMENT_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT"
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ "nid REAL," 
 					+ "comment TEXT,"
 					+ "author TEXT,"
@@ -58,10 +61,11 @@ public class DataProvider {
 					+ "added_date TEXT"
 					+ ");");
 			db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT"
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ "id INTEGER"
 					+ "name TEXT,"
-					+ "latitude REAL,"
-					+ "longitude REAL"
+					+ "latitude INTEGER,"
+					+ "longitude INTEGER"
 					+ ");");
 		}
 
@@ -155,6 +159,32 @@ public class DataProvider {
 		return result;
 	}
 	
+	/**
+	 * Convenience method for getAnnotationMarkers(int, int, int, int) when you have two
+	 * locations.
+	 * 
+	 * @param a one of the points
+	 * @param b the other point
+	 * @return 
+	 */
+	public DataReturn<List<GeoLocation>> getAnnotationMarkers(GeoLocation a, GeoLocation b) {
+		return getAnnotationMarkers(a.getLocation().getLatitudeE6(), 
+									a.getLocation().getLongitudeE6(),
+									b.getLocation().getLatitudeE6(),
+									b.getLocation().getLongitudeE6());
+	}
+	
+	/**
+	 * Calling this method is a request to get GeoLocations within
+	 * the rectangular area 
+	 * 
+	 * @param latitudeA the latitude of the first point, in microlatitude
+	 * @param longitudeA the longitude of the first point, in microlongitude
+	 * @param latitudeB the latitude of the second point, in microlatitude
+	 * @param longitudeB the longitude of the second point, in microlngitude
+	 * @return a DataReturn object containing any local data found and which can
+	 * be listened to by
+	 */
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(int latitudeA,
 			int longitudeA, int latitudeB, int longitudeB) {
 		//Database part here
@@ -189,6 +219,121 @@ public class DataProvider {
 	}
 	
 	/**
+	 * Gets the ReferencePoint that is currently used as reference point.
+	 * Unless setCurrentReferencePoint has been called earlier, the physical
+	 * position of the phone is returned.
+	 * 
+	 * @return the current reference point, as a ReferencePoint object, where the title
+	 * represents the name of the point.
+	 */
+	public ReferencePoint getCurrentReferencePoint() {
+		if(firstRequest) {
+			Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					"id = -1",
+					null,
+					null,
+					null,
+					null);
+			if(c.moveToFirst()) {
+				setCurrentReferencePoint(new ReferencePoint(
+						c.getInt(c.getColumnIndex("id")),
+						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
+									 c.getInt(c.getColumnIndex("longitude"))),
+						c.getString(c.getColumnIndex("name"))));
+			}
+			firstRequest = false;
+		}
+		//TODO Physical position
+		return currentReferencePoint == null ? null /* physical position here */ : currentReferencePoint;
+	}
+	
+	/**
+	 * Returns all reference points saved in the database, and the physical
+	 * position of the phone, which is always a reference point.
+	 * 
+	 * @return all reference point, including the physical location of the phone.
+	 */
+	public List<GeoLocation> getAllReferencePoints() {
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+		c.moveToFirst();
+		List<GeoLocation> glList = new ArrayList<GeoLocation>();
+		do {
+			glList.add(new GeoLocation(c.getInt(c.getColumnIndex("id")),
+					c.getInt(c.getColumnIndex("latitude")),
+					c.getInt(c.getColumnIndex("longitude")), 
+					c.getString(c.getColumnIndex("title"))));
+			c.moveToNext();
+		} while(c.isLast());
+		return glList;
+	}
+	
+	/**
+	 * Sets the ReferencePoint to use as the current reference point.
+	 * Also automatically calls addReferencePoint.
+	 * 
+	 * @param gl the new ReferencePoint to have as current reference point.
+	 */
+	public void setCurrentReferencePoint(ReferencePoint rp) {
+		currentReferencePoint = rp;
+		addReferencePoint(rp, true);
+	}
+	
+	private void addReferencePoint(ReferencePoint rp, boolean isCurrent) {
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		String[] args = {rp.getName(), Integer.toString(rp.getGeoPoint().getLatitudeE6()),
+										 Integer.toString(rp.getGeoPoint().getLongitudeE6())};
+		Cursor c = db.query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"name = ? AND latitude = ? AND longitude = ?",
+				args,
+				null,
+				null,
+				null);
+		if(!c.moveToFirst()) {
+			ContentValues values = new ContentValues();
+			if(isCurrent) {
+				values.put("id", -1);
+			} else {
+				values.put("id", rp.getId());
+			}
+			values.put("name", rp.getName());
+			values.put("latitude", rp.getGeoPoint().getLatitudeE6());
+			values.put("longitude", rp.getGeoPoint().getLongitudeE6());
+			db.insert(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					values);
+		}
+	}
+	/**
+	 * Adds a reference point to the database.
+	 * 
+	 * @param rp the point to add
+	 */
+	public void addReferencePoint(ReferencePoint rp) {
+		addReferencePoint(rp, false);
+	}
+	
+	/**
+	 * Removes a reference point from the database.
+	 * 
+	 * @param gl the point to remove
+	 */
+	public void removeReferencePoint(ReferencePoint rf) {
+		String[] values = {rf.getName(), Integer.toString(rf.getGeoPoint().getLatitudeE6()),
+										 Integer.toString(rf.getGeoPoint().getLongitudeE6())};
+		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
+				"name = ? AND latitude = ? AND longitude = ?",
+				values);
+	}
+	
+	/**
 	 * Called by DataReturn object to notify the DataProvider about new data
 	 * to insert into the local database.
 	 * 
@@ -200,11 +345,11 @@ public class DataProvider {
 		if(newData) {
 			OperationResult<?> result = activeObjects.get(id).getNewData();
 			
-			if(result.hasErrors()) {
+			if(result == null || result.getResult() == null) {
 				return;
 			}
-			Object data = result.getResult();
-			if(data != null) {
+			if(!result.hasErrors()) {
+				Object data = result.getResult();
 				//Test what type the new data has		
 				if(data.getClass() == Annotation.class) {
 					if(!insertData((Annotation) data)) {
@@ -215,13 +360,13 @@ public class DataProvider {
 						//TODO Error handling
 					}
 				}
-			} else {
-				return;
 			}
 		}
 		activeObjects.remove(id);
 	}
 	
+	//Inserts the given Annotation into its table, and it's auxiliary
+	//information into their tables. If error occurs, false is returned.
 	private boolean insertData(Annotation a) {
 		ContentValues values = new ContentValues();
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -255,6 +400,8 @@ public class DataProvider {
 		return true;
 	}
 
+	//Inserts the given list with GeoLocations into its table.
+	//If error occurs, false is returned.
 	private boolean insertData(List<GeoLocation> glList) {
 		ContentValues values = new ContentValues();
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -269,8 +416,10 @@ public class DataProvider {
 					null,
 					values);
 		}
-		return false;
+		return true;
 	}
 
 	private List<DataReturn<?>> activeObjects = new ArrayList<DataReturn<?>>();
+	private ReferencePoint currentReferencePoint;
+	private boolean firstRequest = true;
 }
