@@ -7,6 +7,6 @@
     <RelativeLayout android:id="@+id/RelativeLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
         <ImageButton android:src="@drawable/add" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:id="@+id/add_reference"></ImageButton>
     </RelativeLayout>
-    <ListView android:id="@+id/listView1" android:layout_width="match_parent" android:layout_height="wrap_content"></ListView>
+    <ListView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/android:list"></ListView>
     
 </LinearLayout>

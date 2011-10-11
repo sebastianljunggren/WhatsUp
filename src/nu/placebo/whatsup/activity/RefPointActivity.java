@@ -22,28 +22,47 @@ import android.widget.TextView;
 public class RefPointActivity extends ListActivity {
 	
 	private ArrayList<GeoLocation> refs;
+	private MarkerAdapter adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.ref_point_activity);
+		Log.d("whatsup", "Starting refPointActivity");
+		
+		
 		
 		refs = new ArrayList<GeoLocation>();
-		MarkerAdapter adapter = new MarkerAdapter(this, R.layout.ref_item, refs);
-		this.setListAdapter(adapter);
-		
-		
 		refs.add(new GeoLocation(1, 57708759, 11937507, "Lindholmen"));
 		refs.add(new GeoLocation(2, 57687959, 11978865, "Linsen"));
 		
-		adapter.clear();
-		for(int i=0; i< refs.size(); i++){
+		this.adapter = new MarkerAdapter(this, R.layout.ref_item, new ArrayList<GeoLocation>());
+		this.setListAdapter(adapter);
+		
+		adapter.markers.clear();
+		adapter.notifyDataSetChanged();
+		for (int i = 0; i < refs.size(); i++){
 			adapter.add(refs.get(i));
+			
 		}
 		adapter.notifyDataSetChanged();
 		
+	//	this.runOnUiThread(returnRes);
+		
 		
 	}
+	
+	private Runnable returnRes = new Runnable() {
+
+		public void run() {
+			if (refs != null && refs.size() > 0) {
+				
+			}
+			// m_ProgressDialog.dismiss();
+			
+		}
+	};
+	
 	
 	private class MarkerAdapter extends ArrayAdapter<GeoLocation> implements
 			OnClickListener {
@@ -67,14 +86,14 @@ public class RefPointActivity extends ListActivity {
 			GeoLocation gl = markers.get(position);
 			if (gl != null) {
 				TextView t_title = (TextView) v
-						.findViewById(R.id.ref_item_delete);
+						.findViewById(R.id.ref_item_title);
 
 				if (t_title != null)
 					t_title.setText(gl.getTitle());
-				v.setId(Constants.REFERENCE_POINT);
-				v.setTag(Constants.REFERENCE_POINT, gl.getId());
+				v.setId(R.id.ref_id);
+				v.setTag(R.id.ref_id, gl.getId());
 				ImageButton delBtn = (ImageButton) v.findViewById(R.id.ref_item_delete);
-				delBtn.setTag(Constants.REFERENCE_POINT, gl.getId());
+				delBtn.setTag(R.id.ref_id, gl.getId());
 				delBtn.setOnClickListener(this);
 				v.setOnClickListener(this);
 
@@ -87,12 +106,12 @@ public class RefPointActivity extends ListActivity {
 				Log.d("whatsup",
 						"Delete reference point: "
 								+ ((Integer) v
-										.getTag(Constants.REFERENCE_POINT)));
-			} else if (v.getId() == Constants.REFERENCE_POINT) {
+										.getTag(R.id.ref_id)));
+			} else if (v.getId() == R.id.ref_id) {
 				Log.d("whatsup",
 						"Select reference point: "
 								+ ((Integer) v
-										.getTag(Constants.REFERENCE_POINT)));
+										.getTag(R.id.ref_id)));
 			}
 
 		}
