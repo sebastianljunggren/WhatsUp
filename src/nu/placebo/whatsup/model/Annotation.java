@@ -62,4 +62,18 @@ public class Annotation {
 	public List<Comment> getComments() {
 		return comments;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Annotation) {
+			Annotation other = (Annotation) o;
+			return this.getId() == other.getId() && 
+				   this.getAuthor().equals(other.getAuthor()) &&
+				   this.getBody().equals(other.getBody()) && 
+				   this.getGeoLocation().equals(other.getGeoLocation()) &&
+				   this.getComments().equals(other.getComments());
+		} else {
+			return false;
+		}
+	}
 }

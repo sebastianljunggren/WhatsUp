@@ -69,4 +69,14 @@ public class GeoLocation {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof GeoLocation) {
+			GeoLocation other = (GeoLocation) o;
+			return this.getId() == other.getId() &&
+				   this.getTitle().equals(other.getTitle()) &&
+				   this.getLocation().equals(other.getLocation());
+		}
+		return false;
+	}
 }
