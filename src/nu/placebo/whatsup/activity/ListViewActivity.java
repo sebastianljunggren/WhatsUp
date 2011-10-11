@@ -35,7 +35,6 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 
 	private ArrayList<ListMarker> m_markers = null;
 	private MarkerAdapter m_adapter;
-	private Runnable viewMarkers;
 	private GeoLocation ref;
 
 	@Override
