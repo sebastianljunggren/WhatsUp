@@ -174,7 +174,8 @@ public class DataProvider {
 		
 		DataReturn<List<GeoLocation>> result;
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(
-				latitudeA, longitudeA, latitudeB, longitudeB);
+				(latitudeA - 0.5) / 1000000, (longitudeA - 0.5) / 1000000,
+				(latitudeB - 0.5) / 1000000, (longitudeB - 0.5) / 1000000);
 		
 		synchronized(this) {
 			result = new DataReturn<List<GeoLocation>>(
@@ -191,22 +192,26 @@ public class DataProvider {
 	 * to insert into the local database.
 	 * 
 	 * @param newData whether the data differs from that in the local database
-	 * @param id 
+	 * @param id the id of the DataReturn that has finished
 	 */
 	@SuppressWarnings("unchecked")
 	void newDataRecieved(boolean newData, int id) {
 		if(newData) {
 			Object data = activeObjects.get(id).getNewData();
 			
-			//Test what type the new data has		
-			if(data.getClass() == Annotation.class) {
-				if(!insertData((Annotation) data)) {
-					//TODO Error handling
+			if(data != null) {
+				//Test what type the new data has		
+				if(data.getClass() == Annotation.class) {
+					if(!insertData((Annotation) data)) {
+						//TODO Error handling
+					}
+				} else if(data.getClass() == List.class) {
+					if(!insertData((List<GeoLocation>) data)) {
+						//TODO Error handling
+					}
 				}
-			} else if(data.getClass() == List.class) {
-				if(!insertData((List<GeoLocation>) data)) {
-					//TODO Error handling
-				}
+			} else {
+				return;
 			}
 		}
 		activeObjects.remove(id);
@@ -214,11 +219,11 @@ public class DataProvider {
 	
 	private boolean insertData(Annotation a) {
 		ContentValues values = new ContentValues();
-		
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		values.put("nid", a.getId());
 		values.put("body", a.getBody());
 		values.put("author", a.getAuthor());
-		dbHelper.getWritableDatabase().insert(DatabaseHelper.ANNOTATION_TABLE,
+		db.insert(DatabaseHelper.ANNOTATION_TABLE,
 				null,
 				values);
 		
@@ -227,10 +232,38 @@ public class DataProvider {
 		values.put("latitude", a.getGeoLocation().getLocation().getLatitudeE6());
 		values.put("longitude", a.getGeoLocation().getLocation().getLongitudeE6());
 		values.put("title", a.getGeoLocation().getTitle());
-		return false;
+		db.insert(DatabaseHelper.GEOLOCATION_TABLE,
+				null,
+				values);
+		
+		for(Comment c : a.getComments()) {
+			values.clear();
+			values.put("nid", a.getId());
+			values.put("comment", c.getCommentText());
+			values.put("author", c.getAuthor());
+			values.put("title", c.getTitle());
+			values.put("added_date", c.getAddedDate().toString());
+			db.insert(DatabaseHelper.COMMENT_TABLE,
+					null,
+					values);
+		}
+		return true;
 	}
 
 	private boolean insertData(List<GeoLocation> glList) {
+		ContentValues values = new ContentValues();
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		
+		for(GeoLocation gl : glList) {
+			values.clear();
+			values.put("nid", gl.getId());
+			values.put("latitude", gl.getLocation().getLatitudeE6());
+			values.put("longitude", gl.getLocation().getLongitudeE6());
+			values.put("title", gl.getTitle());
+			db.insert(DatabaseHelper.GEOLOCATION_TABLE,
+					null,
+					values);
+		}
 		return false;
 	}
 

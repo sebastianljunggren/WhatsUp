@@ -58,4 +58,8 @@ public class Annotation {
 	public int getId() {
 		return geoLocation.getId();
 	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
 }
