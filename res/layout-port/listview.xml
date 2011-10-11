@@ -9,6 +9,7 @@
 		<ImageButton android:layout_toRightOf="@+id/list_goto_map" android:layout_alignBaseline="@+id/list_goto_map" android:layout_alignParentTop="true" android:src="@drawable/refresh" android:id="@+id/list_refresh"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"></ImageButton>
 		<ImageButton android:layout_alignBaseline="@+id/list_goto_map" android:layout_alignParentTop="true" android:src="@drawable/add" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="left" android:layout_alignParentRight="true" android:id="@+id/add_annotation"></ImageButton>
+		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/list_refresh" android:id="@+id/goto_refpoint" android:src="@drawable/crosshair_icon"></ImageButton>
 	</RelativeLayout>
 	<ListView android:layout_height="wrap_content"
 		android:layout_width="match_parent" android:id="@+id/android:list"></ListView>

@@ -3,6 +3,7 @@ package nu.placebo.whatsup.activity;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
@@ -61,6 +62,8 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		refreshBtn.setOnClickListener(this);
 		ImageButton addAnnotationButton = (ImageButton) findViewById(R.id.add_annotation);
 		addAnnotationButton.setOnClickListener(this);
+		ImageButton refPointBtn = (ImageButton) this.findViewById(R.id.goto_refpoint);
+		refPointBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -97,6 +100,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		} else if (v.getId() == R.id.add_annotation) {
 			Intent intent = new Intent(MapViewActivity.this,
 					PositionPickerActivity.class);
+			intent.putExtra("requestCode", Constants.ANNOTATION);
+			this.startActivity(intent);
+		}
+		if(v.getId() == R.id.goto_refpoint){
+			Intent intent = new Intent(this, RefPointActivity.class);
 			this.startActivity(intent);
 		}
 	}

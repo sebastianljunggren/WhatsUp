@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
@@ -67,6 +68,8 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		refreshBtn.setOnClickListener(this);
 		ImageButton addAnnotBtn = (ImageButton) this.findViewById(R.id.add_annotation);
 		addAnnotBtn.setOnClickListener(this);
+		ImageButton refPointBtn = (ImageButton) this.findViewById(R.id.goto_refpoint);
+		refPointBtn.setOnClickListener(this);
 		
 	}
 
@@ -96,6 +99,11 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		if(v.getId() == R.id.add_annotation){
 			Intent intent = new Intent(this,
 					PositionPickerActivity.class);
+			intent.putExtra("requestCode", Constants.ANNOTATION);
+			this.startActivity(intent);
+		}
+		if(v.getId() == R.id.goto_refpoint){
+			Intent intent = new Intent(this, RefPointActivity.class);
 			this.startActivity(intent);
 		}
 		
