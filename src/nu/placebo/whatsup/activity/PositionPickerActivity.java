@@ -3,12 +3,14 @@ package nu.placebo.whatsup.activity;
 import android.content.Intent;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -24,28 +26,37 @@ public class PositionPickerActivity extends MapActivity implements
 		OnClickListener {
 
 	private MapView mapView;
-	private boolean isCreateAnnotation;
+	private int requestCode;
 
 	@Override
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 
-		/*
-		 * Validate the incoming bundle, and find out whether the next activity
-		 * should be CreateAnnotationActivity or CreateReferenceActivity
-		 * 
-		 * If bundle is empty or doesn't match either, kill self.
-		 * 
-		 * if next activity is CreateAnnotation, check with SessionHandler if
-		 * logged in. If not, start log in activity.
-		 */
+		this.requestCode = this.getIntent().getExtras().getInt("requestCode");
+		TextView typeText = (TextView) this.findViewById(R.id.activity_name);
+		TextView refName = (TextView) this.findViewById(R.id.position_name);
+		
+		if(this.requestCode == Constants.ANNOTATION){
+			
+			refName.setVisibility(View.GONE);
+			typeText.setText("New Annotation");
+			
+		} else if(this.requestCode == Constants.REFERENCE_POINT) {
+
+			refName.setVisibility(View.VISIBLE);
+			typeText.setText("New Reference Point");
+			
+		} else {
+			this.finish();
+		}
+		
 		setContentView(R.layout.position_picker_view);
 		mapView = (MapView) findViewById(R.id.position_picker_mapview);
 		mapView.setBuiltInZoomControls(true);
-		this.isCreateAnnotation = true;
 		Button selectPosition = (Button) findViewById(R.id.select_position);
 		selectPosition.setOnClickListener(this);
 	}
+	
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -54,11 +65,19 @@ public class PositionPickerActivity extends MapActivity implements
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.select_position) {
-			if (this.isCreateAnnotation) {
+			GeoPoint p = mapView.getMapCenter();
+			if (this.requestCode == Constants.ANNOTATION) {
 				Intent intent = new Intent(this, CreateAnnotationActivity.class);
-				GeoPoint p = mapView.getMapCenter();
 				intent.putExtras(GeoPointUtil.pushGeoPoint(p));
 				this.startActivityForResult(intent, 1);
+			}
+			
+			if (this.requestCode == Constants.REFERENCE_POINT){
+				String refName = ((TextView) this.findViewById(R.id.position_name)).getText().toString();
+				if(!refName.equals("")){
+					DataProvider.getDataProvider(this).addReferencePoint(p, refName);
+					this.finish();
+				}
 			}
 		}
 	}

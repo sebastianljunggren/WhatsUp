@@ -18,10 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class RefPointActivity extends ListActivity {
+public class RefPointActivity extends ListActivity implements OnClickListener {
 
 	private List<ReferencePoint> refs;
 	private MarkerAdapter adapter;
@@ -38,12 +39,24 @@ public class RefPointActivity extends ListActivity {
 				new ArrayList<ReferencePoint>());
 		this.setListAdapter(adapter);
 		
-		refresh();
-
-		
+		Button addBtn = (Button) this.findViewById(R.id.add_reference);
+		addBtn.setOnClickListener(this);
 
 	}
 	
+	
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		refresh();
+		super.onResume();
+	}
+
+
+
 	private void refresh(){
 		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 		
@@ -54,6 +67,14 @@ public class RefPointActivity extends ListActivity {
 
 		}
 		adapter.notifyDataSetChanged();
+	}
+	
+	public void onClick(View v) {
+		if(v.getId() == R.id.add_reference){
+			Intent intent = new Intent(this, PositionPickerActivity.class);
+			intent.putExtra("requestCode", Constants.REFERENCE_POINT);
+			this.startActivity(intent);
+		}
 	}
 
 	private class MarkerAdapter extends ArrayAdapter<ReferencePoint> implements
@@ -108,6 +129,7 @@ public class RefPointActivity extends ListActivity {
 						"Select reference point: "
 								+ ((Integer) v.getTag(R.id.ref_id)));
 				Intent intent = new Intent(ctx, PositionPickerActivity.class);
+				intent.putExtra("requestCode", Constants.REFERENCE_POINT);
 				ctx.startActivityForResult(intent, Constants.REFERENCE_POINT);
 			}
 

@@ -3,17 +3,15 @@
 	android:orientation="vertical" android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<RelativeLayout android:id="@+id/LinearLayout1" xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="horizontal" android:layout_width="match_parent"
 		android:layout_height="50dp">
-
-		<Button 
-			android:id="@+id/select_position"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content"
-			android:drawableLeft="@drawable/ok">
-		</Button>
-	</LinearLayout>
+		<Button android:drawableLeft="@drawable/ok" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/select_position" android:layout_alignParentTop="true" android:layout_alignParentRight="true"></Button>
+		<TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:layout_marginLeft="15dp" android:id="@+id/activity_name"></TextView>
+	</RelativeLayout>
+	<EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/position_name" android:visibility="gone">
+		<requestFocus></requestFocus>
+	</EditText>
 	
 	<RelativeLayout
   		xmlns:android="http://schemas.android.com/apk/res/android"
