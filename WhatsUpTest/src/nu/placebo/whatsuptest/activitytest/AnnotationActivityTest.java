@@ -17,8 +17,4 @@ public class AnnotationActivityTest extends ActivityInstrumentationTestCase2<Ann
 	public void testPreconditions() {
 		
 	}
-	
-	public void addTest() {
-		assertEquals(true, true);
-	}
 }

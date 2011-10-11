@@ -46,14 +46,20 @@ public class GeoPointUtil {
 		return result;
 	}
 
-	public static GeoPoint[] getBottomLeftToTopRightPoints(GeoPoint center,
-			int latSpan, int longSpan) {
+	/**
+	 * Creates two GeoPoints with the center of the map, latitude span and longitude span
+	 * 
+	 * @param center - center of the current mapview
+	 * @param latSpan - latitude span from bottom to top
+	 * @param longSpan - longitude span from left to right
+	 * @return GeoPoint[] with two GeoPoints representing the bottom-left and top-right coordinates 
+	 */
+	public static GeoPoint[] getBottomLeftToTopRightPoints(GeoPoint center,	int latSpan, int longSpan) {
 		int bottom = center.getLatitudeE6() - (latSpan / 2);
 		int top = center.getLatitudeE6() + (latSpan / 2);
 		int left = center.getLongitudeE6() - (longSpan / 2);
 		int right = center.getLongitudeE6() + (longSpan / 2);
-		return new GeoPoint[] { new GeoPoint(bottom, left),
-				new GeoPoint(top, right) };
+		return new GeoPoint[] { new GeoPoint(bottom, left), new GeoPoint(top, right) };
 	}
 
 	/**
