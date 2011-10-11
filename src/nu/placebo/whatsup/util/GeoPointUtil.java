@@ -56,6 +56,16 @@ public class GeoPointUtil {
 				new GeoPoint(top, right) };
 	}
 
+	/**
+	 * Convenience method for packing a GeoPoint in a Bundle (android.os)
+	 * 
+	 * 
+	 * 
+	 * @see #popGeoPoint(Bundle)
+	 * @see #bundleHasGeoPoint(Bundle)
+	 * @param p
+	 * @return Bundle with packaged GeoPoint
+	 */
 	public static Bundle pushGeoPoint(GeoPoint p) {
 		Bundle bundle = new Bundle();
 		bundle.putInt("lat", p.getLatitudeE6());
@@ -64,12 +74,26 @@ public class GeoPointUtil {
 		return bundle;
 	}
 
+	/**
+	 * Convenience method for unpacking a GeoPoint from a Bundle Bundle must be
+	 * packed according to local standards.
+	 * 
+	 * @param bundle
+	 * @return GeoPoint
+	 */
 	public static GeoPoint popGeoPoint(Bundle bundle) {
 		GeoPoint p = new GeoPoint(bundle.getInt("lat"), bundle.getInt("long"));
 
 		return p;
 	}
 
+	/**
+	 * Returns whether the bundle contains a properly packaged GeoPoint
+	 * according to local standards.
+	 * 
+	 * @param b
+	 * @return
+	 */
 	public static boolean bundleHasGeoPoint(Bundle b) {
 		boolean hasGP = true;
 		if (!b.containsKey("lat"))

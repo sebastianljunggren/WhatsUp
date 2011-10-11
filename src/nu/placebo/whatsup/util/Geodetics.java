@@ -32,7 +32,7 @@ public class Geodetics {
 	 * 
 	 * Distances between 1 and 1000 m are presented: "123 m" (ex. dist = 123.4567)
 	 * Distances between 1000 and 100 000 m are presented "12.3 km" (ex. dist = 12345.67)
-	 * Distances exceeding 1000 km will result in a "far away" string (ex. dist = 1234567) 
+	 * Distances from (including) 1000 km will result in a "far away" string (ex. dist = 1234567) 
 	 * 
 	 * @param distance
 	 * @return String with formatted value and approperiate unit
@@ -42,12 +42,17 @@ public class Geodetics {
 		if(distance<0)
 			distance = -distance;
 		
+		distance = Math.round(distance);
+		if(distance >= 1000){
+			distance = ((double) Math.round(distance/100))*100;
+		}
+		
+		
 		
 		if(distance < 1000){
-			distance = Math.round(distance);
 			result = ((int)distance)+" m";
 		} else if(distance < 1000000){
-			distance =((double) Math.round((distance/100)))/10;
+			distance = distance / 1000;
 			result = distance+" km";
 		} else {
 			result = "Very far away";
