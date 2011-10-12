@@ -2,6 +2,13 @@ package nu.placebo.whatsup.network;
 
 import nu.placebo.whatsup.android.os.AsyncTask;
 
+/**
+ * 
+ * Makes it possible to run NetworkOperation in their own thread and then easily
+ * return it to the UI thread.
+ * 
+ */
+
 public class NetworkTask<T> extends
 		AsyncTask<NetworkOperation<T>, NetworkOperation<T>> {
 
