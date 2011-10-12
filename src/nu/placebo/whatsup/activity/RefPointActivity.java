@@ -41,7 +41,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				new ArrayList<ReferencePoint>());
 		this.setListAdapter(adapter);
 		
-		Button addBtn = (Button) this.findViewById(R.id.add_reference);
+		ImageButton addBtn = (ImageButton) this.findViewById(R.id.add_reference);
 		addBtn.setOnClickListener(this);
 
 	}
@@ -63,9 +63,10 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 	//	refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 		refs.clear();
 		refs.add(new ReferencePoint(1, new GeoPoint(57708916, 11937847), "Lindholmen"));
-		refs.add(new ReferencePoint(2, new GeoPoint(57706922, 11969776), "Brunnsparken"));
+		refs.add(new ReferencePoint(2, new GeoPoint(57706922, 11969776), "Brunnsparken")); 
 		
-		
+	
+				
 		adapter.markers.clear();
 		adapter.notifyDataSetChanged();
 		for (int i = 0; i < refs.size(); i++) {
@@ -134,9 +135,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				Log.d("whatsup",
 						"Select reference point: "
 								+ ((Integer) v.getTag(R.id.ref_id)));
-				Intent intent = new Intent(ctx, PositionPickerActivity.class);
-				intent.putExtra("requestCode", Constants.REFERENCE_POINT);
-				ctx.startActivityForResult(intent, Constants.REFERENCE_POINT);
+				DataProvider.getDataProvider(ctx).setCurrentReferencePoint((Integer)v.getTag(R.id.ref_id));
 			}
 
 		}
