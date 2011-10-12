@@ -20,8 +20,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.google.android.maps.GeoPoint;
+import android.util.Log;
 
 public class DataProvider implements NetworkOperationListener<Annotation> {
 
@@ -148,6 +148,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			comments.add(new Comment(cAuthor, comment, cTitle, cDate));
 		} while(!c.isLast());
 		
+		c.close();
 		DataReturn<Annotation> result;
 		
 		synchronized(this) {
@@ -199,7 +200,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		String minLong = Double.toHexString(Math.min(longitudeA, longitudeB));
 		String[] selectionArgs = {maxLat, maxLong, minLat, minLong};
 		
-		dbHelper.getReadableDatabase().query(DatabaseHelper.ANNOTATION_TABLE,
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.GEOLOCATION_TABLE,
 				null,
 				"latitude < ? AND longitude < ? AND latitude > ? AND longitude > ?",
 				selectionArgs,
@@ -207,6 +208,19 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 				null,
 				null);
 		
+		if(c.moveToLast()) {
+			for(int i = 0; i < 10; i++) {
+				locations.add(new GeoLocation(c.getInt(c.getColumnIndex("nid")),
+								c.getInt(c.getColumnIndex("latitude")),
+								c.getInt(c.getColumnIndex("longitude")),
+								c.getString(c.getColumnIndex("title"))));
+				if(!c.moveToPrevious()) {
+					break;
+				}
+			}
+		}
+		
+		c.close();
 		DataReturn<List<GeoLocation>> result;
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(
 				(latitudeA - 0.5) / 1000000, (longitudeA - 0.5) / 1000000,
@@ -242,6 +256,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			if(c.moveToFirst()) {
 				setCurrentReferencePoint(c.getInt(c.getColumnIndex("_nid")));
 			}
+			c.close();
 			firstRequest = false;
 		}
 		//TODO Physical position
@@ -264,16 +279,15 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 				null);
 		
 		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
-		if(c.moveToFirst()) {
+		if(c.moveToPosition(0)) {
 			do {
 				glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
 						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
 						c.getInt(c.getColumnIndex("longitude"))), 
-						c.getString(c.getColumnIndex("title"))));
-				c.moveToNext();
-			} while(!c.isLast());
+						c.getString(c.getColumnIndex("name"))));
+			} while(c.moveToNext());
 		}
-		
+		c.close();
 		//TODO Add physical position to the list
 		return glList;
 	}
@@ -299,9 +313,11 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 									   c.getInt(c.getColumnIndex("latitude"))),
 							   c.getString(c.getColumnIndex("name")));
 		}
+		c.close();
 	}
 	
 	private void addReferencePoint(GeoPoint gp, String name, boolean isCurrent) {
+		Log.i("Wånge", "New reference point added");
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		String[] args = {name, Integer.toString(gp.getLatitudeE6()),
 										 Integer.toString(gp.getLongitudeE6())};
@@ -322,6 +338,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 					null,
 					values);
 		}
+		c.close();
 	}
 	/**
 	 * Adds a reference point to the database.
@@ -329,7 +346,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * 
 	 * @param rp the point to add
 	 */
-	public void addReferencePoint(GeoPoint gp, String name) {
+	public void addReferencePoint(GeoPoint gp, String name) {		
 		addReferencePoint(gp, name, false);
 	}
 	
@@ -340,11 +357,22 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 */
 	public void removeReferencePoint(int id) {
 		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
-				"name = " + id,
+				"_id = " + id,
 				null);
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Creates an Annotation with the specified values. A valid SessionInfo is required, and the object
+	 * that wants the annotation should be sent as listener.
+	 * 
+	 * @param title
+	 * @param desc
+	 * @param author
+	 * @param gp
+	 * @param sInfo
+	 * @param listener
+	 */
 	public void createAnnotation(String title, String desc, String author, 
 			GeoPoint gp, SessionInfo sInfo, 
 			NetworkOperationListener<Annotation> listener) {

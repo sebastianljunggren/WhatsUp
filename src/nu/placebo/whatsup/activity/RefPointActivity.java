@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -34,9 +33,15 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.ref_point_activity);
 		Log.d("whatsup", "Starting refPointActivity");
+		
+		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 
-		refs = new ArrayList<ReferencePoint>();
-
+		String values = "";
+		for(ReferencePoint rp : refs) {
+			values += rp.getName() + " " + rp.getGeoPoint() + " " + rp.getId();
+		}
+		
+		Log.i("Value of refs:", values);
 		this.adapter = new MarkerAdapter(this, R.layout.ref_item,
 				new ArrayList<ReferencePoint>());
 		this.setListAdapter(adapter);

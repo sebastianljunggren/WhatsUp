@@ -7,14 +7,17 @@ import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
+import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
+import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -40,7 +43,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapviewactivity_mapview);
 		mapView.setBuiltInZoomControls(true);
