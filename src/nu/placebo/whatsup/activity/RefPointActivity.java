@@ -3,6 +3,8 @@ package nu.placebo.whatsup.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
+
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.ReferencePoint;
@@ -58,7 +60,11 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 
 	private void refresh(){
-		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
+	//	refs = DataProvider.getDataProvider(this).getAllReferencePoints();
+		refs.clear();
+		refs.add(new ReferencePoint(1, new GeoPoint(57708916, 11937847), "Lindholmen"));
+		refs.add(new ReferencePoint(2, new GeoPoint(57706922, 11969776), "Brunnsparken"));
+		
 		
 		adapter.markers.clear();
 		adapter.notifyDataSetChanged();
