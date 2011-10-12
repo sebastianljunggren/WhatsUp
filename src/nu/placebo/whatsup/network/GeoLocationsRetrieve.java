@@ -43,7 +43,7 @@ public class GeoLocationsRetrieve extends
 		this.longitudeB = area[3];
 	}
 
-	public void execute() {
+	public OperationResult<List<GeoLocation>> execute() {
 		this.hasErrors = true;
 		HttpResponse response = NetworkCalls
 				.performGetRequest(Constants.API_URL + "nearby/"
@@ -61,12 +61,12 @@ public class GeoLocationsRetrieve extends
 		List<GeoLocation> geoLocations = this.parse(result);
 
 		if (response != null) {
-			super.notifyListeners(new OperationResult<List<GeoLocation>>(
+			return new OperationResult<List<GeoLocation>>(
 					this.hasErrors, response.getStatusLine().getStatusCode(),
-					response.getStatusLine().getReasonPhrase(), geoLocations));
+					response.getStatusLine().getReasonPhrase(), geoLocations);
 		} else {
-			super.notifyListeners(new OperationResult<List<GeoLocation>>(
-					hasErrors, 0, "Problems with the network", null));
+			return new OperationResult<List<GeoLocation>>(
+					hasErrors, 0, "Problems with the network", null);
 		}
 
 	}

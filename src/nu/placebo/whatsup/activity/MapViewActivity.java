@@ -10,7 +10,7 @@ import nu.placebo.whatsup.model.Marker;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
@@ -113,6 +113,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	 * Retrieves information about the current location on the map, and sends it
 	 * to the server.
 	 */
+	@SuppressWarnings("unchecked")
 	public void refresh() {
 		marker.clear();
 		GeoPoint[] p = GeoPointUtil.getBottomLeftToTopRightPoints(
@@ -121,17 +122,13 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		double[] d = GeoPointUtil.convertAreaToDoubles(p[0], p[1]);
 		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2], d[3]);
 		gr.addOperationListener(this);
-		NetworkQueue.getInstance().add(gr);
+		new NetworkTask<List<GeoLocation>>().execute(gr);
 	}
 
 	public void operationExcecuted(
 			final OperationResult<List<GeoLocation>> result) {
 		if (!result.hasErrors()) {
-			this.runOnUiThread(new Runnable() {
-				public void run() {
 					addMarkers(result.getResult());
-				}
-			});
 		}
 	}
 

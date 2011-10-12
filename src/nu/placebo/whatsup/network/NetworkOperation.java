@@ -9,6 +9,8 @@ package nu.placebo.whatsup.network;
 
 public interface NetworkOperation<T> {
 	public void addOperationListener(NetworkOperationListener<T> listener);
-
-	public void execute();
+	public void notifyListeners(OperationResult<T> result);
+	public OperationResult<T> execute();
+	public OperationResult<T> getResult();
+	public void setOperationResult(OperationResult<T> result);
 }

@@ -33,7 +33,7 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 		this.password = password;
 	}
 
-	public void execute() {
+	public OperationResult<SessionInfo> execute() {
 		HttpResponse response = null;
 		String result = null;
 		this.hasErrors = true;
@@ -58,14 +58,14 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 			e.printStackTrace();
 		}
 		if (response != null) {
-			super.notifyListeners(new OperationResult<SessionInfo>(
+			return new OperationResult<SessionInfo>(
 					this.hasErrors, response.getStatusLine().getStatusCode(),
 					response.getStatusLine().getReasonPhrase(),
 					new SessionInfo(this.sessionName, this.sessionId),
-					Action.LOG_IN));
+					Action.LOG_IN);
 		} else {
-			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
-					0, "Problems with the network", null, Action.LOG_IN));
+			return new OperationResult<SessionInfo>(hasErrors,
+					0, "Problems with the network", null, Action.LOG_IN);
 		}
 	}
 

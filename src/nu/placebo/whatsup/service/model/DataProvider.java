@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.android.maps.GeoPoint;
-
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -15,13 +13,15 @@ import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.google.android.maps.GeoPoint;
 
 public class DataProvider implements NetworkOperationListener<Annotation> {
 
@@ -89,7 +89,6 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	private static volatile DataProvider instance;
 
 	private DatabaseHelper dbHelper;
-	private NetworkQueue networkQueue = NetworkQueue.getInstance();
 
 	public static DataProvider getDataProvider(Context c) {
 		if(instance == null) {
@@ -98,6 +97,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		return instance;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public DataReturn<Annotation> getAnnotation(int nid) {
 		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
 		//cache, and means of acquiring the data fetched from remote server
@@ -158,7 +158,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		activeObjects.add(result);
 		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
 		ar.addOperationListener(result);
-		networkQueue.add(ar);
+		new NetworkTask<Annotation>().execute(ar);
 		return result;
 	}
 	
@@ -188,6 +188,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * @return a DataReturn object containing any local data found and which can
 	 * be listened to by
 	 */
+	@SuppressWarnings("unchecked")
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(int latitudeA,
 			int longitudeA, int latitudeB, int longitudeB) {
 		//Database part here
@@ -217,7 +218,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			activeObjects.add(result);
 		}
 		glr.addOperationListener(result);
-		networkQueue.add(glr);
+		new NetworkTask<List<GeoLocation>>().execute(glr);
 		return result;
 	}
 	
@@ -343,12 +344,13 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 				null);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void createAnnotation(String title, String desc, String author, 
 			GeoPoint gp, SessionInfo sInfo, 
 			NetworkOperationListener<Annotation> listener) {
 		AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
 		ac.addOperationListener(listener);
-		networkQueue.add(ac);
+		new NetworkTask<Annotation>().execute(ac);
 	}
 	
 	public void createComment(int nid, String author, String commentText, String title) {

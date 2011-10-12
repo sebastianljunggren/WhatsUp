@@ -52,7 +52,7 @@ public class AnnotationCreate extends AbstractNetworkOperation<Annotation> {
 		this.author = author;
 	}
 
-	public void execute() {
+	public OperationResult<Annotation> execute() {
 		Annotation annotation = null;
 		HttpResponse response = null;
 		this.hasErrors = true;
@@ -79,9 +79,9 @@ public class AnnotationCreate extends AbstractNetworkOperation<Annotation> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		super.notifyListeners(new OperationResult<Annotation>(hasErrors,
+		return new OperationResult<Annotation>(hasErrors,
 				response.getStatusLine().getStatusCode(), response
-						.getStatusLine().getReasonPhrase(), annotation));
+						.getStatusLine().getReasonPhrase(), annotation);
 	}
 
 	private Annotation parseResult(String result) {

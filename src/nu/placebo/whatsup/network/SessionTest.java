@@ -29,7 +29,7 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 		this.sessionInfo = sessionInfo;
 	}
 
-	public void execute() {
+	public OperationResult<SessionInfo> execute() {
 		HttpResponse response = NetworkCalls.performPostRequest(
 				Constants.API_URL + "system/connect.json", null, sessionInfo);
 		ResponseHandler<String> handler = new BasicResponseHandler();
@@ -43,13 +43,13 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 		}
 		boolean hasErrors = this.parseResult(result);
 		if (response != null) {
-			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
+			return new OperationResult<SessionInfo>(hasErrors,
 					response.getStatusLine().getStatusCode(), response
 							.getStatusLine().getReasonPhrase(), sessionInfo,
-					Action.TEST_SESSION));
+					Action.TEST_SESSION);
 		} else {
-			super.notifyListeners(new OperationResult<SessionInfo>(hasErrors,
-					0, "Problems with the network", null, Action.TEST_SESSION));
+			return new OperationResult<SessionInfo>(hasErrors,
+					0, "Problems with the network", null, Action.TEST_SESSION);
 		}
 	}
 

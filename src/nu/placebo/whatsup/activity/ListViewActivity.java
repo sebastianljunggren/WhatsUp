@@ -10,7 +10,7 @@ import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.ListActivity;
 import android.content.Context;
@@ -52,11 +52,12 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		refresh();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void refresh() {
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008,
 				9.667969, 68.974164, 24.785156);
 		glr.addOperationListener(this);
-		NetworkQueue.getInstance().add(glr);
+		new NetworkTask<List<GeoLocation>>().execute(glr);
 	}
 
 	private void buildToolbar() {

@@ -5,7 +5,7 @@ import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ public class AnnotationActivity extends Activity implements
 	private TextView author;
 	private Annotation annotation;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class AnnotationActivity extends Activity implements
 		Bundle bundle = getIntent().getExtras();
 		AnnotationRetrieve ar = new AnnotationRetrieve(bundle.getInt("nid"));
 		ar.addOperationListener(this);
-		NetworkQueue.getInstance().add(ar);
+		new NetworkTask<Annotation>().execute(ar);
 	}
 
 	public Annotation getAnnotation() {
@@ -55,14 +56,7 @@ public class AnnotationActivity extends Activity implements
 
 	public void operationExcecuted(final OperationResult<Annotation> result) {
 		if (!result.hasErrors()) {
-			this.runOnUiThread(new Runnable() {
-
-				public void run() {
-					setAnnotation(result.getResult());
-
-				}
-
-			});
+			setAnnotation(result.getResult());
 		}
 	}
 

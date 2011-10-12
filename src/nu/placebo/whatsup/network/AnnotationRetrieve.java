@@ -25,7 +25,7 @@ public class AnnotationRetrieve extends AbstractNetworkOperation<Annotation> {
 		this.nid = nid;
 	}
 
-	public void execute() {
+	public OperationResult<Annotation> execute() {
 		Annotation annotation = null;
 		HttpResponse response = null;
 		boolean hasErrors = true;
@@ -44,12 +44,12 @@ public class AnnotationRetrieve extends AbstractNetworkOperation<Annotation> {
 		}
 		
 		if (response != null) {
-			super.notifyListeners(new OperationResult<Annotation>(hasErrors,
+			return new OperationResult<Annotation>(hasErrors,
 					response.getStatusLine().getStatusCode(), response
-							.getStatusLine().getReasonPhrase(), annotation));
+							.getStatusLine().getReasonPhrase(), annotation);
 		} else {
-			super.notifyListeners(new OperationResult<Annotation>(hasErrors, 0,
-					"Problems with the network", null));
+			return new OperationResult<Annotation>(hasErrors, 0,
+					"Problems with the network", null);
 		}
 	}
 }

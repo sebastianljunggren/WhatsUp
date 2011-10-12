@@ -4,11 +4,13 @@ import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.network.Action;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
+import nu.placebo.whatsup.network.SessionTest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 /**
  * 
@@ -29,14 +31,15 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		this.read();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testSession() {
 		if (this.hasSession()) {
-//			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
-//					this.sessionId));
-//			ts.addOperationListener(this);
-//			NetworkQueue.getInstance().add(ts);
-//		} else {
-//			Log.w("WhatsUp", "No session to test.");
+			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
+					this.sessionId));
+			ts.addOperationListener(this);
+			new NetworkTask<SessionInfo>().execute(ts);
+		} else {
+			Log.w("WhatsUp", "No session to test.");
 		}
 	}
 
@@ -101,10 +104,11 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void attemptLogIn() {
 		Login logIn = new Login(this.userName, this.password);
 		logIn.addOperationListener(this);
-		NetworkQueue.getInstance().add(logIn);
+		new NetworkTask<SessionInfo>().execute(logIn);
 	}
 
 	public boolean hasCredentials() {

@@ -5,7 +5,7 @@ import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkQueue;
+import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,10 +17,11 @@ import android.widget.TextView;
 /**
  * 
  * Activity with the log in form.
- *
+ * 
  */
 
-public class LogInActivity extends Activity implements OnClickListener, NetworkOperationListener<SessionInfo> {
+public class LogInActivity extends Activity implements OnClickListener,
+		NetworkOperationListener<SessionInfo> {
 
 	private String userName;
 	private String password;
@@ -35,33 +36,29 @@ public class LogInActivity extends Activity implements OnClickListener, NetworkO
 		this.result = (TextView) this.findViewById(R.id.result);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void onClick(View view) {
-		this.userName = ((TextView) this.findViewById(R.id.user_name)).getText().toString();
-		this.password = ((TextView) this.findViewById(R.id.password)).getText().toString();
+		this.userName = ((TextView) this.findViewById(R.id.user_name))
+				.getText().toString();
+		this.password = ((TextView) this.findViewById(R.id.password)).getText()
+				.toString();
 		this.result.setText("Logging in...");
-		Login login = new Login(this.userName,
-				this.password);
+		Login login = new Login(this.userName, this.password);
 		login.addOperationListener(this);
-		NetworkQueue.getInstance().add(login);
+		new NetworkTask<SessionInfo>().execute(login);
 		this.result.setText("Logging in...");
 	}
 
 	public void operationExcecuted(final OperationResult<SessionInfo> r) {
-		this.runOnUiThread(new Runnable() {
+		if (!r.hasErrors()) {
+			result.setText("Successfully logged in!");
+			SessionHandler sh = SessionHandler.getInstance(LogInActivity.this);
+			sh.saveSession(r.getResult());
+			sh.saveCredentials(userName, password);
+			sh.testSession();
 
-			public void run() {
-				if (!r.hasErrors()) {
-					result.setText("Successfully logged in!");
-					SessionHandler sh = SessionHandler.getInstance(LogInActivity.this);
-					sh.saveSession(r.getResult());
-					sh.saveCredentials(userName, password);
-					sh.testSession();
-					
-				} else {
-					result.setText("Failed to login: " + r.getStatusMessage());
-				}
-			}
-			
-		});
+		} else {
+			result.setText("Failed to login: " + r.getStatusMessage());
+		}
 	}
 }

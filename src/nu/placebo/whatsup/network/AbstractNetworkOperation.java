@@ -12,15 +12,25 @@ public abstract class AbstractNetworkOperation<T> implements
 		NetworkOperation<T> {
 
 	private List<NetworkOperationListener<T>> listeners = new ArrayList<NetworkOperationListener<T>>();
+	private OperationResult<T> operationResult;
 
 	public final void addOperationListener(NetworkOperationListener<T> listener) {
 		this.listeners.add(listener);
 	}
 
-	public final void notifyListeners(OperationResult<T> result) {
+	public void notifyListeners(OperationResult<T> result) {
 		for (NetworkOperationListener<T> listener : this.listeners) {
 			listener.operationExcecuted(result);
 		}
+	}
+
+	public final OperationResult<T> getResult() {
+		return this.operationResult;
+	}
+
+	public final void setOperationResult(OperationResult<T> result) {
+		this.operationResult = result;
+		
 	}
 
 }
