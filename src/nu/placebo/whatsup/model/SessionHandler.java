@@ -31,7 +31,6 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		this.read();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testSession() {
 		if (this.hasSession()) {
 			SessionTest ts = new SessionTest(new SessionInfo(this.sessionName,
@@ -104,7 +103,6 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void attemptLogIn() {
 		Login logIn = new Login(this.userName, this.password);
 		logIn.addOperationListener(this);

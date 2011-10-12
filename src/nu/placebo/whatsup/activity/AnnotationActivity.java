@@ -26,7 +26,6 @@ public class AnnotationActivity extends Activity implements
 	private TextView author;
 	private Annotation annotation;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

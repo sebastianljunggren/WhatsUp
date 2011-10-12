@@ -36,7 +36,6 @@ public class LogInActivity extends Activity implements OnClickListener,
 		this.result = (TextView) this.findViewById(R.id.result);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void onClick(View view) {
 		this.userName = ((TextView) this.findViewById(R.id.user_name))
 				.getText().toString();

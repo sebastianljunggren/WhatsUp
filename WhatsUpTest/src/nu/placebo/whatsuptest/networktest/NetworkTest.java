@@ -5,7 +5,6 @@ import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.test.AndroidTestCase;
 

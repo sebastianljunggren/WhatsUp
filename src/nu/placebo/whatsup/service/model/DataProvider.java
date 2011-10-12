@@ -97,7 +97,6 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		return instance;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public DataReturn<Annotation> getAnnotation(int nid) {
 		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
 		//cache, and means of acquiring the data fetched from remote server
@@ -189,7 +188,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * @return a DataReturn object containing any local data found and which can
 	 * be listened to by
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(int latitudeA,
 			int longitudeA, int latitudeB, int longitudeB) {
 		//Database part here
@@ -361,7 +360,6 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 				null);
 	}
 	
-	@SuppressWarnings("unchecked")
 	/**
 	 * Creates an Annotation with the specified values. A valid SessionInfo is required, and the object
 	 * that wants the annotation should be sent as listener.
@@ -373,6 +371,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * @param sInfo
 	 * @param listener
 	 */
+
 	public void createAnnotation(String title, String desc, String author, 
 			GeoPoint gp, SessionInfo sInfo, 
 			NetworkOperationListener<Annotation> listener) {

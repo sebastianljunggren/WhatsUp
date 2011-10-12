@@ -59,7 +59,6 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		super.onResume();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void refresh() {
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008,
 				9.667969, 68.974164, 24.785156);

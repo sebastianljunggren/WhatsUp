@@ -1,16 +1,14 @@
 package nu.placebo.whatsup.network;
 
-import android.os.AsyncTask;
+import nu.placebo.whatsup.android.os.AsyncTask;
 
-public class NetworkTask<T> extends AsyncTask<NetworkOperation<T>, Void, NetworkOperation<T>> {
+public class NetworkTask<T> extends
+		AsyncTask<NetworkOperation<T>, NetworkOperation<T>> {
 
 	@Override
-	protected NetworkOperation<T> doInBackground(NetworkOperation<T>... operations) {
-		for(NetworkOperation<T> o: operations) {
-			o.setOperationResult(o.execute());
-			return o;
-		}
-		return null;
+	protected NetworkOperation<T> doInBackground(NetworkOperation<T> o) {
+		o.setOperationResult(o.execute());
+		return o;
 	}
 
 	@Override
