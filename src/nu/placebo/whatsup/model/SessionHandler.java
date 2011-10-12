@@ -6,13 +6,9 @@ import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkQueue;
 import nu.placebo.whatsup.network.OperationResult;
-import nu.placebo.whatsup.network.SessionTest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 
@@ -98,20 +94,11 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	public void operationExcecuted(OperationResult<SessionInfo> result) {
 		if (result.getAction() == Action.LOG_IN && !result.hasErrors()) {
 			this.saveSession(result.getResult());
-			this.showToast("Logged in");
 		} else if (result.getAction() == Action.TEST_SESSION) {
-			if (!result.hasErrors()) {
-				this.showToast("Logged in");
-			} else if (result.hasErrors() && this.hasCredentials()) {
+			if (result.hasErrors() && this.hasCredentials()) {
 				this.attemptLogIn();
 			}
 		}
-	}
-
-	private void showToast(String msg) {
-		Looper.prepare();
-		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-		Looper.loop();
 	}
 
 	private void attemptLogIn() {
