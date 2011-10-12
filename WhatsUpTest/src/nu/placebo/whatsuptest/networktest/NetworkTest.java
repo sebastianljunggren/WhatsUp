@@ -29,7 +29,7 @@ public class NetworkTest extends AndroidTestCase {
 
 			@Override
 			public void operationExcecuted(OperationResult<Annotation> result) {
-				assertFalse("Errors when loading annotation", result.hasErrors());
+				assertFalse("Errors when retrieving annotation", result.hasErrors());
 				assertNotNull("Annotation reurned was null", result.getResult());
 				assertEquals("Incorrect nid on the Annotation returned.", 1234, result.getResult().getId());
 			}
@@ -46,12 +46,14 @@ public class NetworkTest extends AndroidTestCase {
 			@Override
 			public void operationExcecuted(OperationResult<SessionInfo> result) {
 				assertFalse("Errors when loggin in", result.hasErrors());
-				assertNotNull("SessionInfo reutrned was null",
+				assertNotNull("SessionInfo returned was null",
 						 session = result.getResult());
 			}
 
 		});
 		OperationResult<SessionInfo> result = l.execute();
+		this.session  = result.getResult();
+		this.session.getSessionId();
 		l.notifyListeners(result);
 	}
 	
@@ -67,6 +69,7 @@ public class NetworkTest extends AndroidTestCase {
 			}
 
 		});
-		st.execute();
+		st.setOperationResult(st.execute());
+		st.notifyListeners(st.getResult());
 	}
 }
