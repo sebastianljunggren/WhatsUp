@@ -310,14 +310,14 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			currentReferencePoint = new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
 							   new GeoPoint(
 									   c.getInt(c.getColumnIndex("latitude")),
-									   c.getInt(c.getColumnIndex("latitude"))),
+									   c.getInt(c.getColumnIndex("longitude"))),
 							   c.getString(c.getColumnIndex("name")));
 		}
 		c.close();
 	}
 	
 	private void addReferencePoint(GeoPoint gp, String name, boolean isCurrent) {
-		Log.i("Wånge", "New reference point added");
+		Log.i("Wï¿½nge", "New reference point added");
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		String[] args = {name, Integer.toString(gp.getLatitudeE6()),
 										 Integer.toString(gp.getLongitudeE6())};

@@ -8,10 +8,12 @@ import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
+import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
+import nu.placebo.whatsup.service.model.DataProvider;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +38,7 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 
 	private ArrayList<ListMarker> m_markers = null;
 	private MarkerAdapter m_adapter;
-	private GeoLocation ref;
+	private ReferencePoint ref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,13 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 		this.m_adapter = new MarkerAdapter(this, R.layout.list_item, m_markers);
 		setListAdapter(this.m_adapter);
 
-		this.ref = new GeoLocation(0, 57.688328, 11.979196, "Hubben");
+	}
+	
+	@Override
+	protected void onResume(){
+		this.ref = DataProvider.getDataProvider(this).getCurrentReferencePoint();
 		refresh();
+		super.onResume();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -111,7 +118,6 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 	}
 
 	public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
-		// TODO: Get active reference point
 
 		if (!result.hasErrors()) {
 			m_markers = new ArrayList<ListMarker>();

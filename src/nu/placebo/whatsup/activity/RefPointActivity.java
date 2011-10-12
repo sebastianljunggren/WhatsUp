@@ -65,13 +65,9 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 
 	private void refresh(){
-	//	refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 		refs.clear();
-		refs.add(new ReferencePoint(1, new GeoPoint(57708916, 11937847), "Lindholmen"));
-		refs.add(new ReferencePoint(2, new GeoPoint(57706922, 11969776), "Brunnsparken")); 
-		
-	
-				
+		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
+					
 		adapter.markers.clear();
 		adapter.notifyDataSetChanged();
 		for (int i = 0; i < refs.size(); i++) {
@@ -140,7 +136,12 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				Log.d("whatsup",
 						"Select reference point: "
 								+ ((Integer) v.getTag(R.id.ref_id)));
+
 				DataProvider.getDataProvider(ctx).setCurrentReferencePoint((Integer)v.getTag(R.id.ref_id));
+				ReferencePoint rp = DataProvider.getDataProvider(ctx).getCurrentReferencePoint();
+				Log.d("whatsup", "refPoint location: "+rp.getGeoPoint().getLatitudeE6()+", "+rp.getGeoPoint().getLongitudeE6());
+				
+				ctx.finish();
 			}
 
 		}

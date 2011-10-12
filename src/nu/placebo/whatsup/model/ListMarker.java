@@ -4,13 +4,13 @@ import nu.placebo.whatsup.util.Geodetics;
 
 public class ListMarker implements Comparable<ListMarker>{
 	private GeoLocation location;
-	private GeoLocation ref;
+	private ReferencePoint ref;
 	private double range;
 	
-	public ListMarker(GeoLocation location, GeoLocation reference){
+	public ListMarker(GeoLocation location, ReferencePoint ref2){
 		this.location = new GeoLocation(location);
-		this.ref = new GeoLocation(reference);
-		this.range = Geodetics.distance(this.location.getLocation(), this.ref.getLocation());
+		this.ref = new ReferencePoint(ref2);
+		this.range = Geodetics.distance(this.location.getLocation(), this.ref.getGeoPoint());
 	}
 	
 	public String getTitle(){
