@@ -12,14 +12,10 @@
 			android:id="@+id/map_refresh" android:src="@drawable/refresh"
 			android:layout_width="wrap_content" android:layout_toRightOf="@+id/map_goto_list"
 			android:layout_centerVertical="true"></ImageButton>
-		<ImageButton android:id="@+id/log_in" android:src="@drawable/user"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/map_refresh"
-			android:layout_centerVertical="true"></ImageButton>
 		<ImageButton android:id="@+id/add_annotation" android:src="@drawable/add"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_alignParentRight="true" android:layout_centerVertical="true"></ImageButton>
-		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/log_in" android:src="@drawable/crosshair_icon" android:id="@+id/goto_refpoint"></ImageButton>
+		<ImageButton android:layout_width="wrap_content" android:src="@drawable/crosshair_icon" android:layout_height="wrap_content" android:id="@+id/goto_refpoint" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/map_refresh"></ImageButton>
 	</RelativeLayout>
 
 	<FrameLayout android:layout_height="match_parent"

@@ -58,8 +58,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		ImageButton gotoListBtn = (ImageButton) this
 				.findViewById(R.id.map_goto_list);
 		gotoListBtn.setOnClickListener(this);
-		ImageButton logInBtn = (ImageButton) this.findViewById(R.id.log_in);
-		logInBtn.setOnClickListener(this);
 		ImageButton refreshBtn = (ImageButton) this
 				.findViewById(R.id.map_refresh);
 		refreshBtn.setOnClickListener(this);
@@ -94,10 +92,10 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 					ListViewActivity.class);
 			this.startActivity(intent);
 			this.finish();
-		} else if (v.getId() == R.id.log_in) {
+	/*	} else if (v.getId() == R.id.log_in) {
 			Intent intent = new Intent(MapViewActivity.this,
 					LogInActivity.class);
-			this.startActivity(intent);
+			this.startActivity(intent); */
 		} else if (v.getId() == R.id.map_refresh) {
 			refresh();
 		} else if (v.getId() == R.id.add_annotation) {

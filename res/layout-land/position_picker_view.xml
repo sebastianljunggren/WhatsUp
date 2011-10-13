@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<RelativeLayout android:id="@+id/LinearLayout1" xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" android:layout_width="match_parent"
+		android:layout_height="50dp">
+		<Button android:drawableLeft="@drawable/ok" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/select_position" android:layout_alignParentTop="true" android:layout_alignParentRight="true"></Button>
+		<TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:layout_marginLeft="15dp" android:id="@+id/activity_name"></TextView>
+		<EditText android:id="@+id/position_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/select_position" android:layout_alignLeft="@+id/activity_name" android:visibility="invisible">
+			<requestFocus></requestFocus>
+		</EditText>
+	</RelativeLayout>
+	
+	<RelativeLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="match_parent"
+ 		android:layout_height="match_parent" >
+   		
+   		<com.google.android.maps.MapView
+			android:id="@+id/position_picker_mapview" 
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" 
+			android:clickable="true"
+			android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA" />
+			
+    	<ImageView 
+    		android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" android:src="@drawable/crosshair"/>
+	</RelativeLayout>
+</LinearLayout>

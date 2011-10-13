@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/RelativeLayout1" android:layout_height="match_parent" android:layout_width="wrap_content">
+        <ImageButton android:layout_alignParentTop="true" android:layout_width="wrap_content" android:layout_alignParentLeft="true" android:src="@drawable/map" android:layout_height="wrap_content" android:id="@+id/list_goto_map"></ImageButton>
+        <ImageButton android:layout_width="wrap_content" android:src="@drawable/refresh" android:layout_height="wrap_content" android:id="@+id/list_refresh" android:layout_below="@+id/list_goto_map" android:layout_alignParentLeft="true"></ImageButton>
+        <ImageButton android:layout_width="wrap_content" android:src="@drawable/crosshair_icon" android:layout_height="wrap_content" android:id="@+id/goto_refpoint" android:layout_below="@+id/list_refresh" android:layout_alignParentLeft="true"></ImageButton>
+        <ImageButton android:layout_width="wrap_content" android:src="@drawable/add" android:layout_height="wrap_content" android:id="@+id/add_annotation" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"></ImageButton>
+    </RelativeLayout>
+	<ListView android:layout_height="wrap_content"
+		android:layout_width="match_parent" android:id="@+id/android:list"></ListView>
+</LinearLayout>
