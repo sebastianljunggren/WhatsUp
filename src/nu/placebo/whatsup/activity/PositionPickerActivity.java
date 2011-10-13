@@ -3,6 +3,8 @@ package nu.placebo.whatsup.activity;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.MenuHandler;
+import nu.placebo.whatsup.model.SessionHandler;
+import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Intent;
@@ -42,7 +44,6 @@ public class PositionPickerActivity extends MapActivity implements
 		EditText refName = (EditText) this.findViewById(R.id.position_name);
 
 		if (this.requestCode == Constants.ANNOTATION) {
-
 			refName.setVisibility(View.GONE);
 			typeText.setText("New Annotation");
 
@@ -66,13 +67,22 @@ public class PositionPickerActivity extends MapActivity implements
 		return false;
 	}
 
+	@Override
+	protected void onResume() {
+		if (!SessionHandler.getInstance(this).hasSession()) {
+			Intent intent = new Intent(this, LogInActivity.class);
+			this.startActivityForResult(intent, Constants.LOG_IN);
+		}
+		super.onResume();
+	}
+
 	public void onClick(View v) {
 		if (v.getId() == R.id.select_position) {
 			GeoPoint p = mapView.getMapCenter();
 			if (this.requestCode == Constants.ANNOTATION) {
 				Intent intent = new Intent(this, CreateAnnotationActivity.class);
 				intent.putExtras(GeoPointUtil.pushGeoPoint(p));
-				this.startActivityForResult(intent, 1);
+				this.startActivityForResult(intent, Constants.ANNOTATION);
 			}
 
 			if (this.requestCode == Constants.REFERENCE_POINT) {
@@ -97,13 +107,25 @@ public class PositionPickerActivity extends MapActivity implements
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d("whatsup", "Returned to PositionPickerActivity with resultCode: "
 				+ resultCode);
-		if (resultCode == Constants.ACTIVITY_FINISHED_OK) {
-			Log.d("whatsup", "CreateAnnotationActivity finished OK");
-			this.finish();
+		if (requestCode == Constants.ANNOTATION) {
+			if (resultCode == Constants.ACTIVITY_FINISHED_OK) {
+				Log.d("whatsup", "CreateAnnotationActivity finished OK");
+				this.finish();
+			}
+			if (resultCode == Constants.ACTIVITY_INTERRUPTED) {
+				Log.d("whatsup", "CreateAnnotationActivity did interrupt");
+			}
 		}
-		if (resultCode == Constants.ACTIVITY_INTERRUPTED) {
-			Log.d("whatsup", "CreateAnnotationActivity did interrupt");
+
+		if (requestCode == Constants.LOG_IN) {
+			if (resultCode == Constants.ACTIVITY_INTERRUPTED) {
+				this.finish();
+			}
+			if (resultCode == Constants.ACTIVITY_FINISHED_OK) {
+				this.onResume();
+			}
 		}
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 

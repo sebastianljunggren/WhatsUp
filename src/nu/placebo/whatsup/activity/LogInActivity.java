@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
@@ -36,6 +37,8 @@ public class LogInActivity extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.login);
+		this.setResult(Constants.ACTIVITY_INTERRUPTED);
+
 		Button logIn = (Button) this.findViewById(R.id.log_in);
 		logIn.setOnClickListener(this);
 		this.result = (TextView) this.findViewById(R.id.result);
@@ -59,6 +62,7 @@ public class LogInActivity extends Activity implements OnClickListener,
 			SessionHandler sh = SessionHandler.getInstance(LogInActivity.this);
 			sh.saveSession(r.getResult());
 			sh.saveCredentials(userName, password);
+			this.setResult(Constants.ACTIVITY_FINISHED_OK);
 			this.finish();
 			Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
 		} else {

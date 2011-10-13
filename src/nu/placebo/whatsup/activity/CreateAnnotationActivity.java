@@ -32,7 +32,7 @@ public class CreateAnnotationActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setResult(Constants.ACTIVITY_INTERRUPTED);
+		this.setResult(RESULT_CANCELED);
 
 		Bundle bundle = this.getIntent().getExtras();
 		if (GeoPointUtil.bundleHasGeoPoint(bundle)) {
@@ -60,14 +60,14 @@ public class CreateAnnotationActivity extends Activity implements
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.create_annot_submit) {
-			
+
 			String title = titleField.getText().toString();
 			String desc = descField.getText().toString();
 			SessionInfo sInfo = SessionHandler.getInstance(this).getSession();
 			String author = SessionHandler.getInstance(this).getUserName();
-			
-			DataProvider.getDataProvider(getApplicationContext()).createAnnotation(
-					title, desc, author, gp, sInfo, this);
+
+			DataProvider.getDataProvider(getApplicationContext())
+					.createAnnotation(title, desc, author, gp, sInfo, this);
 		}
 
 	}
@@ -84,12 +84,12 @@ public class CreateAnnotationActivity extends Activity implements
 
 	public void operationExcecuted(OperationResult<Annotation> result) {
 		// TODO Auto-generated method stub
-		if(!result.hasErrors()){
+		if (!result.hasErrors()) {
 			setResult(Constants.ACTIVITY_FINISHED_OK);
 			this.finish();
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuHandler.inflate(menu, this.getMenuInflater());
