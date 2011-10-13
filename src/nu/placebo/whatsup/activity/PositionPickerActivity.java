@@ -3,10 +3,14 @@ package nu.placebo.whatsup.activity;
 import android.content.Intent;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -104,4 +108,15 @@ public class PositionPickerActivity extends MapActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return MenuHandler.onOptionsItemSelected(item, this);
+	}
 }

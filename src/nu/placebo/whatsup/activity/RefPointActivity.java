@@ -7,6 +7,7 @@ import com.google.android.maps.GeoPoint;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.service.model.DataProvider;
 import android.app.Activity;
@@ -16,6 +17,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -146,5 +150,17 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 		}
 
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return MenuHandler.onOptionsItemSelected(item, this);
 	}
 }

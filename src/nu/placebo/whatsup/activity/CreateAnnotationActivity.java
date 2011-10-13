@@ -5,6 +5,7 @@ import com.google.android.maps.GeoPoint;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.NetworkOperationListener;
@@ -13,6 +14,9 @@ import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -84,5 +88,17 @@ public class CreateAnnotationActivity extends Activity implements
 			setResult(Constants.ACTIVITY_FINISHED_OK);
 			this.finish();
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return MenuHandler.onOptionsItemSelected(item, this);
 	}
 }
