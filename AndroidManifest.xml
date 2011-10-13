@@ -30,5 +30,6 @@
 		<activity android:name=".activity.CreateAnnotationActivity"></activity>
 		<activity android:name=".activity.RefPointActivity">
 		</activity>
+		<activity android:name=".activity.RegisterActivity"></activity>
 	</application>
 </manifest>
