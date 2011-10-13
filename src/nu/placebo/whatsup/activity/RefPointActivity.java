@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RefPointActivity extends ListActivity implements OnClickListener {
@@ -37,27 +38,28 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.ref_point_activity);
 		Log.d("whatsup", "Starting refPointActivity");
-		
+
 		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 
 		String values = "";
-		for(ReferencePoint rp : refs) {
+		for (ReferencePoint rp : refs) {
 			values += rp.getName() + " " + rp.getGeoPoint() + " " + rp.getId();
 		}
-		
+
 		Log.i("Value of refs:", values);
 		this.adapter = new MarkerAdapter(this, R.layout.ref_item,
 				new ArrayList<ReferencePoint>());
 		this.setListAdapter(adapter);
-		
-		ImageButton addBtn = (ImageButton) this.findViewById(R.id.add_reference);
+
+		ImageButton addBtn = (ImageButton) this
+				.findViewById(R.id.add_reference);
 		addBtn.setOnClickListener(this);
 
 	}
-	
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
@@ -66,12 +68,10 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		super.onResume();
 	}
 
-
-
-	private void refresh(){
+	private void refresh() {
 		refs.clear();
 		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
-					
+
 		adapter.markers.clear();
 		adapter.notifyDataSetChanged();
 		for (int i = 0; i < refs.size(); i++) {
@@ -80,9 +80,9 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		}
 		adapter.notifyDataSetChanged();
 	}
-	
+
 	public void onClick(View v) {
-		if(v.getId() == R.id.add_reference){
+		if (v.getId() == R.id.add_reference) {
 			Intent intent = new Intent(this, PositionPickerActivity.class);
 			intent.putExtra("requestCode", Constants.REFERENCE_POINT);
 			this.startActivity(intent);
@@ -93,16 +93,24 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 			OnClickListener {
 		private Activity ctx;
 		private ArrayList<ReferencePoint> markers;
+		private int currentRefId;
 
 		public MarkerAdapter(Activity context, int textViewResourceId,
 				ArrayList<ReferencePoint> objects) {
 			super(context, textViewResourceId, objects);
 			this.markers = objects;
 			this.ctx = context;
+			ReferencePoint currentRef = DataProvider.getDataProvider(ctx).getCurrentReferencePoint();
+			if(currentRef != null){
+				currentRefId = currentRef.getId();
+			} else
+				currentRefId = -2;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			
+			
 			View v = convertView;
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -115,6 +123,12 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 				if (t_title != null)
 					t_title.setText(gl.getName());
+				ImageView iv = (ImageView) v.findViewById(R.id.current_image);
+				if (gl.getId() == currentRefId){
+					iv.setVisibility(View.VISIBLE);
+				} else {
+					iv.setVisibility(View.INVISIBLE);
+				}
 				v.setId(R.id.ref_id);
 				v.setTag(R.id.ref_id, gl.getId());
 				ImageButton delBtn = (ImageButton) v
@@ -141,10 +155,14 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 						"Select reference point: "
 								+ ((Integer) v.getTag(R.id.ref_id)));
 
-				DataProvider.getDataProvider(ctx).setCurrentReferencePoint((Integer)v.getTag(R.id.ref_id));
-				ReferencePoint rp = DataProvider.getDataProvider(ctx).getCurrentReferencePoint();
-				Log.d("whatsup", "refPoint location: "+rp.getGeoPoint().getLatitudeE6()+", "+rp.getGeoPoint().getLongitudeE6());
-				
+				DataProvider.getDataProvider(ctx).setCurrentReferencePoint(
+						(Integer) v.getTag(R.id.ref_id));
+				ReferencePoint rp = DataProvider.getDataProvider(ctx)
+						.getCurrentReferencePoint();
+				Log.d("whatsup", "refPoint location: "
+						+ rp.getGeoPoint().getLatitudeE6() + ", "
+						+ rp.getGeoPoint().getLongitudeE6());
+
 				ctx.finish();
 			}
 

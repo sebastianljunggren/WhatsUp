@@ -3,7 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:orientation="horizontal" android:layout_height="wrap_content">
-    <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_weight="1" android:layout_height="wrap_content" android:id="@+id/ref_item_title" android:layout_gravity="center"></TextView>
+    <ImageView android:layout_width="wrap_content" android:layout_height="match_parent" android:src="@drawable/right_chevron" android:visibility="invisible" android:id="@+id/current_image"></ImageView>
+    <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:text="TextView" android:layout_weight="1" android:layout_height="match_parent" android:layout_gravity="center_vertical" android:gravity="center_vertical" android:layout_marginLeft="10dp" android:id="@+id/ref_item_title"></TextView>
     <ImageButton android:layout_width="wrap_content" android:id="@+id/ref_item_delete" android:src="@drawable/close" android:layout_height="wrap_content"></ImageButton>
     
 </LinearLayout>
