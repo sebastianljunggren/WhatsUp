@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
+
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -15,6 +17,7 @@ import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.service.model.DataProvider;
+import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -64,8 +67,9 @@ public class ListViewActivity extends ListActivity implements OnClickListener,
 	}
 
 	private void refresh() {
-		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(54.826008,
-				9.667969, 68.974164, 24.785156);
+		GeoPoint[] points = GeoPointUtil.getBottomLeftToTopRightPoints(this.ref.getGeoPoint(), 180000, 180000);
+		double[] area = GeoPointUtil.convertAreaToDoubles(points[0], points[1]);
+		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(area);
 		glr.addOperationListener(this);
 		new NetworkTask<List<GeoLocation>>().execute(glr);
 	}
