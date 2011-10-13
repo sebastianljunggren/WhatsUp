@@ -102,12 +102,12 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 			if (!result.hasErrors()){
 				Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
 			} else if (result.hasErrors() && this.hasCredentials()) {
-				this.attemptLogIn();
+				this.login();
 			}
 		}
 	}
 
-	private void attemptLogIn() {
+	public void login() {
 		Login logIn = new Login(this.userName, this.password);
 		logIn.addOperationListener(this);
 		new NetworkTask<SessionInfo>().execute(logIn);
