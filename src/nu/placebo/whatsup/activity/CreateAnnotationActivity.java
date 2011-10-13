@@ -1,7 +1,5 @@
 package nu.placebo.whatsup.activity;
 
-import com.google.android.maps.GeoPoint;
-
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.Annotation;
@@ -15,12 +13,14 @@ import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.maps.GeoPoint;
 
 public class CreateAnnotationActivity extends Activity implements
 		OnClickListener, NetworkOperationListener<Annotation> {
@@ -86,6 +86,7 @@ public class CreateAnnotationActivity extends Activity implements
 		// TODO Auto-generated method stub
 		if (!result.hasErrors()) {
 			setResult(Constants.ACTIVITY_FINISHED_OK);
+			Toast.makeText(this, "Annotation created", Toast.LENGTH_SHORT);
 			this.finish();
 		}
 	}
