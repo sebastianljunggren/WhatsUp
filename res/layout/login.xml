@@ -11,7 +11,7 @@
 	</EditText>
 	<TextView android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="TextView" android:layout_width="wrap_content"></TextView>
+		android:text="Password" android:layout_width="wrap_content"></TextView>
 	<EditText android:layout_height="wrap_content" android:id="@+id/password"
 		android:layout_width="match_parent" android:inputType="textPassword"></EditText>
 	<Button android:text="Log in" android:id="@+id/log_in"

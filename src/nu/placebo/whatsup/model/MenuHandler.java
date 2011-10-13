@@ -27,7 +27,7 @@ public class MenuHandler {
 			}
 			return true;
 		case R.id.menu_options:
-			Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT);
+			Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show();
 			return true;
 		default:
 			return false;
