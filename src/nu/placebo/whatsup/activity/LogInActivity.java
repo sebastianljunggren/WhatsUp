@@ -2,7 +2,6 @@ package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Login;
@@ -10,10 +9,8 @@ import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,19 +39,27 @@ public class LogInActivity extends Activity implements OnClickListener,
 		Button logIn = (Button) this.findViewById(R.id.log_in);
 		logIn.setOnClickListener(this);
 		this.result = (TextView) this.findViewById(R.id.result);
+		Button reg = (Button) this.findViewById(R.id.register);
+		reg.setOnClickListener(this);
 	}
 
 	public void onClick(View view) {
-		this.userName = ((TextView) this.findViewById(R.id.user_name))
-				.getText().toString();
-		this.password = ((TextView) this.findViewById(R.id.password)).getText()
-				.toString();
-		this.result.setText("Logging in...");
-		((Button) this.findViewById(R.id.log_in)).setEnabled(false);
-		Login login = new Login(this.userName, this.password);
-		login.addOperationListener(this);
-		new NetworkTask<SessionInfo>().execute(login);
-		this.result.setText("Logging in...");
+		if(view.getId() == R.id.log_in){
+			this.userName = ((TextView) this.findViewById(R.id.user_name))
+					.getText().toString();
+			this.password = ((TextView) this.findViewById(R.id.password)).getText()
+					.toString();
+			this.result.setText("Logging in...");
+			((Button) this.findViewById(R.id.log_in)).setEnabled(false);
+			Login login = new Login(this.userName, this.password);
+			login.addOperationListener(this);
+			new NetworkTask<SessionInfo>().execute(login);
+			this.result.setText("Logging in...");
+		}
+		if(view.getId() == R.id.register){
+			Intent intent = new Intent(this, RegisterActivity.class);
+			this.startActivity(intent);
+		}
 	}
 
 	public void operationExcecuted(final OperationResult<SessionInfo> r) {

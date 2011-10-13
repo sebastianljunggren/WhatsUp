@@ -53,6 +53,8 @@ public class RegisterActivity extends Activity implements OnClickListener, Netwo
 			
 			SessionHandler.getInstance(this).saveCredentials(username, password);
 			SessionHandler.getInstance(this).login();
+			
+			this.finish();
 		}
 		
 	}
