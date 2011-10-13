@@ -61,6 +61,9 @@ public class GeoLocationsRetrieve extends
 		List<GeoLocation> geoLocations = this.parse(result);
 
 		if (response != null) {
+			if(hasErrors) {
+				geoLocations = null;
+			}
 			return new OperationResult<List<GeoLocation>>(
 					this.hasErrors, response.getStatusLine().getStatusCode(),
 					response.getStatusLine().getReasonPhrase(), geoLocations);

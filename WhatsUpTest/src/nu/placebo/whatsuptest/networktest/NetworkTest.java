@@ -1,8 +1,12 @@
 package nu.placebo.whatsuptest.networktest;
 
+import java.util.List;
+
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
+import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.OperationResult;
@@ -32,7 +36,7 @@ public class NetworkTest extends AndroidTestCase {
 
 			@Override
 			public void operationExcecuted(OperationResult<Annotation> result) {
-				assertTrue("Errors when retrieving annotation",
+				assertTrue("No errors when retrieving annotation with nonexistant id",
 						result.hasErrors());
 				assertNull("Annotation returned was not null",
 						result.getResult());
@@ -124,5 +128,40 @@ public class NetworkTest extends AndroidTestCase {
 		});
 		st.setOperationResult(st.execute());
 		st.notifyListeners(st.getResult());
+	}
+	
+	public void testGeoLocationRetrieve() {
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(-90, -90, 90, 90);
+		assertTrue(true);
+		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
+
+			@Override
+			public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
+				assertFalse("Errors when retrieving GeoLocations",
+						result.hasErrors());
+				assertNotNull("List of GeoLocations returned was null", result.getResult());
+				assertNotSame("Empty list returned", result.getResult().size(), 0);
+			}
+
+		});
+		OperationResult<List<GeoLocation>> result = gr.execute();
+		gr.notifyListeners(result);
+	}
+	
+	public void testGeoLocationRetrieveFail() {
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(360, 360, 360, 360);
+		assertTrue(true);
+		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
+
+			@Override
+			public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
+				assertTrue("No errors when retrieving GeoLocations",
+						result.hasErrors());
+				assertNull("List of GeoLocations returned was not null", result.getResult());
+			}
+
+		});
+		OperationResult<List<GeoLocation>> result = gr.execute();
+		gr.notifyListeners(result);
 	}
 }
