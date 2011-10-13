@@ -1,10 +1,10 @@
 package nu.placebo.whatsuptest.utiltest;
 
-import com.google.android.maps.GeoPoint;
-import android.os.Bundle;
-import android.test.*;
-import android.util.Log;
 import nu.placebo.whatsup.util.GeoPointUtil;
+import android.test.AndroidTestCase;
+import android.os.Bundle;
+
+import com.google.android.maps.GeoPoint;
 
 public class GeoPointUtilTest extends AndroidTestCase {
 
@@ -63,9 +63,24 @@ public class GeoPointUtilTest extends AndroidTestCase {
 		assertEquals(tr.getLongitudeE6(), gp[1].getLongitudeE6());
 	}
 
-	// public void testPushGeoPoint() {}
+	public void testPushGeoPoint() {
+		Bundle b = GeoPointUtil.pushGeoPoint(new GeoPoint(1000000, 1000000));
+		
+		assertEquals(b.get("lat"), 1000000);
+		assertEquals(b.get("long"), 1000000);
+	}
 
-	// public void testPopGeoPoint() {}
+	public void testPopGeoPoint() {
+		Bundle b = GeoPointUtil.pushGeoPoint(new GeoPoint(1000000, 1000000));
+		GeoPoint p = GeoPointUtil.popGeoPoint(b);
+		
+		assertEquals(1000000, p.getLatitudeE6());
+		assertEquals(1000000, p.getLongitudeE6());
+	}
 
-	// public void testBundleHasGeoPoint() {}
+	public void testBundleHasGeoPoint() {
+		Bundle b = GeoPointUtil.pushGeoPoint(new GeoPoint(1000000, 1000000));
+		
+		assertTrue(GeoPointUtil.bundleHasGeoPoint(b));
+	}
 }

@@ -81,7 +81,7 @@ public class GeoPointUtil {
 	}
 
 	/**
-	 * Convenience method for unpacking a GeoPoint from a Bundle Bundle must be
+	 * Convenience method for unpacking a GeoPoint from a android.os.Bundle bundle must be
 	 * packed according to local standards.
 	 * 
 	 * @param bundle
@@ -101,12 +101,6 @@ public class GeoPointUtil {
 	 * @return
 	 */
 	public static boolean bundleHasGeoPoint(Bundle b) {
-		boolean hasGP = true;
-		if (!b.containsKey("lat"))
-			hasGP = false;
-		if (!b.containsKey("long"))
-			hasGP = false;
-
-		return hasGP;
+		return b.containsKey("lat") && b.containsKey("long");
 	}
 }
