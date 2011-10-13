@@ -106,7 +106,7 @@ public class NetworkTest extends AndroidTestCase {
 			@Override
 			public void operationExcecuted(OperationResult<SessionInfo> result) {
 				assertTrue("Errors not set when logging in with wrong credentials.", result.hasErrors());
-				assertNull("SessionInfo returned was not null, when logging in.",result.getResult());
+				assertNull("SessionInfo returned even though there were errors", result.getResult());
 			}
 
 		});
@@ -115,7 +115,6 @@ public class NetworkTest extends AndroidTestCase {
 		l.notifyListeners(result);
 		
 		SessionTest st = new SessionTest(session);
-		Log.w("WhatsUp", session.getSessionName());
 		st.addOperationListener(new NetworkOperationListener<SessionInfo>() {
 
 			@Override
@@ -150,14 +149,13 @@ public class NetworkTest extends AndroidTestCase {
 	
 	public void testGeoLocationRetrieveFail() {
 		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(360, 360, 360, 360);
-		assertTrue(true);
 		gr.addOperationListener(new NetworkOperationListener<List<GeoLocation>>() {
 
 			@Override
 			public void operationExcecuted(OperationResult<List<GeoLocation>> result) {
-				assertTrue("No errors when retrieving GeoLocations",
+				assertFalse("Errors when retrieving GeoLocations",
 						result.hasErrors());
-				assertNull("List of GeoLocations returned was not null", result.getResult());
+				assertEquals("List of GeoLocations not empty.", result.getResult().size(), 0);
 			}
 
 		});

@@ -58,11 +58,11 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 			e.printStackTrace();
 		}
 		if (response != null) {
-			return new OperationResult<SessionInfo>(
-					this.hasErrors, response.getStatusLine().getStatusCode(),
-					response.getStatusLine().getReasonPhrase(),
-					new SessionInfo(this.sessionName, this.sessionId),
-					Action.LOG_IN);
+			SessionInfo si = null; 
+			if(!hasErrors) {
+				si = new SessionInfo(this.sessionName, this.sessionId);
+			}
+			return new OperationResult<SessionInfo>(this.hasErrors, response.getStatusLine().getStatusCode(),response.getStatusLine().getReasonPhrase(), si, Action.LOG_IN);
 		} else {
 			return new OperationResult<SessionInfo>(hasErrors,
 					1337, "Problems with the network", null, Action.LOG_IN);

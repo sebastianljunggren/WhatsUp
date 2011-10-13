@@ -43,6 +43,9 @@ public class SessionTest extends AbstractNetworkOperation<SessionInfo> {
 		}
 		boolean hasErrors = this.parseResult(result);
 		if (response != null) {
+			if (hasErrors) {
+				sessionInfo = null;
+			}
 			return new OperationResult<SessionInfo>(hasErrors,
 					response.getStatusLine().getStatusCode(), response
 							.getStatusLine().getReasonPhrase(), sessionInfo,
