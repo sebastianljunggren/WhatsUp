@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * 
@@ -96,8 +97,11 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	public void operationExcecuted(OperationResult<SessionInfo> result) {
 		if (result.getAction() == Action.LOG_IN && !result.hasErrors()) {
 			this.saveSession(result.getResult());
+			Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
 		} else if (result.getAction() == Action.TEST_SESSION) {
-			if (result.hasErrors() && this.hasCredentials()) {
+			if (!result.hasErrors()){
+				Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
+			} else if (result.hasErrors() && this.hasCredentials()) {
 				this.attemptLogIn();
 			}
 		}
