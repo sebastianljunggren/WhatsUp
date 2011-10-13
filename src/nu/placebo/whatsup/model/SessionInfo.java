@@ -20,4 +20,10 @@ public class SessionInfo {
 	public String getSessionId() {
 		return this.sessionId;
 	}
+
+	public boolean equals(SessionInfo si) {
+		return this.getSessionId() == si.getSessionId()
+				&& this.getSessionName() == si.getSessionName();
+
+	}
 }

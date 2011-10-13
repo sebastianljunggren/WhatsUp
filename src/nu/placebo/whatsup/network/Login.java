@@ -65,7 +65,7 @@ public class Login extends AbstractNetworkOperation<SessionInfo> {
 					Action.LOG_IN);
 		} else {
 			return new OperationResult<SessionInfo>(hasErrors,
-					0, "Problems with the network", null, Action.LOG_IN);
+					1337, "Problems with the network", null, Action.LOG_IN);
 		}
 	}
 

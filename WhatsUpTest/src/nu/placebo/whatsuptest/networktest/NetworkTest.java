@@ -107,7 +107,7 @@ public class NetworkTest extends AndroidTestCase {
 
 		});
 		OperationResult<SessionInfo> result = l.execute();
-		final SessionInfo session = result.getResult();
+		SessionInfo session = result.getResult();
 		l.notifyListeners(result);
 		
 		SessionTest st = new SessionTest(session);
