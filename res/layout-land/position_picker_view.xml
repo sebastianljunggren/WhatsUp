@@ -7,8 +7,8 @@
 		android:orientation="horizontal" android:layout_width="match_parent"
 		android:layout_height="50dp">
 		<Button android:drawableLeft="@drawable/ok" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/select_position" android:layout_alignParentTop="true" android:layout_alignParentRight="true"></Button>
-		<TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:layout_marginLeft="15dp" android:id="@+id/activity_name"></TextView>
-		<EditText android:id="@+id/position_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/select_position" android:layout_alignLeft="@+id/activity_name" android:visibility="invisible">
+		<TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:id="@+id/activity_name" android:text="Dummy text" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></TextView>
+		<EditText android:id="@+id/position_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/select_position" android:visibility="invisible" android:layout_toRightOf="@+id/activity_name">
 			<requestFocus></requestFocus>
 		</EditText>
 	</RelativeLayout>
