@@ -1,15 +1,14 @@
 package nu.placebo.whatsup.activity;
 
-import android.content.Intent;
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,32 +36,30 @@ public class PositionPickerActivity extends MapActivity implements
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.position_picker_view);
-		
+
 		this.requestCode = this.getIntent().getExtras().getInt("requestCode");
 		TextView typeText = (TextView) this.findViewById(R.id.activity_name);
 		EditText refName = (EditText) this.findViewById(R.id.position_name);
-		
-		if(this.requestCode == Constants.ANNOTATION){
-			
+
+		if (this.requestCode == Constants.ANNOTATION) {
+
 			refName.setVisibility(View.GONE);
 			typeText.setText("New Annotation");
-			
-		} else if(this.requestCode == Constants.REFERENCE_POINT) {
+
+		} else if (this.requestCode == Constants.REFERENCE_POINT) {
 
 			refName.setVisibility(View.VISIBLE);
 			typeText.setText("New Reference Point");
-			
+
 		} else {
 			this.finish();
 		}
-		
-		
+
 		mapView = (MapView) findViewById(R.id.position_picker_mapview);
 		mapView.setBuiltInZoomControls(true);
 		Button selectPosition = (Button) findViewById(R.id.select_position);
 		selectPosition.setOnClickListener(this);
 	}
-	
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -77,11 +74,13 @@ public class PositionPickerActivity extends MapActivity implements
 				intent.putExtras(GeoPointUtil.pushGeoPoint(p));
 				this.startActivityForResult(intent, 1);
 			}
-			
-			if (this.requestCode == Constants.REFERENCE_POINT){
-				String refName = ((EditText) this.findViewById(R.id.position_name)).getText().toString();
-				if(!refName.equals("")){
-					DataProvider.getDataProvider(this).addReferencePoint(p, refName);
+
+			if (this.requestCode == Constants.REFERENCE_POINT) {
+				String refName = ((EditText) this
+						.findViewById(R.id.position_name)).getText().toString();
+				if (!refName.equals("")) {
+					DataProvider.getDataProvider(this).addReferencePoint(p,
+							refName);
 					this.finish();
 				}
 			}
@@ -110,13 +109,17 @@ public class PositionPickerActivity extends MapActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu, menu);
-	    return true;
+		MenuHandler.inflate(menu, this.getMenuInflater());
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return MenuHandler.onOptionsItemSelected(item, this);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return MenuHandler.onPrepareOptionsMenu(menu, this);
 	}
 }

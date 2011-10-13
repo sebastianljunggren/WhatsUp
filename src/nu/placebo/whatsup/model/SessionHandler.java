@@ -43,7 +43,7 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		}
 	}
 
-	private boolean hasSession() {
+	public boolean hasSession() {
 		return this.sessionId != null && this.sessionName != null;
 	}
 
@@ -115,5 +115,11 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 
 	public boolean hasCredentials() {
 		return this.userName != null && this.password != null;
+	}
+
+	public void logOut() {
+		this.saveSession(new SessionInfo(null, null));
+		// TODO Actually log out from the server.
+		Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT);	
 	}
 }

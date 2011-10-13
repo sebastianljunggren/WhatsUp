@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -46,6 +47,7 @@ public class LogInActivity extends Activity implements OnClickListener,
 		this.password = ((TextView) this.findViewById(R.id.password)).getText()
 				.toString();
 		this.result.setText("Logging in...");
+		((Button) this.findViewById(R.id.log_in)).setEnabled(false);
 		Login login = new Login(this.userName, this.password);
 		login.addOperationListener(this);
 		new NetworkTask<SessionInfo>().execute(login);
@@ -54,26 +56,14 @@ public class LogInActivity extends Activity implements OnClickListener,
 
 	public void operationExcecuted(final OperationResult<SessionInfo> r) {
 		if (!r.hasErrors()) {
-			result.setText("Successfully logged in!");
 			SessionHandler sh = SessionHandler.getInstance(LogInActivity.this);
 			sh.saveSession(r.getResult());
 			sh.saveCredentials(userName, password);
-			sh.testSession();
-
+			this.finish();
+			Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
 		} else {
 			result.setText("Failed to login: " + r.getStatusMessage());
+			((Button) this.findViewById(R.id.log_in)).setEnabled(true);
 		}
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu, menu);
-	    return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return MenuHandler.onOptionsItemSelected(item, this);
 	}
 }

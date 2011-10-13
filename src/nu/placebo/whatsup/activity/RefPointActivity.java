@@ -172,13 +172,17 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu, menu);
-	    return true;
+		MenuHandler.inflate(menu, this.getMenuInflater());
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return MenuHandler.onOptionsItemSelected(item, this);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return MenuHandler.onPrepareOptionsMenu(menu, this);
 	}
 }
