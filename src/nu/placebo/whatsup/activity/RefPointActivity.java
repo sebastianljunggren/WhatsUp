@@ -61,6 +61,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 	 */
 	@Override
 	protected void onResume() {
+
 		refresh();
 		super.onResume();
 	}
@@ -68,7 +69,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 	private void refresh() {
 		refs.clear();
 		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
-
+		this.adapter.fetchCurrentRefId();
 		adapter.markers.clear();
 		adapter.notifyDataSetChanged();
 		for (int i = 0; i < refs.size(); i++) {
@@ -97,17 +98,24 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 			super(context, textViewResourceId, objects);
 			this.markers = objects;
 			this.ctx = context;
-			ReferencePoint currentRef = DataProvider.getDataProvider(ctx).getCurrentReferencePoint();
-			if(currentRef != null){
+			fetchCurrentRefId();
+		}
+
+		public void fetchCurrentRefId() {
+			ReferencePoint currentRef = DataProvider.getDataProvider(ctx)
+					.getCurrentReferencePoint();
+
+			if (currentRef != null) {
 				currentRefId = currentRef.getId();
-			} else
+			} else {
+				Log.d("whatsup", "Current RefPoint == null");
 				currentRefId = -2;
+			}
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			
+
 			View v = convertView;
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,7 +129,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				if (t_title != null)
 					t_title.setText(gl.getName());
 				ImageView iv = (ImageView) v.findViewById(R.id.current_image);
-				if (gl.getId() == currentRefId){
+				if (gl.getId() == currentRefId) {
 					iv.setVisibility(View.VISIBLE);
 				} else {
 					iv.setVisibility(View.INVISIBLE);
@@ -166,7 +174,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		}
 
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuHandler.inflate(menu, this.getMenuInflater());

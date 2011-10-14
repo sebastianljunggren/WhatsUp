@@ -31,5 +31,6 @@
 		<activity android:name=".activity.RefPointActivity">
 		</activity>
 		<activity android:name=".activity.RegisterActivity"></activity>
+		<activity android:name=".activity.LoginRegTabActivity"></activity>
 	</application>
 </manifest>

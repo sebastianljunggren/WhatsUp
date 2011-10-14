@@ -39,8 +39,7 @@ public class LogInActivity extends Activity implements OnClickListener,
 		Button logIn = (Button) this.findViewById(R.id.log_in);
 		logIn.setOnClickListener(this);
 		this.result = (TextView) this.findViewById(R.id.result);
-		Button reg = (Button) this.findViewById(R.id.register);
-		reg.setOnClickListener(this);
+		
 	}
 
 	public void onClick(View view) {
@@ -55,10 +54,6 @@ public class LogInActivity extends Activity implements OnClickListener,
 			login.addOperationListener(this);
 			new NetworkTask<SessionInfo>().execute(login);
 			this.result.setText("Logging in...");
-		}
-		if(view.getId() == R.id.register){
-			Intent intent = new Intent(this, RegisterActivity.class);
-			this.startActivity(intent);
 		}
 	}
 

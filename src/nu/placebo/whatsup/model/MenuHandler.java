@@ -1,7 +1,7 @@
 package nu.placebo.whatsup.model;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.activity.LogInActivity;
+import nu.placebo.whatsup.activity.LoginRegTabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
@@ -23,7 +23,7 @@ public class MenuHandler {
 			if(sh.hasSession()){
 				sh.logOut();
 			} else {
-				context.startActivity(new Intent(context, LogInActivity.class));
+				context.startActivity(new Intent(context, LoginRegTabActivity.class));
 			}
 			return true;
 		case R.id.menu_options:
