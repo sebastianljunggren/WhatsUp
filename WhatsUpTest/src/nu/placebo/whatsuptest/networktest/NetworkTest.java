@@ -208,7 +208,7 @@ public class NetworkTest extends AndroidTestCase {
 
 			@Override
 			public void operationExcecuted(OperationResult<Annotation> result) {
-				assertFalse("No errors when creating annotation",
+				assertTrue("No errors when creating annotation",
 						result.hasErrors());
 				assertNull("Annotation returned.", result.getResult());
 			}
