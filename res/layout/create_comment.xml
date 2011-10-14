@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_height="wrap_content" android:text="Title"></TextView>
+    <EditText android:layout_width="fill_parent" android:id="@+id/create_comment_title" android:layout_height="wrap_content">
+        <requestFocus></requestFocus>
+    </EditText>
+    <TextView android:layout_width="wrap_content" android:id="@+id/textView2" android:layout_height="wrap_content" android:text="Comment"></TextView>
+    <EditText android:layout_weight="1" android:layout_width="match_parent" android:id="@+id/create_commit_desc" android:layout_height="wrap_content" android:gravity="top|left"></EditText>
+    <LinearLayout android:id="@+id/linearLayout1" android:padding="10dp" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:layout_gravity="center_vertical" android:id="@+id/create_comment_submit" android:layout_weight="1" android:layout_width="wrap_content" android:text="Submit" android:layout_height="wrap_content"></Button>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_weight="1" android:layout_width="match_parent" android:id="@+id/create_annot_debug_lat" android:layout_height="wrap_content" android:text="TextView"></TextView>
+        <TextView android:layout_weight="1" android:layout_width="match_parent" android:id="@+id/create_annot_debug_long" android:layout_height="wrap_content" android:text="TextView"></TextView>
+    </LinearLayout>
+    
+</LinearLayout>

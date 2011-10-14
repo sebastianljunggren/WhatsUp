@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import nu.placebo.whatsup.activity.CreateCommentActivity;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -17,15 +18,20 @@ import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
 public class DataProvider implements NetworkOperationListener<Annotation> {
-
+	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		//-------------------- Constants -----------------
@@ -87,6 +93,40 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 		dbHelper = new DatabaseHelper(c);
 	}
 
+	public LocationListener getLocationListener() {
+		return new LocationListener() {
+			public void onLocationChanged(Location location) {
+				if(!dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+						null,
+						"name = physical_position",
+						null,
+						null,
+						null,
+						null).moveToPosition(0)) {
+					ContentValues values = new ContentValues();
+					values.put("name", "physical_location");
+					values.put("current", 1);
+					dbHelper.getReadableDatabase().insert(DatabaseHelper.REFERENCE_POINT_TABLE,
+							null,
+							values);
+				}
+				
+				ContentValues values = new ContentValues();
+				Log.i("Physical locations: ", location.getLatitude() + " " + location.getLongitude());
+				values.put("latitude", location.getLatitude());
+				values.put("longitude", location.getLongitude());
+				dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+						values,
+						"name = physical_position",
+						null);
+			}
+			public void onProviderDisabled(String provider) {}
+			public void onProviderEnabled(String provider) {}
+			public void onStatusChanged(String provider, int status,
+						Bundle extras) {}
+			};
+	}
+	
 	private static volatile DataProvider instance;
 
 	private DatabaseHelper dbHelper;
@@ -261,8 +301,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			c.close();
 			firstRequest = false;
 		}
-		//TODO Physical position
-		return currentReferencePoint == null ? null /* physical position here */ : currentReferencePoint;
+				return currentReferencePoint == null ? null /* physical position here */ : currentReferencePoint;
 	}
 	
 	/**
@@ -290,7 +329,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			} while(c.moveToNext());
 		}
 		c.close();
-		//TODO Add physical position to the list
+		
 		return glList;
 	}
 	
@@ -390,7 +429,6 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * @param sInfo
 	 * @param listener
 	 */
-
 	public void createAnnotation(String title, String desc, String author, 
 			GeoPoint gp, SessionInfo sInfo, 
 			NetworkOperationListener<Annotation> listener) {
@@ -400,18 +438,16 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	}
 	
 	public void createComment(int nid, String author, String commentText, String title) {
-		Date currentDate = new Date();
 		ContentValues values = new ContentValues();
 		values.put("nid", nid);
 		values.put("comment", commentText);
 		values.put("author", author);
 		values.put("title", title);
-		values.put("added_date", currentDate.toString());
+		values.put("added_date", "N/A");
 		
 		dbHelper.getWritableDatabase().insert(DatabaseHelper.COMMENT_TABLE,
 				null,
 				values);
-		new Comment(author, commentText, title, currentDate);
 	}
 	
 	/**

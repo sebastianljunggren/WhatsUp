@@ -12,8 +12,12 @@ import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
+import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +54,20 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin),
 				mapView, this);
 		setupToolbar();
+		startGPSManager(this.getApplicationContext(), 
+				DataProvider.getDataProvider(this.getApplicationContext()).getLocationListener());
 	}
 
+	private void startGPSManager(Context c, LocationListener listener) {
+		LocationManager locationManager = (LocationManager) 
+		  c.getSystemService(Context.LOCATION_SERVICE);
+		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				30,
+				50,
+				listener);
+	}
+	
 	private void setupToolbar() {
 		ImageButton gotoListBtn = (ImageButton) this
 				.findViewById(R.id.map_goto_list);

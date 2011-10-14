@@ -84,7 +84,9 @@ public class AnnotationActivity extends Activity implements
 
 	public void onClick(View v) {
 		if(v.getId() == R.id.comment) {
-			this.startActivity(new Intent(this, CommentActivity.class));
+			Intent intent = new Intent(this, CreateCommentActivity.class);
+			intent.putExtra("id", annotation.getId());
+			this.startActivity(intent);
 		}
 	}
 }
