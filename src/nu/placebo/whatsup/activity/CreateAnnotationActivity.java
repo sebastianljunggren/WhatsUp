@@ -45,13 +45,6 @@ public class CreateAnnotationActivity extends Activity implements
 		this.setContentView(R.layout.create_annotation);
 		this.titleField = (TextView) this.findViewById(R.id.create_annot_title);
 		this.descField = (TextView) this.findViewById(R.id.create_annot_desc);
-		TextView debugLat = (TextView) this
-				.findViewById(R.id.create_annot_debug_lat);
-		TextView debugLong = (TextView) this
-				.findViewById(R.id.create_annot_debug_long);
-
-		debugLat.setText(Integer.toString(gp.getLatitudeE6()));
-		debugLong.setText(Integer.toString(gp.getLongitudeE6()));
 
 		Button submitBtn = (Button) this.findViewById(R.id.create_annot_submit);
 		submitBtn.setOnClickListener(this);
