@@ -381,7 +381,18 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	}
 	
 	public void createComment(int nid, String author, String commentText, String title) {
-		new Comment(author, commentText, title, new Date());
+		Date currentDate = new Date();
+		ContentValues values = new ContentValues();
+		values.put("nid", nid);
+		values.put("comment", commentText);
+		values.put("author", author);
+		values.put("title", title);
+		values.put("added_date", currentDate.toString());
+		
+		dbHelper.getWritableDatabase().insert(DatabaseHelper.COMMENT_TABLE,
+				null,
+				values);
+		new Comment(author, commentText, title, currentDate);
 	}
 	
 	/**
