@@ -243,6 +243,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 * @return the current reference point, as a ReferencePoint object.
 	 */
 	public ReferencePoint getCurrentReferencePoint() {
+		Log.i("getCurrent", "Value is " + firstRequest);
 		if(firstRequest) {
 			String[] idCol = {"_id"};
 			Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
@@ -252,8 +253,9 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 					null,
 					null,
 					null);
-			if(c.moveToFirst()) {
-				setCurrentReferencePoint(c.getInt(c.getColumnIndex("_nid")));
+			if(c.moveToPosition(0)) {
+				setCurrentReferencePoint(c.getInt(c.getColumnIndex("_id")));
+				Log.i("Value of current: ", Integer.toString(c.getInt(c.getColumnIndex("_id"))));
 			}
 			c.close();
 			firstRequest = false;
@@ -313,8 +315,24 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 							   c.getString(c.getColumnIndex("name")));
 		}
 		c.close();
+		resetOldCurrent();
+		ContentValues values = new ContentValues();
+		values.put("current", 1);
+		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+				values,
+				"_id = " + id,
+				null);
 	}
 	
+	private void resetOldCurrent() {
+		ContentValues values = new ContentValues();
+		values.put("current", 0);
+		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+				values,
+				"current = 1",
+				null);
+	}
+
 	private void addReferencePoint(GeoPoint gp, String name, boolean isCurrent) {
 		Log.i("W�nge", "New reference point added");
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
