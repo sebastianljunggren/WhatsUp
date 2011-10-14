@@ -8,11 +8,17 @@ import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
+
 
 /**
  * 
@@ -21,7 +27,7 @@ import android.widget.TextView;
  */
 
 public class AnnotationActivity extends Activity implements
-		NetworkOperationListener<Annotation> {
+		OnClickListener, NetworkOperationListener<Annotation> {
 
 	private TextView title;
 	private TextView body;
@@ -39,6 +45,8 @@ public class AnnotationActivity extends Activity implements
 		AnnotationRetrieve ar = new AnnotationRetrieve(bundle.getInt("nid"));
 		ar.addOperationListener(this);
 		new NetworkTask<Annotation>().execute(ar);
+		Button commentButton = (Button) this.findViewById(R.id.comment);
+		commentButton.setOnClickListener(this);
 	}
 
 	public Annotation getAnnotation() {
@@ -72,5 +80,11 @@ public class AnnotationActivity extends Activity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		return MenuHandler.onPrepareOptionsMenu(menu, this);
+	}
+
+	public void onClick(View v) {
+		if(v.getId() == R.id.comment) {
+			this.startActivity(new Intent(this, CommentActivity.class));
+		}
 	}
 }
