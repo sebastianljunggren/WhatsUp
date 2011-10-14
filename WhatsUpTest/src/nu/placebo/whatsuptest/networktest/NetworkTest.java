@@ -55,7 +55,6 @@ public class NetworkTest extends AndroidTestCase {
 
 	public void testAnnotationRetrieve() {
 		AnnotationRetrieve a = new AnnotationRetrieve(1337);
-		assertTrue(true);
 		a.addOperationListener(new NetworkOperationListener<Annotation>() {
 
 			@Override
