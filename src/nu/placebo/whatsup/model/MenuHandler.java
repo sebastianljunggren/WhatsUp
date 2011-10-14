@@ -43,7 +43,7 @@ public class MenuHandler {
 		if(SessionHandler.getInstance(context).hasSession()) {
 			logInOut.setTitle("Log out" );
 		} else {
-			logInOut.setTitle("Log in");
+			logInOut.setTitle("Log in/register");
 		}
 		return true;
 	}

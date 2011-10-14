@@ -6,9 +6,9 @@
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Title of annotation"
-			android:layout_marginBottom="10dp" android:layout_marginTop="10dp"
-			android:id="@+id/title" android:textSize="20sp" />
+			android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+			android:layout_marginTop="10dp" android:id="@+id/title"
+			android:textSize="20sp" />
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="wrap_content">
 			<Button android:layout_height="wrap_content" android:text="Comment"
@@ -22,12 +22,12 @@
 			</Button>
 		</LinearLayout>
 		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="by [USER_NAME]"
-			android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
-			android:id="@+id/author" android:textStyle="italic" />
+			android:layout_height="wrap_content" android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp" android:id="@+id/author"
+			android:textStyle="italic" />
 		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Body of annotation"
-			android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
-			android:id="@+id/body" />
+			android:layout_height="wrap_content" android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp" android:id="@+id/body"
+			android:layout_weight="1" android:layout_gravity="top|left" />
 	</LinearLayout>
 </ScrollView>

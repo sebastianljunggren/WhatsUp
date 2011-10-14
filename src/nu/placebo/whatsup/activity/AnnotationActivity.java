@@ -37,9 +37,6 @@ public class AnnotationActivity extends Activity implements
 		this.title = (TextView) this.findViewById(R.id.title);
 		this.body = (TextView) this.findViewById(R.id.body);
 		this.author = (TextView) this.findViewById(R.id.author);
-		Annotation a = new Annotation(new GeoLocation(1234, 23, 32,
-				"The title of my annotation!"), "Brödtext", "Sebbe", null);
-		this.setAnnotation(a);
 		Bundle bundle = getIntent().getExtras();
 		AnnotationRetrieve ar = new AnnotationRetrieve(bundle.getInt("nid"));
 		ar.addOperationListener(this);
