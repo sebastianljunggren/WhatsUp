@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Log in" android:id="@+id/menu_log_in_out"></item>
-    <item android:title="Options" android:id="@+id/menu_options"></item>    
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="Log in" android:icon="@drawable/user"
+		android:id="@+id/menu_log_in_out"></item>
+	<item android:title="Options" android:icon="@drawable/settings"
+		android:id="@+id/menu_options"></item>
 </menu>

@@ -42,8 +42,10 @@ public class MenuHandler {
 		MenuItem logInOut = menu.getItem(0);
 		if(SessionHandler.getInstance(context).hasSession()) {
 			logInOut.setTitle("Log out" );
+			logInOut.setIcon(R.drawable.logout);
 		} else {
 			logInOut.setTitle("Log in/register");
+			logInOut.setIcon(R.drawable.user);
 		}
 		return true;
 	}
