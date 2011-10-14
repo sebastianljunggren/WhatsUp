@@ -69,7 +69,7 @@ public class PositionPickerActivity extends MapActivity implements
 
 	@Override
 	protected void onResume() {
-		if (!SessionHandler.getInstance(this).hasSession()) {
+		if (this.requestCode == Constants.ANNOTATION && !SessionHandler.getInstance(this).hasSession()) {
 			Intent intent = new Intent(this, LogInActivity.class);
 			this.startActivityForResult(intent, Constants.LOG_IN);
 		}
