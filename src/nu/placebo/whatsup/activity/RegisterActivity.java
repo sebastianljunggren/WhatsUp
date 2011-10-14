@@ -57,6 +57,7 @@ public class RegisterActivity extends Activity implements OnClickListener, Netwo
 			Log.d("whatsup", "Registration result: "+result.getStatusCode());
 			SessionHandler.getInstance(this).saveCredentials(username, password);
 			SessionHandler.getInstance(this).login();
+			this.finish();
 		}
 	}
 	
