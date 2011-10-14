@@ -195,6 +195,8 @@ public class NetworkTest extends AndroidTestCase {
 				assertNotNull("No annotation returned.", result.getResult());
 			}
 		});
+		OperationResult<Annotation> result = ac.execute();
+		ac.notifyListeners(result);
 	}
 	public void testAnnotationCreateFail() {
 		Login l = new Login("test", "BadPass!");
@@ -211,5 +213,7 @@ public class NetworkTest extends AndroidTestCase {
 				assertNull("Annotation returned.", result.getResult());
 			}
 		});
+		OperationResult<Annotation> result = ac.execute();
+		ac.notifyListeners(result);
 	}
 }
