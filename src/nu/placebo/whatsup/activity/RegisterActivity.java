@@ -1,6 +1,7 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.NetworkOperationListener;
@@ -26,7 +27,6 @@ public class RegisterActivity extends Activity implements OnClickListener, Netwo
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.register);
-		
 		Button submitBtn = (Button) this.findViewById(R.id.submit);
 		submitBtn.setOnClickListener(this);
 		username = "";

@@ -34,7 +34,6 @@ public class LogInActivity extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.login);
-		this.setResult(Constants.ACTIVITY_INTERRUPTED);
 
 		Button logIn = (Button) this.findViewById(R.id.log_in);
 		logIn.setOnClickListener(this);

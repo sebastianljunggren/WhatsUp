@@ -117,7 +117,7 @@ public class PositionPickerActivity extends MapActivity implements
 		}
 
 		if (requestCode == Constants.LOG_IN) {
-			if (resultCode == Constants.ACTIVITY_INTERRUPTED) {
+			if (resultCode == RESULT_CANCELED) {
 				this.finish();
 			}
 			if (resultCode == Constants.ACTIVITY_FINISHED_OK) {
