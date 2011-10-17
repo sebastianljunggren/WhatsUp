@@ -15,6 +15,7 @@ import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -88,41 +90,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	 */
 	private DataProvider(Context c) {
 		dbHelper = new DatabaseHelper(c);
-		
-	}
-
-	public LocationListener getLocationListener() {
-		return new LocationListener() {
-			public void onLocationChanged(Location location) {
-				if(!dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-						null,
-						"name = physical_position",
-						null,
-						null,
-						null,
-						null).moveToPosition(0)) {
-					ContentValues values = new ContentValues();
-					values.put("name", "physical_location");
-					values.put("current", 1);
-					dbHelper.getReadableDatabase().insert(DatabaseHelper.REFERENCE_POINT_TABLE,
-							null,
-							values);
-				}
-				
-				ContentValues values = new ContentValues();
-				Log.i("Physical locations: ", location.getLatitude() + " " + location.getLongitude());
-				values.put("latitude", location.getLatitude());
-				values.put("longitude", location.getLongitude());
-				dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
-						values,
-						"name = physical_position",
-						null);
-			}
-			public void onProviderDisabled(String provider) {}
-			public void onProviderEnabled(String provider) {}
-			public void onStatusChanged(String provider, int status,
-						Bundle extras) {}
-			};
+		List<GeoLocation> glList = new ArrayList<GeoLocation>();
+		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		glList.add(new GeoLocation(-1,
+				lastKnownLocation.getLatitude(),
+				lastKnownLocation.getLongitude(),
+				"physical_position"));
+		insertData(glList);
 	}
 	
 	private static volatile DataProvider instance;
@@ -345,7 +319,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 				null,
 				null);
 		
-		if(c.moveToFirst()) {
+		if(c.moveToPosition(0)) {
 			currentReferencePoint = new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
 							   new GeoPoint(
 									   c.getInt(c.getColumnIndex("latitude")),
@@ -353,7 +327,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 							   c.getString(c.getColumnIndex("name")));
 		}
 		c.close();
-		resetOldCurrent();
+		resetCurrentRefPoint();
 		ContentValues values = new ContentValues();
 		values.put("current", 1);
 		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
@@ -362,7 +336,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 				null);
 	}
 	
-	private void resetOldCurrent() {
+	private void resetCurrentRefPoint() {
 		ContentValues values = new ContentValues();
 		values.put("current", 0);
 		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
@@ -545,7 +519,29 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	}
 
 	public void onLocationChanged(Location location) {
+		if(!dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"name = physical_position",
+				null,
+				null,
+				null,
+				null).moveToPosition(0)) {
+			ContentValues values = new ContentValues();
+			values.put("name", "physical_location");
+			values.put("current", 1);
+			dbHelper.getReadableDatabase().insert(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					values);
+		}
 		
+		ContentValues values = new ContentValues();
+		Log.i("Physical locations: ", location.getLatitude() + " " + location.getLongitude());
+		values.put("latitude", location.getLatitude());
+		values.put("longitude", location.getLongitude());
+		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+				values,
+				"name = physical_position",
+				null);
 	}
 	public void onProviderDisabled(String provider) {}
 	public void onProviderEnabled(String provider) {}
