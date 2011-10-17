@@ -2,11 +2,11 @@ package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.OperationResult;
-import nu.placebo.whatsup.service.model.DataProvider;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

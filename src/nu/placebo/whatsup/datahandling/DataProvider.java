@@ -1,4 +1,4 @@
-package nu.placebo.whatsup.service.model;
+package nu.placebo.whatsup.datahandling;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -35,7 +34,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	 * Class is Singelton, disallow outside creation
 	 */
 	private DataProvider(Context c) {
-		dbHelper = new DatabaseHelper(c);
+		DatabaseConnectionLayer.setDatabaseHelper(new DatabaseHelper(c));
 		List<GeoLocation> glList = new ArrayList<GeoLocation>();
 		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		glList.add(new GeoLocation(-1,
@@ -47,8 +46,6 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	private static volatile DataProvider instance;
 
-	private DatabaseHelper dbHelper;
-
 	public static DataProvider getDataProvider(Context c) {
 		if(instance == null) {
 			instance = new DataProvider(c);
@@ -56,64 +53,19 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 		return instance;
 	}
 	
+	/**
+	 * This method supplies the caller with a DataReturn<Annotation> object that will
+	 * contain
+	 * 
+	 * @param nid
+	 * @return
+	 */
 	public DataReturn<Annotation> getAnnotation(int nid) {
-		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
-		//cache, and means of acquiring the data fetched from remote server
 		
-		Cursor c = dbHelper.getReadableDatabase().query(
-				DatabaseHelper.ANNOTATION_TABLE, 
-				null, 
-				"nid = " + nid, 
-				null, 
-				null, 
-				null, 
-				null);
-		
-		c.moveToPosition(0);
-		String author = c.getString(c.getColumnIndex("author"));
-		String body = c.getString(c.getColumnIndex("body"));
-		
-		c = dbHelper.getReadableDatabase().query(
-				DatabaseHelper.GEOLOCATION_TABLE, 
-				null, 
-				"nid = " + nid, 
-				null, 
-				null, 
-				null, 
-				null);
-		
-		c.moveToPosition(0);
-		int latitude = c.getInt(c.getColumnIndex("latitude"));
-		int longitude = c.getInt(c.getColumnIndex("longitude"));
-		String title = c.getString(c.getColumnIndex("title"));
-		
-		c = dbHelper.getReadableDatabase().query(
-				DatabaseHelper.COMMENT_TABLE, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null);
-		
-		c.moveToPosition(0);
-		List<Comment> comments = new ArrayList<Comment>();
-		do {
-			String comment = c.getString(c.getColumnIndex("comment"));
-			String cTitle = c.getString(c.getColumnIndex("title"));
-			String cAuthor = c.getString(c.getColumnIndex("author"));
-			Date cDate = new Date(c.getLong(c.getColumnIndex("added_date")));
-			comments.add(new Comment(cAuthor, comment, cTitle, cDate));
-		} while(!c.isLast());
-		
-		c.close();
 		DataReturn<Annotation> result;
 		
-		synchronized(this) {
-			result = new DataReturn<Annotation>(new Annotation(
-				new GeoLocation(nid, latitude, longitude, title), 
-				body, author, comments), activeObjects.size());
-		}
+		result = new DataReturn<Annotation>(DatabaseConnectionLayer.getAnnotation(nid),
+						activeObjects.size());	
 		activeObjects.add(result);
 		AnnotationRetrieve ar = new AnnotationRetrieve(nid);
 		ar.addOperationListener(result);

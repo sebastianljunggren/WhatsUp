@@ -1,4 +1,4 @@
-package nu.placebo.whatsup.service.model;
+package nu.placebo.whatsup.datahandling;
 
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.OperationResult;

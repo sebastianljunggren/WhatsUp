@@ -1,4 +1,4 @@
-package nu.placebo.whatsup.service.model;
+package nu.placebo.whatsup.datahandling;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -54,6 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS " + GEOLOCATION_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + ANNOTATION_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + COMMENT_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + REFERENCE_POINT_TABLE);
 		onCreate(db);
 	}
 }

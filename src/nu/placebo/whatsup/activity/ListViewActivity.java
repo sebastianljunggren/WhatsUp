@@ -6,6 +6,7 @@ import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
 import nu.placebo.whatsup.model.MenuHandler;
@@ -14,7 +15,6 @@ import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
-import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.ListActivity;
 import android.content.Context;

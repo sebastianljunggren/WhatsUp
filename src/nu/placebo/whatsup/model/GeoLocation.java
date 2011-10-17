@@ -5,6 +5,11 @@ import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 
+/**
+ * This class represents a "compressed" version of an Annotation. It holds basic data like
+ * where on the map the annotation is, its title and who wrote it. Basically, everything
+ * needed for simply showing annotations on the map view.
+ */
 public class GeoLocation {
 	private GeoPoint gp;
 	private String title;
