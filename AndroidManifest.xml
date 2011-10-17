@@ -32,5 +32,6 @@
 		</activity>
 		<activity android:name=".activity.RegisterActivity"></activity>
 		<activity android:name=".activity.LoginRegTabActivity"></activity>
+		<activity android:name=".activity.CreateCommentActivity"></activity>
 	</application>
 </manifest>

@@ -17,8 +17,9 @@ public class CreateCommentActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		id = savedInstanceState.getInt("id");
 		this.setContentView(R.layout.create_comment);
+		Bundle extras = this.getIntent().getExtras();
+		this.id = extras.getInt("id");
 		Button submitButton = (Button) this.findViewById(R.id.create_comment_submit);
 		submitButton.setOnClickListener(this);
 	}
