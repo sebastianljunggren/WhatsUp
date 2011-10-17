@@ -16,7 +16,6 @@ import nu.placebo.whatsup.service.model.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -42,6 +41,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	private MapView mapView;
 	private Marker marker;
 	private List<Overlay> overlays;
+	private LocationManager locationManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +54,7 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin),
 				mapView, this);
 		setupToolbar();
-		startGPSManager(this.getApplicationContext(), 
-				DataProvider.getDataProvider(this.getApplicationContext()).getLocationListener());
-	}
-
-	private void startGPSManager(Context c, LocationListener listener) {
-		LocationManager locationManager = (LocationManager) 
-		  c.getSystemService(Context.LOCATION_SERVICE);
-		
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				30,
-				50,
-				listener);
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 	}
 	
 	private void setupToolbar() {
@@ -128,7 +117,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	 * Retrieves information about the current location on the map, and sends it
 	 * to the server.
 	 */
-	@SuppressWarnings("unchecked")
 	public void refresh() {
 		marker.clear();
 		GeoPoint[] p = GeoPointUtil.getBottomLeftToTopRightPoints(
@@ -138,6 +126,23 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2], d[3]);
 		gr.addOperationListener(this);
 		new NetworkTask<List<GeoLocation>>().execute(gr);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		locationManager.removeUpdates(DataProvider.getDataProvider(getApplicationContext()));
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				30,
+				50,
+				DataProvider.getDataProvider(getApplicationContext()));
 	}
 
 	public void operationExcecuted(

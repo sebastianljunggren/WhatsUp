@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import nu.placebo.whatsup.activity.CreateCommentActivity;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -18,20 +17,18 @@ import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
-public class DataProvider implements NetworkOperationListener<Annotation> {
-	
+public class DataProvider implements NetworkOperationListener<Annotation>, LocationListener {
+
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		//-------------------- Constants -----------------
@@ -91,6 +88,7 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 	 */
 	private DataProvider(Context c) {
 		dbHelper = new DatabaseHelper(c);
+		
 	}
 
 	public LocationListener getLocationListener() {
@@ -545,4 +543,11 @@ public class DataProvider implements NetworkOperationListener<Annotation> {
 			insertData(result.getResult());
 		}
 	}
+
+	public void onLocationChanged(Location location) {
+		
+	}
+	public void onProviderDisabled(String provider) {}
+	public void onProviderEnabled(String provider) {}
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
 }
