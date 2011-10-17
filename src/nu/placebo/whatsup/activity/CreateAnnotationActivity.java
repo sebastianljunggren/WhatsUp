@@ -65,18 +65,8 @@ public class CreateAnnotationActivity extends Activity implements
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onDestroy()
-	 */
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
 	public void operationExcecuted(OperationResult<Annotation> result) {
-		// TODO Auto-generated method stub
+		// TODO Error handling
 		if (!result.hasErrors()) {
 			setResult(Constants.ACTIVITY_FINISHED_OK);
 			Toast.makeText(this, "Annotation created", Toast.LENGTH_SHORT);

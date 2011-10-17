@@ -30,60 +30,6 @@ import android.util.Log;
 import com.google.android.maps.GeoPoint;
 
 public class DataProvider implements NetworkOperationListener<Annotation>, LocationListener {
-
-	private static class DatabaseHelper extends SQLiteOpenHelper {
-		
-		//-------------------- Constants -----------------
-		private static final String DATABASE_NAME = "whatsup.db";
-		private static final int DATABASE_VERSION = 2;
-		private static final String GEOLOCATION_TABLE = "geolocations";
-		private static final String ANNOTATION_TABLE = "anntations";
-		private static final String COMMENT_TABLE = "comments";
-		private static final String REFERENCE_POINT_TABLE = "reference_points";
-		//------------------------------------------------
-
-		DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE " + GEOLOCATION_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "nid INTEGER,"
-					+ "latitude INTEGER,"
-					+ "longitude INTEGER,"
-					+ "title TEXT"
-					+ ");");
-			db.execSQL("CREATE TABLE " + ANNOTATION_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "nid INTEGER,"
-					+ "body TEXT,"
-					+ "author TEXT"
-					+ ");");
-			db.execSQL("CREATE TABLE " + COMMENT_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "nid REAL," 
-					+ "comment TEXT,"
-					+ "author TEXT,"
-					+ "title TEXT,"
-					+ "added_date TEXT"
-					+ ");");
-			db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE + " ("
-					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "name TEXT,"
-					+ "latitude INTEGER,"
-					+ "longitude INTEGER,"
-					+ "current INTEGER"
-					+ ");");
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS " + GEOLOCATION_TABLE);
-			onCreate(db);
-		}
-	}
 	
 	/**
 	 * Class is Singelton, disallow outside creation
@@ -123,7 +69,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 				null, 
 				null);
 		
-		c.moveToFirst();
+		c.moveToPosition(0);
 		String author = c.getString(c.getColumnIndex("author"));
 		String body = c.getString(c.getColumnIndex("body"));
 		
@@ -136,7 +82,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 				null, 
 				null);
 		
-		c.moveToFirst();
+		c.moveToPosition(0);
 		int latitude = c.getInt(c.getColumnIndex("latitude"));
 		int longitude = c.getInt(c.getColumnIndex("longitude"));
 		String title = c.getString(c.getColumnIndex("title"));
@@ -144,13 +90,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 		c = dbHelper.getReadableDatabase().query(
 				DatabaseHelper.COMMENT_TABLE, 
 				null, 
-				"", 
+				null, 
 				null, 
 				null, 
 				null, 
 				null);
 		
-		c.moveToFirst();
+		c.moveToPosition(0);
 		List<Comment> comments = new ArrayList<Comment>();
 		do {
 			String comment = c.getString(c.getColumnIndex("comment"));
@@ -392,7 +338,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * Creates an Annotation with the specified values. A valid SessionInfo is required, and the object
-	 * that wants the annotation should be sent as listener.
+	 * that wants the annotation should be sent as listener. The listener can be null if no object wants the
+	 * returned Annotation immediately.
+	 * 
+	 * When the object is returned, the DataProvider will receive it as well, and it will be put into the
+	 * database. The time until the annotation is stably in the database is determined by the workload of the
+	 * phone, threading priority and the time a SQLite insert takes. As this is mostly random, trying to get
+	 * this annotation from the database before it's fully updated will result
 	 * 
 	 * @param title
 	 * @param desc
@@ -405,7 +357,9 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 			GeoPoint gp, SessionInfo sInfo, 
 			NetworkOperationListener<Annotation> listener) {
 		AnnotationCreate ac = new AnnotationCreate(title, desc, author, gp, sInfo);
-		ac.addOperationListener(listener);
+		if(listener != null) {
+			ac.addOperationListener(listener);
+		}
 		new NetworkTask<Annotation>().execute(ac);
 	}
 	
