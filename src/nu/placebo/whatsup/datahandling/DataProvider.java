@@ -102,43 +102,19 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	public DataReturn<List<GeoLocation>> getAnnotationMarkers(int latitudeA,
 			int longitudeA, int latitudeB, int longitudeB) {
-		//Database part here
-		List<GeoLocation> locations = new ArrayList<GeoLocation>();
-		String maxLat = Double.toHexString(Math.max(latitudeA, latitudeB));
-		String maxLong = Double.toHexString(Math.max(longitudeA, longitudeB));
-		String minLat = Double.toHexString(Math.min(latitudeA, latitudeB));
-		String minLong = Double.toHexString(Math.min(longitudeA, longitudeB));
-		String[] selectionArgs = {maxLat, maxLong, minLat, minLong};
-		
-		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.GEOLOCATION_TABLE,
-				null,
-				"latitude < ? AND longitude < ? AND latitude > ? AND longitude > ?",
-				selectionArgs,
-				null,
-				null,
-				null);
-		
-		if(c.moveToLast()) {
-			for(int i = 0; i < 10; i++) {
-				locations.add(new GeoLocation(c.getInt(c.getColumnIndex("nid")),
-								c.getInt(c.getColumnIndex("latitude")),
-								c.getInt(c.getColumnIndex("longitude")),
-								c.getString(c.getColumnIndex("title"))));
-				if(!c.moveToPrevious()) {
-					break;
-				}
-			}
-		}
-		
-		c.close();
+		int maxLat = Math.max(latitudeA, latitudeB);
+		int maxLong = Math.max(longitudeA, longitudeB);
+		int minLat = Math.min(latitudeA, latitudeB);
+		int minLong = Math.min(longitudeA, longitudeB);
+
 		DataReturn<List<GeoLocation>> result;
 		GeoLocationsRetrieve glr = new GeoLocationsRetrieve(
 				(latitudeA - 0.5) / 1000000, (longitudeA - 0.5) / 1000000,
 				(latitudeB - 0.5) / 1000000, (longitudeB - 0.5) / 1000000);
 		
 		synchronized(this) {
-			result = new DataReturn<List<GeoLocation>>(
-												locations, activeObjects.size());
+			result = new DataReturn<List<GeoLocation>>(DatabaseConnectionLayer.getAnnotationMarkers(
+											maxLat, maxLong, minLat, minLong), activeObjects.size());
 			activeObjects.add(result);
 		}
 		glr.addOperationListener(result);
@@ -148,30 +124,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * Gets the ReferencePoint that is currently used as reference point.
-	 * Unless setCurrentReferencePoint has been called earlier, the physical
+	 * In the case that the user has not chosen a reference point, the physical
 	 * position of the phone is returned.
 	 * 
 	 * @return the current reference point, as a ReferencePoint object.
 	 */
 	public ReferencePoint getCurrentReferencePoint() {
-		Log.i("getCurrent", "Value is " + firstRequest);
-		if(firstRequest) {
-			String[] idCol = {"_id"};
-			Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-					idCol,
-					"current = 1",
-					null,
-					null,
-					null,
-					null);
-			if(c.moveToPosition(0)) {
-				setCurrentReferencePoint(c.getInt(c.getColumnIndex("_id")));
-				Log.i("Value of current: ", Integer.toString(c.getInt(c.getColumnIndex("_id"))));
-			}
-			c.close();
-			firstRequest = false;
-		}
-				return currentReferencePoint == null ? null /* physical position here */ : currentReferencePoint;
+		return currentReferencePoint;
 	}
 	
 	/**
@@ -181,111 +140,38 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	 * @return all reference point, including the physical location of the phone.
 	 */
 	public List<ReferencePoint> getAllReferencePoints() {
-		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null);
-		
-		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
-		if(c.moveToPosition(0)) {
-			do {
-				glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
-						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
-						c.getInt(c.getColumnIndex("longitude"))), 
-						c.getString(c.getColumnIndex("name"))));
-			} while(c.moveToNext());
-		}
-		c.close();
-		
-		return glList;
+		return DatabaseConnectionLayer.getAllReferencePoints();
 	}
 	
 	/**
-	 * Sets the ReferencePoint to use as the current reference point.
+	 * Sets the ReferencePoint to use as the current reference point, both short-time
+	 * and in the database.
 	 * 
-	 * @param id the id of the already existing reference point
+	 * @param id the id of the already existing reference point. If the id does not
+	 * match any existing reference point, nothing changes.
 	 */
 	public void setCurrentReferencePoint(int id) {
-		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				"_id = " + id,
-				null,
-				null,
-				null,
-				null);
-		
-		if(c.moveToPosition(0)) {
-			currentReferencePoint = new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
-							   new GeoPoint(
-									   c.getInt(c.getColumnIndex("latitude")),
-									   c.getInt(c.getColumnIndex("longitude"))),
-							   c.getString(c.getColumnIndex("name")));
-		}
-		c.close();
-		resetCurrentRefPoint();
-		ContentValues values = new ContentValues();
-		values.put("current", 1);
-		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
-				values,
-				"_id = " + id,
-				null);
+		currentReferencePoint = DatabaseConnectionLayer.setCurrentReferencePoint(id);
 	}
 	
-	private void resetCurrentRefPoint() {
-		ContentValues values = new ContentValues();
-		values.put("current", 0);
-		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
-				values,
-				"current = 1",
-				null);
-	}
-
-	private void addReferencePoint(GeoPoint gp, String name, boolean isCurrent) {
-		Log.i("W�nge", "New reference point added");
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		String[] args = {name, Integer.toString(gp.getLatitudeE6()),
-										 Integer.toString(gp.getLongitudeE6())};
-		Cursor c = db.query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				"name = ? AND latitude = ? AND longitude = ?",
-				args,
-				null,
-				null,
-				null);
-		if(!c.moveToFirst()) {
-			ContentValues values = new ContentValues();
-			values.put("current", (isCurrent ? 1 : 0));
-			values.put("name", name);
-			values.put("latitude", gp.getLatitudeE6());
-			values.put("longitude", gp.getLongitudeE6());
-			db.insert(DatabaseHelper.REFERENCE_POINT_TABLE,
-					null,
-					values);
-		}
-		c.close();
-	}
 	/**
 	 * Adds a reference point to the database.
-	 * @param b 
 	 * 
-	 * @param rp the point to add
+	 * @param gp the geographical location of the reference point.
+	 * @param name the name of the reference point.
 	 */
-	public void addReferencePoint(GeoPoint gp, String name) {		
-		addReferencePoint(gp, name, false);
+	public void addReferencePoint(GeoPoint gp, String name) {
+		DatabaseConnectionLayer.addReferencePoint(gp, name);
+
 	}
-	
+		
 	/**
 	 * Removes a reference point from the database.
 	 * 
 	 * @param gl the point to remove
 	 */
 	public void removeReferencePoint(int id) {
-		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
-				"_id = " + id,
-				null);
+		DatabaseConnectionLayer.removeReferencePoint(id);
 	}
 	
 	/**
@@ -416,7 +302,6 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 
 	private List<DataReturn<?>> activeObjects = new ArrayList<DataReturn<?>>();
 	private ReferencePoint currentReferencePoint;
-	private boolean firstRequest = true;
 
 	public void operationExcecuted(OperationResult<Annotation> result) {
 		if(!result.hasErrors()) {

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
+
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
-import nu.placebo.whatsup.network.AnnotationRetrieve;
-import nu.placebo.whatsup.network.NetworkTask;
+import nu.placebo.whatsup.model.ReferencePoint;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
@@ -32,18 +34,13 @@ public class DatabaseConnectionLayer {
 	 * @return the annotation, as represented in the database, or null, if it does not exist in the database.
 	 */
 	static Annotation getAnnotation(int nid) {
-		//Calling local cache first, then putting a network call in the queue, returning an object containing the content of the local
-		//cache, and means of acquiring the data fetched from remote server
 		boolean exists = true;
 			
 		Cursor c = dbHelper.getReadableDatabase().query(
 				DatabaseHelper.ANNOTATION_TABLE, 
 				null, 
 				"nid = " + nid, 
-				null, 
-				null, 
-				null, 
-				null);
+				null,null,null,null);
 		
 		String author = "";
 		String body = "";
@@ -58,10 +55,7 @@ public class DatabaseConnectionLayer {
 				DatabaseHelper.GEOLOCATION_TABLE, 
 				null, 
 				"nid = " + nid, 
-				null, 
-				null, 
-				null, 
-				null);
+				null,null,null,null);
 		
 		int latitude = 0;
 		int longitude = 0;
@@ -76,12 +70,7 @@ public class DatabaseConnectionLayer {
 		
 		c = dbHelper.getReadableDatabase().query(
 				DatabaseHelper.COMMENT_TABLE, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null);
+				null,null,null,null,null,null);
 		
 		List<Comment> comments = new ArrayList<Comment>();
 		if(c.moveToPosition(0)) {
@@ -104,7 +93,9 @@ public class DatabaseConnectionLayer {
 	}
 	
 	/**
-	 * Returns a list of GeoLocations 
+	 * Returns a list of the GeoLocations within the area given by applying the parameters 
+	 * constraints.
+	 * 
 	 * @param maxLat
 	 * @param maxLong
 	 * @param minLat
@@ -121,9 +112,7 @@ public class DatabaseConnectionLayer {
 				null,
 				"latitude < ? AND longitude < ? AND latitude > ? AND longitude > ?",
 				selectionArgs,
-				null,
-				null,
-				null);
+				null,null,null);
 		
 		List<GeoLocation> locations = new ArrayList<GeoLocation>();
 		if(c.moveToLast()) {
@@ -140,5 +129,114 @@ public class DatabaseConnectionLayer {
 		
 		c.close();
 		return locations;
+	}
+	
+	/**
+	 * Returns all reference points.
+	 * 
+	 * @return
+	 */
+	static List<ReferencePoint> getAllReferencePoints() {
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+		
+		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
+		if(c.moveToPosition(0)) {
+			do {
+				glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
+						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
+						c.getInt(c.getColumnIndex("longitude"))), 
+						c.getString(c.getColumnIndex("name"))));
+			} while(c.moveToNext());
+		}
+		c.close();
+		
+		return glList;
+	}
+	
+	/**
+	 * Sets the reference point with the specified id as the current reference point.
+	 * The last current reference point is also cleared.
+	 * 
+	 * @param id the id of the reference point that is desired as the current reference point.
+	 * @return the new current reference point if it existed in the database, and the old one
+	 * if not.
+	 */
+	static ReferencePoint setCurrentReferencePoint(int id) {
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"_id = " + id,
+				null,null,null,null);
+		
+		if(c.moveToPosition(0)) {
+			resetCurrentRefPoint();
+			ContentValues values = new ContentValues();
+			values.put("current", 1);
+			dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+					values,
+					"_id = " + id,
+					null);
+		}
+		c.close();
+		c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"current = 1",
+				null,null,null,null);
+		return new ReferencePoint(id, new GeoPoint(
+				c.getInt(c.getColumnIndex("latitude")),
+				c.getInt(c.getColumnIndex("longitude"))), 
+			c.getString(c.getColumnIndex("name")));
+	}
+
+	private static void resetCurrentRefPoint() {
+		ContentValues values = new ContentValues();
+		values.put("current", 0);
+		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+				values,
+				"current = 1",
+				null);
+	}
+	
+	/**
+	 * Adds a reference point to the database. If the point already exists, nothing is done.
+	 * 
+	 * @param gp the geographical location of the reference point.
+	 * @param name the name of the reference point.
+	 */
+	static void addReferencePoint(GeoPoint gp, String name) {
+		String[] args = {name, Integer.toString(gp.getLatitudeE6()),
+										 Integer.toString(gp.getLongitudeE6())};
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"name = ? AND latitude = ? AND longitude = ?",
+				args,
+				null,null,null);
+		if(!c.moveToPosition(0)) {
+			ContentValues values = new ContentValues();
+			values.put("current", 0);
+			values.put("name", name);
+			values.put("latitude", gp.getLatitudeE6());
+			values.put("longitude", gp.getLongitudeE6());
+			dbHelper.getWritableDatabase().insert(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					values);
+		}
+		c.close();
+	}
+	
+	/**
+	 * Removes a reference point from the database.
+	 * 
+	 * @param id the id of the point to remove. If this point does not exist, nothing is done.
+	 */
+	static void removeReferencePoint(int id) {
+		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
+				"_id = " + id,
+				null);
 	}
 }
