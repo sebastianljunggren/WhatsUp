@@ -1,5 +1,7 @@
 package nu.placebo.whatsup.model;
 
+import java.util.Observable;
+
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.network.Action;
 import nu.placebo.whatsup.network.Login;
@@ -19,7 +21,7 @@ import android.widget.Toast;
  * 
  */
 
-public class SessionHandler implements NetworkOperationListener<SessionInfo> {
+public class SessionHandler extends Observable implements NetworkOperationListener<SessionInfo> {
 
 	private static SessionHandler instance;
 	private static Context context;
@@ -27,6 +29,7 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 	private String password;
 	private String sessionName;
 	private String sessionId;
+	private boolean loggedIn = false;
 
 	private SessionHandler() {
 		this.read();
@@ -59,12 +62,14 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		this.userName = userName;
 		this.password = password;
 		this.write();
+		this.setChanged();
 	}
 
 	public void saveSession(SessionInfo sessionInfo) {
 		this.sessionName = sessionInfo.getSessionName();
 		this.sessionId = sessionInfo.getSessionId();
 		this.write();
+		this.setChanged();
 	}
 
 	public SessionInfo getSession() {
@@ -98,19 +103,26 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 		if (result.getAction() == Action.LOG_IN && !result.hasErrors()) {
 			this.saveSession(result.getResult());
 			Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
+			this.loggedIn = true;
+			this.setChanged();
 		} else if (result.getAction() == Action.TEST_SESSION) {
 			if (!result.hasErrors()){
 				Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show();
+				this.loggedIn = true;
+				this.setChanged();
 			} else if (result.hasErrors() && this.hasCredentials()) {
 				this.login();
+				Log.w("WhatsUp", "Trying to log in");
 			}
 		}
+		Log.w("WhatsUp", "Stuff");
 	}
 
 	public void login() {
 		Login logIn = new Login(this.userName, this.password);
 		logIn.addOperationListener(this);
 		new NetworkTask<SessionInfo>().execute(logIn);
+		Log.w("WhatsUp", "Trying to log in");
 	}
 
 	public boolean hasCredentials() {
@@ -119,7 +131,12 @@ public class SessionHandler implements NetworkOperationListener<SessionInfo> {
 
 	public void logOut() {
 		this.saveSession(new SessionInfo(null, null));
+		this.loggedIn = false;
 		// TODO Actually log out from the server.
-		Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT);	
+		Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT);
+	}
+	
+	public boolean isLoggedIn() {
+		return this.loggedIn;
 	}
 }
