@@ -135,11 +135,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+		/*
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				30,
 				50,
-				DataProvider.getDataProvider(getApplicationContext()));
+				DataProvider.getDataProvider(getApplicationContext())); */
 	}
 
 	public void operationExcecuted(
