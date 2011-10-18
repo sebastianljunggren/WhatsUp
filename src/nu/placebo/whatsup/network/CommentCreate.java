@@ -2,6 +2,7 @@ package nu.placebo.whatsup.network;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -25,11 +26,13 @@ public class CommentCreate extends AbstractNetworkOperation<Comment> {
 	private String body, title;
 	private boolean hasErrors;
 	private SessionInfo sessionInfo;
+	private String author;
 	private int id;
 	
 	public CommentCreate(String title, String body,
-			int id, SessionInfo sessionInfo){
+			int id, String author, SessionInfo sessionInfo){
 		this.id = id;
+		this.author = author;
 		this.title = title;
 		this.body = body;
 		this.sessionInfo = sessionInfo;
@@ -62,7 +65,9 @@ public class CommentCreate extends AbstractNetworkOperation<Comment> {
 
 	private Comment parseResult(String handleResponse) {
 		Log.d("whatsup", handleResponse);
-		return null;
+		
+		
+		return new Comment(this.author, this.body, this.title, new Date());
 	}
 
 }

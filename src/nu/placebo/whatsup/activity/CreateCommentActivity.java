@@ -2,11 +2,10 @@ package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.SessionHandler;
-import nu.placebo.whatsup.network.CommentCreate;
 import nu.placebo.whatsup.network.NetworkOperationListener;
-import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 import android.app.Activity;
 import android.os.Bundle;
@@ -39,19 +38,14 @@ public class CreateCommentActivity extends Activity implements OnClickListener,
 			TextView title = (TextView) this
 					.findViewById(R.id.create_comment_title);
 			if (text.toString() != "" && title.toString() != "") {
-				/*
-				 * DataProvider.getDataProvider(getApplicationContext()).
-				 * createComment( id,
-				 * SessionHandler.getInstance(this).getUserName(),
-				 * text.getText().toString(), title.getText().toString());
-				 */
+				
+				DataProvider.getDataProvider(getApplicationContext()).
+				createComment( id,
+				SessionHandler.getInstance(this).getUserName(),
+				text.getText().toString(), title.getText().toString(), this);
+				 
 
-				// Try direct network operation
-				CommentCreate cc = new CommentCreate(title.getText().toString(),
-						text.getText().toString(), id, SessionHandler.getInstance(this)
-								.getSession());
-				cc.addOperationListener(this);
-				new NetworkTask<Comment>().execute(cc);
+				
 
 			} else {
 				Toast.makeText(this, "Please enter text in both fields",
