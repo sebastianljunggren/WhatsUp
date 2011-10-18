@@ -38,6 +38,7 @@ public class NetworkCalls {
 			e.printStackTrace();
 		}
 		client.getConnectionManager().shutdown();
+		
 		return response;
 	}
 

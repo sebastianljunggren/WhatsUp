@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.placebo.whatsup.model.Annotation;
+import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
+import nu.placebo.whatsup.network.CommentCreate;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
@@ -19,6 +21,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -29,15 +32,23 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	 */
 	private DataProvider(Context c) {
 		DatabaseConnectionLayer.setDatabaseHelper(new DatabaseHelper(c));
-		List<GeoLocation> glList = new ArrayList<GeoLocation>();
 		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).
 													getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if(lastKnownLocation != null) {
-			glList.add(new GeoLocation(-1,
-					lastKnownLocation.getLatitude(),
-					lastKnownLocation.getLongitude(),
-					"physical_position"));
-			insertData(glList);
+		if(lastKnownLocation == null) {
+			lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).
+												getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		if(lastKnownLocation == null) {
+			addReferencePoint(new GeoPoint(57706900, 11982051), "physical_position");
+			for(ReferencePoint rp : getAllReferencePoints()) {
+				Log.i("Name is: ", rp.getName());
+			}
+			setCurrentReferencePoint(-1);
+		} else {
+			addReferencePoint(new GeoPoint((int)(lastKnownLocation.getLatitude() * 1000000 + 0.5),
+					(int)(lastKnownLocation.getLongitude() * 1000000 + 0.5)),
+					"physical_position");
+			setCurrentReferencePoint(-1);
 		}
 	}
 	
@@ -145,7 +156,8 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * Sets the ReferencePoint to use as the current reference point, both short-time
-	 * and in the database.
+	 * and in the database. Sending a negative id will set the physical location as
+	 * current location (calling with the id of the physical location also works).
 	 * 
 	 * @param id the id of the already existing reference point. If the id does not
 	 * match any existing reference point, nothing changes.
@@ -162,7 +174,6 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	 */
 	public void addReferencePoint(GeoPoint gp, String name) {
 		DatabaseConnectionLayer.addReferencePoint(gp, name);
-
 	}
 		
 	/**
@@ -201,7 +212,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 		new NetworkTask<Annotation>().execute(ac);
 	}
 	
-	public void createComment(int nid, String author, String commentText, String title) {
+	public void createComment(int nid, String author, String commentText, String title,
+							  NetworkOperationListener<Comment> listener) {
+		CommentCreate cc = new CommentCreate();
+		if(listener != null) {
+			cc.addOperationListener(listener);
+		}
+		new NetworkTask<Comment>().execute(cc);
 		DatabaseConnectionLayer.storeComment(nid, author, commentText, title);
 	}
 	
