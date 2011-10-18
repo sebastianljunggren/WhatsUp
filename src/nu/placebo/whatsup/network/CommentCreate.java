@@ -11,6 +11,8 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
 
 import nu.placebo.whatsup.constants.Constants;
@@ -40,13 +42,11 @@ public class CommentCreate extends AbstractNetworkOperation<Comment> {
 		this.hasErrors = true;
 		try {
 			List<NameValuePair> body = new ArrayList<NameValuePair>(2);
-			body.add(new BasicNameValuePair("node[title]", this.title));
-			body.add(new BasicNameValuePair("node[type]", "annotation"));
-			body.add(new BasicNameValuePair("node[body][und][0][value]",
+			body.add(new BasicNameValuePair("comment[subject]", this.title));
+			body.add(new BasicNameValuePair("comment[body][und][0][value]",
 					this.body));
-			body.add(new BasicNameValuePair("node[locations][0][country]", "se"));
 			response = NetworkCalls.performPostRequest(Constants.API_URL
-					+ "node.json", body, this.sessionInfo);
+					+ "comment.json", body, this.sessionInfo);
 			ResponseHandler<String> handler = new BasicResponseHandler();
 			comment = this.parseResult(handler.handleResponse(response));
 			hasErrors = false;
@@ -61,7 +61,7 @@ public class CommentCreate extends AbstractNetworkOperation<Comment> {
 	}
 
 	private Comment parseResult(String handleResponse) {
-		// TODO Auto-generated method stub
+		Log.d("whatsup", handleResponse);
 		return null;
 	}
 
