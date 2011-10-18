@@ -45,8 +45,8 @@ public class AnnotationActivity extends Activity implements
 		AnnotationRetrieve ar = new AnnotationRetrieve(bundle.getInt("nid"));
 		ar.addOperationListener(this);
 		new NetworkTask<Annotation>().execute(ar);
-		Button commentButton = (Button) this.findViewById(R.id.comment);
-		commentButton.setOnClickListener(this);
+	//	Button commentButton = (Button) this.findViewById(R.id.comment);
+	//	commentButton.setOnClickListener(this);
 	}
 
 	public Annotation getAnnotation() {
@@ -83,10 +83,10 @@ public class AnnotationActivity extends Activity implements
 	}
 
 	public void onClick(View v) {
-		if(v.getId() == R.id.comment) {
+	/*	if(v.getId() == R.id.comment) { 			// NOT YET READY FOR RELEASE
 			Intent intent = new Intent(this, CreateCommentActivity.class);
 			intent.putExtra("id", annotation.getId());
 			this.startActivity(intent);
-		}
+		} */
 	}
 }
