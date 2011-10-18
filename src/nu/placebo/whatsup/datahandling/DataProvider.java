@@ -32,11 +32,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 		List<GeoLocation> glList = new ArrayList<GeoLocation>();
 		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).
 													getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		glList.add(new GeoLocation(-1,
-				lastKnownLocation.getLatitude(),
-				lastKnownLocation.getLongitude(),
-				"physical_position"));
-		insertData(glList);
+		if(lastKnownLocation != null) {
+			glList.add(new GeoLocation(-1,
+					lastKnownLocation.getLatitude(),
+					lastKnownLocation.getLongitude(),
+					"physical_position"));
+			insertData(glList);
+		}
 	}
 	
 	private static volatile DataProvider instance;
