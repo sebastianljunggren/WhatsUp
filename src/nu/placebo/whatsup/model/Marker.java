@@ -25,6 +25,7 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	public Marker(Drawable defaultMarker, MapView mapView, Activity a) {
 		super(boundCenterBottom(defaultMarker), mapView);
 		activity = a;
+		populate();
 	}
 
 	@Override
@@ -42,6 +43,7 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	}
 	
 	public void callPopulate() {
+		setLastFocusedIndex(-1);
 		populate();
 	}
 	
@@ -57,6 +59,8 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	
 	public void clear() {
 		overlays.clear();
+		setLastFocusedIndex(-1);
+		populate();
 	}
 	
 }
