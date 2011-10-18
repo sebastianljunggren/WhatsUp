@@ -12,6 +12,7 @@ import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Handles connection with the database.
@@ -138,12 +139,7 @@ public class DatabaseConnectionLayer {
 	 */
 	static List<ReferencePoint> getAllReferencePoints() {
 		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null);
+				null,null,null,null,null,null);
 		
 		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
 		if(c.moveToPosition(0)) {
@@ -229,6 +225,17 @@ public class DatabaseConnectionLayer {
 		c.close();
 	}
 	
+	
+	static void updateCurrentLocation(GeoPoint gp) {
+		ContentValues values = new ContentValues();
+		values.put("latitude", gp.getLatitudeE6());
+		values.put("longitude", gp.getLongitudeE6());
+		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+				values,
+				"name = physical_location",
+				null);
+	}
+	
 	/**
 	 * Removes a reference point from the database.
 	 * 
@@ -238,5 +245,73 @@ public class DatabaseConnectionLayer {
 		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
 				"_id = " + id,
 				null);
+	}
+	
+	static void storeComment(int nid, String author, String commentText, String title) {
+		ContentValues values = new ContentValues();
+		values.put("nid", nid);
+		values.put("comment", commentText);
+		values.put("author", author);
+		values.put("title", title);
+		values.put("added_date", "N/A");
+		
+		dbHelper.getWritableDatabase().insert(DatabaseHelper.COMMENT_TABLE,
+				null,
+				values);
+	}
+	
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	static boolean storeAnnotation(Annotation a) {
+		ContentValues values = new ContentValues();
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		values.put("nid", a.getId());
+		values.put("body", a.getBody());
+		values.put("author", a.getAuthor());
+		db.insert(DatabaseHelper.ANNOTATION_TABLE,
+				null,
+				values);
+		
+		values.clear();
+		values.put("nid", a.getId());
+		values.put("latitude", a.getGeoLocation().getLocation().getLatitudeE6());
+		values.put("longitude", a.getGeoLocation().getLocation().getLongitudeE6());
+		values.put("title", a.getGeoLocation().getTitle());
+		db.insert(DatabaseHelper.GEOLOCATION_TABLE,
+				null,
+				values);
+		
+		for(Comment c : a.getComments()) {
+			values.clear();
+			values.put("nid", a.getId());
+			values.put("comment", c.getCommentText());
+			values.put("author", c.getAuthor());
+			values.put("title", c.getTitle());
+			values.put("added_date", c.getAddedDate().toString());
+			db.insert(DatabaseHelper.COMMENT_TABLE,
+					null,
+					values);
+		}
+		return true;
+	}
+	
+	static boolean storeGeoLocations(List<GeoLocation> glList) {
+		ContentValues values = new ContentValues();
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		
+		for(GeoLocation gl : glList) {
+			values.clear();
+			values.put("nid", gl.getId());
+			values.put("latitude", gl.getLocation().getLatitudeE6());
+			values.put("longitude", gl.getLocation().getLongitudeE6());
+			values.put("title", gl.getTitle());
+			db.insert(DatabaseHelper.GEOLOCATION_TABLE,
+					null,
+					values);
+		}
+		return true;
 	}
 }

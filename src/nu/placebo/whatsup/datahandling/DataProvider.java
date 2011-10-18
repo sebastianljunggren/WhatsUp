@@ -1,11 +1,9 @@
 package nu.placebo.whatsup.datahandling;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import nu.placebo.whatsup.model.Annotation;
-import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.model.SessionInfo;
@@ -16,15 +14,11 @@ import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -36,7 +30,8 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	private DataProvider(Context c) {
 		DatabaseConnectionLayer.setDatabaseHelper(new DatabaseHelper(c));
 		List<GeoLocation> glList = new ArrayList<GeoLocation>();
-		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).
+													getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		glList.add(new GeoLocation(-1,
 				lastKnownLocation.getLatitude(),
 				lastKnownLocation.getLongitude(),
@@ -55,7 +50,9 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * This method supplies the caller with a DataReturn<Annotation> object that will
-	 * contain
+	 * contain an the annotation with the given id, if it has previously been saved to
+	 * the database. If it was not found, the local data will be null, and the requester
+	 * will have to wait until new server data is available.
 	 * 
 	 * @param nid
 	 * @return
@@ -90,7 +87,8 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * Calling this method is a request to get GeoLocations within
-	 * the rectangular area 
+	 * the rectangular area given by applying the parameters 
+	 * constraints.
 	 * 
 	 * @param latitudeA the latitude of the first point, in microlatitude
 	 * @param longitudeA the longitude of the first point, in microlongitude
@@ -202,16 +200,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	}
 	
 	public void createComment(int nid, String author, String commentText, String title) {
-		ContentValues values = new ContentValues();
-		values.put("nid", nid);
-		values.put("comment", commentText);
-		values.put("author", author);
-		values.put("title", title);
-		values.put("added_date", "N/A");
-		
-		dbHelper.getWritableDatabase().insert(DatabaseHelper.COMMENT_TABLE,
-				null,
-				values);
+		DatabaseConnectionLayer.storeComment(nid, author, commentText, title);
 	}
 	
 	/**
@@ -249,55 +238,13 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	//Inserts the given Annotation into its table, and it's auxiliary
 	//information into their tables. If error occurs, false is returned.
 	private boolean insertData(Annotation a) {
-		ContentValues values = new ContentValues();
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		values.put("nid", a.getId());
-		values.put("body", a.getBody());
-		values.put("author", a.getAuthor());
-		db.insert(DatabaseHelper.ANNOTATION_TABLE,
-				null,
-				values);
-		
-		values.clear();
-		values.put("nid", a.getId());
-		values.put("latitude", a.getGeoLocation().getLocation().getLatitudeE6());
-		values.put("longitude", a.getGeoLocation().getLocation().getLongitudeE6());
-		values.put("title", a.getGeoLocation().getTitle());
-		db.insert(DatabaseHelper.GEOLOCATION_TABLE,
-				null,
-				values);
-		
-		for(Comment c : a.getComments()) {
-			values.clear();
-			values.put("nid", a.getId());
-			values.put("comment", c.getCommentText());
-			values.put("author", c.getAuthor());
-			values.put("title", c.getTitle());
-			values.put("added_date", c.getAddedDate().toString());
-			db.insert(DatabaseHelper.COMMENT_TABLE,
-					null,
-					values);
-		}
-		return true;
+		return DatabaseConnectionLayer.storeAnnotation(a);
 	}
 
 	//Inserts the given list with GeoLocations into its table.
 	//If error occurs, false is returned.
 	private boolean insertData(List<GeoLocation> glList) {
-		ContentValues values = new ContentValues();
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		
-		for(GeoLocation gl : glList) {
-			values.clear();
-			values.put("nid", gl.getId());
-			values.put("latitude", gl.getLocation().getLatitudeE6());
-			values.put("longitude", gl.getLocation().getLongitudeE6());
-			values.put("title", gl.getTitle());
-			db.insert(DatabaseHelper.GEOLOCATION_TABLE,
-					null,
-					values);
-		}
-		return true;
+		return DatabaseConnectionLayer.storeGeoLocations(glList);
 	}
 
 	private List<DataReturn<?>> activeObjects = new ArrayList<DataReturn<?>>();
@@ -310,30 +257,9 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	}
 
 	public void onLocationChanged(Location location) {
-		if(!dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				"name = physical_position",
-				null,
-				null,
-				null,
-				null).moveToPosition(0)) {
-			ContentValues values = new ContentValues();
-			values.put("name", "physical_location");
-			values.put("current", 1);
-			dbHelper.getReadableDatabase().insert(DatabaseHelper.REFERENCE_POINT_TABLE,
-					null,
-					values);
-		}
-		
-		ContentValues values = new ContentValues();
-		Log.i("Physical locations: ", location.getLatitude() + " " + location.getLongitude());
-		values.put("latitude", location.getLatitude());
-		values.put("longitude", location.getLongitude());
-		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
-				values,
-				"name = physical_position",
-				null);
-	}
+		DatabaseConnectionLayer.updateCurrentLocation(
+				new GeoPoint((int)location.getLatitude(), (int)location.getLongitude()));
+;	}
 	public void onProviderDisabled(String provider) {}
 	public void onProviderEnabled(String provider) {}
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
