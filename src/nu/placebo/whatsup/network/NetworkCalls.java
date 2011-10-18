@@ -25,9 +25,10 @@ import android.net.http.AndroidHttpClient;
  */
 
 public class NetworkCalls {
+	
+	private  static HttpClient client = AndroidHttpClient.newInstance("");
 
 	public static HttpResponse performGetRequest(String query) {
-		HttpClient client = AndroidHttpClient.newInstance("");
 		HttpGet request = new HttpGet(query);
 		HttpResponse response = null;
 		try {
@@ -37,14 +38,11 @@ public class NetworkCalls {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		client.getConnectionManager().shutdown();
-		
 		return response;
 	}
 
 	public static HttpResponse performPostRequest(String query,
 			List<NameValuePair> body, SessionInfo sessionInfo) {
-		HttpClient client = AndroidHttpClient.newInstance("");
 		HttpPost request = new HttpPost(query);
 
 		HttpResponse response = null;
@@ -64,7 +62,6 @@ public class NetworkCalls {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		client.getConnectionManager().shutdown();
 		return response;
 
 	}
