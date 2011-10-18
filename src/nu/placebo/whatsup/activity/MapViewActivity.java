@@ -96,10 +96,6 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 					ListViewActivity.class);
 			this.startActivity(intent);
 			this.finish();
-	/*	} else if (v.getId() == R.id.log_in) {
-			Intent intent = new Intent(MapViewActivity.this,
-					LogInActivity.class);
-			this.startActivity(intent); */
 		} else if (v.getId() == R.id.map_refresh) {
 			refresh();
 		} else if (v.getId() == R.id.add_annotation) {
