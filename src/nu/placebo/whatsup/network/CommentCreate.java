@@ -22,17 +22,16 @@ import nu.placebo.whatsup.model.SessionInfo;
 
 public class CommentCreate extends AbstractNetworkOperation<Comment> {
 	
-	private String body, title, author;
+	private String body, title;
 	private boolean hasErrors;
 	private SessionInfo sessionInfo;
 	private int id;
 	
-	public CommentCreate(String title, String body, String author,
+	public CommentCreate(String title, String body,
 			int id, SessionInfo sessionInfo){
 		this.id = id;
 		this.title = title;
 		this.body = body;
-		this.author = author;
 		this.sessionInfo = sessionInfo;
 	}
 
@@ -42,9 +41,10 @@ public class CommentCreate extends AbstractNetworkOperation<Comment> {
 		this.hasErrors = true;
 		try {
 			List<NameValuePair> body = new ArrayList<NameValuePair>(2);
-			body.add(new BasicNameValuePair("comment[subject]", this.title));
-			body.add(new BasicNameValuePair("comment[body][und][0][value]",
+			body.add(new BasicNameValuePair("comment_subject", this.title));
+			body.add(new BasicNameValuePair("comment_body[und][0][value]",
 					this.body));
+			body.add(new BasicNameValuePair("nid", Integer.toString(this.id)));
 			response = NetworkCalls.performPostRequest(Constants.API_URL
 					+ "comment.json", body, this.sessionInfo);
 			ResponseHandler<String> handler = new BasicResponseHandler();
