@@ -7,6 +7,7 @@ import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
+import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
@@ -27,10 +28,13 @@ import com.google.android.maps.GeoPoint;
 
 public class DataProvider implements NetworkOperationListener<Annotation>, LocationListener {
 	
+	private Context c;
 	/**
 	 * Class is Singelton, disallow outside creation
 	 */
 	private DataProvider(Context c) {
+		this.c = c;
+		
 		DatabaseConnectionLayer.setDatabaseHelper(new DatabaseHelper(c));
 		Location lastKnownLocation = ((LocationManager) c.getSystemService(Context.LOCATION_SERVICE)).
 													getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -214,7 +218,10 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	public void createComment(int nid, String author, String commentText, String title,
 							  NetworkOperationListener<Comment> listener) {
-		CommentCreate cc = new CommentCreate();
+
+		SessionHandler sh = SessionHandler.getInstance(this.c);
+		CommentCreate cc = new CommentCreate(title, commentText, nid,sh.getUserName(), sh.getSession());
+
 		if(listener != null) {
 			cc.addOperationListener(listener);
 		}
