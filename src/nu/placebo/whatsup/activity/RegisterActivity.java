@@ -50,12 +50,14 @@ public class RegisterActivity extends Activity implements OnClickListener, Netwo
 	}
 
 	public void operationExcecuted(OperationResult<Void> result) {
-		if(!result.hasErrors()){
+		if(result.getStatusCode() == 200){
 			Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
 			Log.d("whatsup", "Registration result: "+result.getStatusCode());
 			SessionHandler.getInstance(this).saveCredentials(username, password);
 			SessionHandler.getInstance(this).login();
 			this.finish();
+		} else {
+			Toast.makeText(this, "Something went wrong, check what you wrote", Toast.LENGTH_LONG).show();
 		}
 	}
 	

@@ -32,7 +32,7 @@ public class RegisterOperation extends AbstractNetworkOperation<Void> {
 		body.add(new BasicNameValuePair("account[pass]", this.passWord));
 		response = NetworkCalls.performPostRequest(Constants.API_URL
 				+ "user.json", body, null);
-		hasErrors = false;
+		hasErrors = response.getStatusLine().getStatusCode() != 200;
 
 		return new OperationResult<Void>(hasErrors, response.getStatusLine()
 				.getStatusCode(), response.getStatusLine().getReasonPhrase(),
