@@ -13,6 +13,7 @@ import nu.placebo.whatsup.model.ReferencePoint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Handles connection with the database.
@@ -157,36 +158,57 @@ public class DatabaseConnectionLayer {
 	
 	/**
 	 * Sets the reference point with the specified id as the current reference point.
-	 * The last current reference point is also cleared.
+	 * The last current reference point is also cleared. Sending a negative id will set the physical location as
+	 * current location (calling with the id of the physical location also works).
 	 * 
 	 * @param id the id of the reference point that is desired as the current reference point.
 	 * @return the new current reference point if it existed in the database, and the old one
 	 * if not.
 	 */
 	static ReferencePoint setCurrentReferencePoint(int id) {
-		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,
-				"_id = " + id,
-				null,null,null,null);
-		
-		if(c.moveToPosition(0)) {
+		Cursor c;
+		if(id < 0) {
+			Log.i("Kommer hit: ", "1");
+			c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					"name = 'physical_position'",
+
+					null,null,null,null);
+		} else {
+			c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+					null,
+					"_id = " + id,
+					null,null,null,null);
+		}
+		if(c.moveToFirst()) {
+			Log.i("Kommer hit: ", "2");
 			resetCurrentRefPoint();
 			ContentValues values = new ContentValues();
 			values.put("current", 1);
-			dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
-					values,
-					"_id = " + id,
-					null);
+			if(id < 0) {
+				dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+						values,
+						"name = 'physical_position'",
+						null);
+			} else {
+				dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
+						values,
+						"_id = " + id,
+						null);
+			}
 		}
 		c.close();
 		c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
 				null,
 				"current = 1",
 				null,null,null,null);
-		return new ReferencePoint(id, new GeoPoint(
+		c.moveToFirst();
+		ReferencePoint result = new ReferencePoint(id, new GeoPoint(
 				c.getInt(c.getColumnIndex("latitude")),
 				c.getInt(c.getColumnIndex("longitude"))), 
 			c.getString(c.getColumnIndex("name")));
+		c.close();
+		return result;
 	}
 
 	private static void resetCurrentRefPoint() {
@@ -205,14 +227,15 @@ public class DatabaseConnectionLayer {
 	 * @param name the name of the reference point.
 	 */
 	static void addReferencePoint(GeoPoint gp, String name) {
-		String[] args = {name, Integer.toString(gp.getLatitudeE6()),
+		String[] args = {"'"+name+"'", Integer.toString(gp.getLatitudeE6()),
 										 Integer.toString(gp.getLongitudeE6())};
+		String whereName = "name = '"+name+"'";
 		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
 				null,
-				"name = ? AND latitude = ? AND longitude = ?",
-				args,
-				null,null,null);
-		if(!c.moveToPosition(0)) {
+				whereName,
+				null,null,null,null);
+		if(!c.moveToFirst()) {
+			Log.i("Kommer hit: ", "0");
 			ContentValues values = new ContentValues();
 			values.put("current", 0);
 			values.put("name", name);
@@ -232,7 +255,7 @@ public class DatabaseConnectionLayer {
 		values.put("longitude", gp.getLongitudeE6());
 		dbHelper.getWritableDatabase().update(DatabaseHelper.REFERENCE_POINT_TABLE,
 				values,
-				"name = physical_location",
+				"name = 'physical_location'",
 				null);
 	}
 	

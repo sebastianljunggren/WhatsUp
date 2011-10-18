@@ -12,6 +12,7 @@ import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,10 +35,10 @@ public class CreateAnnotationActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		this.setResult(RESULT_CANCELED);
 
+		
 		Bundle bundle = this.getIntent().getExtras();
 		if (GeoPointUtil.bundleHasGeoPoint(bundle)) {
 			this.gp = GeoPointUtil.popGeoPoint(bundle);
-
 		} else {
 			this.finish();
 		}
