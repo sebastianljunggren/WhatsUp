@@ -138,8 +138,13 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				v.setTag(R.id.ref_id, gl.getId());
 				ImageButton delBtn = (ImageButton) v
 						.findViewById(R.id.ref_item_delete);
-				delBtn.setTag(R.id.ref_id, gl.getId());
-				delBtn.setOnClickListener(this);
+				if(gl.getId() == 1){
+					delBtn.setVisibility(View.INVISIBLE);
+				} else {
+					delBtn.setVisibility(View.VISIBLE);
+					delBtn.setTag(R.id.ref_id, gl.getId());
+					delBtn.setOnClickListener(this);
+				}
 				v.setOnClickListener(this);
 
 			}
