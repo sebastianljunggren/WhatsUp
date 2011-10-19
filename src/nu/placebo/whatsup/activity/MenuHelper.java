@@ -1,7 +1,7 @@
-package nu.placebo.whatsup.ctrl;
+package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.activity.LoginRegTabActivity;
+import nu.placebo.whatsup.ctrl.SessionHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
@@ -15,7 +15,7 @@ import android.widget.Toast;
  *
  */
 
-public class MenuHandler {
+public class MenuHelper {
 	public static boolean onOptionsItemSelected(MenuItem item, Context context) {
 		switch (item.getItemId()) {
 		case R.id.menu_log_in_out:

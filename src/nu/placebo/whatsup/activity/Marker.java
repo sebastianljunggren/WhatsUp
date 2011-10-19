@@ -1,9 +1,9 @@
-package nu.placebo.whatsup.model;
+package nu.placebo.whatsup.activity;
 
 import java.util.ArrayList;
 
-import nu.placebo.whatsup.activity.AnnotationActivity;
 import nu.placebo.whatsup.balloon.BalloonItemizedOverlay;
+import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

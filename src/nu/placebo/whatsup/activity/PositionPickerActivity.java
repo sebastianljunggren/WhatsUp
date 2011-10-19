@@ -6,7 +6,6 @@ import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.ctrl.SessionHandler;
 import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.util.GeoPointUtil;
@@ -139,17 +138,17 @@ public class PositionPickerActivity extends MapActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuHandler.inflate(menu, this.getMenuInflater());
+		MenuHelper.inflate(menu, this.getMenuInflater());
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return MenuHandler.onOptionsItemSelected(item, this);
+		return MenuHelper.onOptionsItemSelected(item, this);
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		return MenuHandler.onPrepareOptionsMenu(menu, this);
+		return MenuHelper.onPrepareOptionsMenu(menu, this);
 	}
 }

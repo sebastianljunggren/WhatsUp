@@ -1,7 +1,6 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
-import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
@@ -68,18 +67,18 @@ public class AnnotationActivity extends Activity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuHandler.inflate(menu, this.getMenuInflater());
+		MenuHelper.inflate(menu, this.getMenuInflater());
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return MenuHandler.onOptionsItemSelected(item, this);
+		return MenuHelper.onOptionsItemSelected(item, this);
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		return MenuHandler.onPrepareOptionsMenu(menu, this);
+		return MenuHelper.onPrepareOptionsMenu(menu, this);
 	}
 
 	public void onClick(View v) {

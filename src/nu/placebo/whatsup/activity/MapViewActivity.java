@@ -4,11 +4,9 @@ import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
-import nu.placebo.whatsup.model.Marker;
 import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkCalls;
@@ -175,17 +173,17 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuHandler.inflate(menu, this.getMenuInflater());
+		MenuHelper.inflate(menu, this.getMenuInflater());
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return MenuHandler.onOptionsItemSelected(item, this);
+		return MenuHelper.onOptionsItemSelected(item, this);
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		return MenuHandler.onPrepareOptionsMenu(menu, this);
+		return MenuHelper.onPrepareOptionsMenu(menu, this);
 	}
 }
