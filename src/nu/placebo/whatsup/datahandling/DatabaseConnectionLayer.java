@@ -138,7 +138,8 @@ public class DatabaseConnectionLayer {
 	 */
 	static List<ReferencePoint> getAllReferencePoints() {
 		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
-				null,null,null,null,null,null);
+				null,null,null,null,null,
+				"current DESC");
 		
 		List<ReferencePoint> glList = new ArrayList<ReferencePoint>();
 		if(c.moveToPosition(0)) {
@@ -166,11 +167,9 @@ public class DatabaseConnectionLayer {
 	static ReferencePoint setCurrentReferencePoint(int id) {
 		Cursor c;
 		if(id < 0) {
-			Log.i("Kommer hit: ", "1");
 			c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
 					null,
 					"name = 'physical_position'",
-
 					null,null,null,null);
 		} else {
 			c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
@@ -179,7 +178,6 @@ public class DatabaseConnectionLayer {
 					null,null,null,null);
 		}
 		if(c.moveToFirst()) {
-			Log.i("Kommer hit: ", "2");
 			resetCurrentRefPoint();
 			ContentValues values = new ContentValues();
 			values.put("current", 1);
@@ -201,9 +199,10 @@ public class DatabaseConnectionLayer {
 				"current = 1",
 				null,null,null,null);
 		c.moveToFirst();
-		ReferencePoint result = new ReferencePoint(id, new GeoPoint(
-				c.getInt(c.getColumnIndex("latitude")),
-				c.getInt(c.getColumnIndex("longitude"))), 
+		ReferencePoint result = new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
+						new GeoPoint(
+								c.getInt(c.getColumnIndex("latitude")),
+								c.getInt(c.getColumnIndex("longitude"))), 
 			c.getString(c.getColumnIndex("name")));
 		c.close();
 		return result;
@@ -231,7 +230,6 @@ public class DatabaseConnectionLayer {
 				whereName,
 				null,null,null,null);
 		if(!c.moveToFirst()) {
-			Log.i("Kommer hit: ", "0");
 			ContentValues values = new ContentValues();
 			values.put("current", 0);
 			values.put("name", name);
@@ -267,6 +265,14 @@ public class DatabaseConnectionLayer {
 		dbHelper.getWritableDatabase().delete(DatabaseHelper.REFERENCE_POINT_TABLE,
 				"_id = " + id,
 				null);
+		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
+				null,
+				"current = 1",
+				null,null,null,null);
+		if(!c.moveToFirst()) {
+			DataProvider.getDataProvider(null).setCurrentReferencePoint(-1);
+			c.close();
+		}
 	}
 	
 	/**

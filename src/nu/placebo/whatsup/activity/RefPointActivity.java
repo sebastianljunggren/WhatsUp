@@ -115,7 +115,6 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 			if (currentRef != null) {
 				currentRefId = currentRef.getId();
 			} else {
-				Log.d("whatsup", "Current RefPoint == null");
 				currentRefId = -2;
 			}
 		}
@@ -145,7 +144,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				v.setTag(R.id.ref_id, gl.getId());
 				ImageButton delBtn = (ImageButton) v
 						.findViewById(R.id.ref_item_delete);
-				if(gl.getId() == 1){
+				if(gl.getName().equals("physical_position")) {
 					delBtn.setVisibility(View.INVISIBLE);
 				} else {
 					delBtn.setVisibility(View.VISIBLE);
@@ -160,31 +159,12 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 		public void onClick(View v) {
 			if (v.getId() == R.id.ref_item_delete) {
-				Log.i("Id in db: ", Integer.toString(DataProvider.getDataProvider(ctx).getCurrentReferencePoint().
-						getId()));
-				Log.i("Id in refpointactiviy: ", v.getTag(R.id.ref_id).toString());
-				if (DataProvider.getDataProvider(ctx).getCurrentReferencePoint().
-						getId() != (Integer) v.getTag(R.id.ref_id)) {
-					Log.d("whatsup",
-							"Delete reference point: "
-									+ ((Integer) v.getTag(R.id.ref_id)));
-					DataProvider.getDataProvider(ctx).removeReferencePoint(
-							(Integer) v.getTag(R.id.ref_id));
-					((RefPointActivity) ctx).refresh();
-				}
+				DataProvider.getDataProvider(ctx).removeReferencePoint(
+						(Integer) v.getTag(R.id.ref_id));
+				((RefPointActivity) ctx).refresh();
 			} else if (v.getId() == R.id.ref_id) {
-				Log.d("whatsup",
-						"Select reference point: "
-								+ ((Integer) v.getTag(R.id.ref_id)));
-
 				DataProvider.getDataProvider(ctx).setCurrentReferencePoint(
 						(Integer) v.getTag(R.id.ref_id));
-				ReferencePoint rp = DataProvider.getDataProvider(ctx)
-						.getCurrentReferencePoint();
-				Log.d("whatsup", "refPoint location: "
-						+ rp.getGeoPoint().getLatitudeE6() + ", "
-						+ rp.getGeoPoint().getLongitudeE6());
-
 				ctx.finish();
 			}
 
