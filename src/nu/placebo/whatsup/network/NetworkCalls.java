@@ -8,10 +8,10 @@ import nu.placebo.whatsup.model.SessionInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
@@ -25,14 +25,12 @@ import android.net.http.AndroidHttpClient;
  */
 
 public class NetworkCalls {
-	
-	private  static HttpClient client = AndroidHttpClient.newInstance("");
 
 	public static HttpResponse performGetRequest(String query) {
 		HttpGet request = new HttpGet(query);
 		HttpResponse response = null;
 		try {
-			response = client.execute(request);
+			response = execute(request);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -57,7 +55,7 @@ public class NetworkCalls {
 				request.addHeader(new BasicHeader("Cookie", sessionInfo
 						.getSessionName() + "=" + sessionInfo.getSessionId()));
 			}
-			response = client.execute(request);
+			response = execute(request);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -65,5 +63,9 @@ public class NetworkCalls {
 		}
 		return response;
 
+	}
+
+	private static HttpResponse execute(HttpUriRequest request) throws ClientProtocolException, IOException {
+		return AndroidHttpClient.newInstance("").execute(request);
 	}
 }
