@@ -49,11 +49,13 @@ public class Marker extends BalloonItemizedOverlay<OverlayItem> {
 	
 	@Override
 	protected boolean onBalloonTap(int index, OverlayItem item) {
-		Intent startAnnotation = new Intent(activity, AnnotationActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putInt("nid", ((ExtendedOverlayItem)item).getId());
-		startAnnotation.putExtras(bundle);
-		activity.startActivity(startAnnotation);	
+		if (item instanceof ExtendedOverlayItem) {
+			Intent startAnnotation = new Intent(activity, AnnotationActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("nid", ((ExtendedOverlayItem)item).getId());
+			startAnnotation.putExtras(bundle);
+			activity.startActivity(startAnnotation);
+		}
 		return true;
 	}
 	

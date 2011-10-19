@@ -1,7 +1,6 @@
 package nu.placebo.whatsup.activity;
 
 import java.util.List;
-
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.datahandling.DataProvider;
