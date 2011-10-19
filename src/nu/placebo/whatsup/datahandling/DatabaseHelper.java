@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ "comment TEXT,"
 				+ "author TEXT,"
 				+ "title TEXT,"
-				+ "added_date TEXT"
+				+ "added_date INTEGER"
 				+ ");");
 		db.execSQL("CREATE TABLE " + REFERENCE_POINT_TABLE + " ("
 				+ "_id INTEGER PRIMARY KEY AUTOINCREMENT,"

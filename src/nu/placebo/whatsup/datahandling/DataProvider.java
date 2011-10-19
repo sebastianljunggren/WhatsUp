@@ -58,6 +58,16 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	private static volatile DataProvider instance;
 
+	/**
+	 * Gets the single instance of this class. The context parameter is only necessary the
+	 * first call. Once instantiated, it can be null. For example, if a class does not have
+	 * easy access to a contex and is sure that the DataProvider has been used earlier in
+	 * the application lifetime, may call this with null rather than going to lengths to get
+	 * a context.
+	 * 
+	 * @param c the context with which to create the database.
+	 * @return
+	 */
 	public static DataProvider getDataProvider(Context c) {
 		if(instance == null) {
 			instance = new DataProvider(c);
@@ -67,7 +77,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	/**
 	 * This method supplies the caller with a DataReturn<Annotation> object that will
-	 * contain an the annotation with the given id, if it has previously been saved to
+	 * contain the annotation with the given id, if it has previously been saved to
 	 * the database. If it was not found, the local data will be null, and the requester
 	 * will have to wait until new server data is available.
 	 * 
@@ -140,7 +150,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	/**
 	 * Gets the ReferencePoint that is currently used as reference point.
 	 * In the case that the user has not chosen a reference point, the physical
-	 * position of the phone is returned.
+	 * position of the phone is returned, as it is the standard refernce point.
 	 * 
 	 * @return the current reference point, as a ReferencePoint object.
 	 */
@@ -218,7 +228,6 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	
 	public void createComment(int nid, String author, String commentText, String title,
 							  NetworkOperationListener<Comment> listener) {
-
 		SessionHandler sh = SessionHandler.getInstance(this.c);
 		CommentCreate cc = new CommentCreate(title, commentText, nid,sh.getUserName(), sh.getSession());
 
