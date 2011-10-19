@@ -8,6 +8,7 @@ import nu.placebo.whatsup.model.SessionInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -26,6 +27,9 @@ import android.net.http.AndroidHttpClient;
 
 public class NetworkCalls {
 
+	private static HttpClient client = getHttpClient();
+	private static boolean testing;
+
 	public static HttpResponse performGetRequest(String query) {
 		HttpGet request = new HttpGet(query);
 		HttpResponse response = null;
@@ -36,8 +40,11 @@ public class NetworkCalls {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return response;
+	}
+
+	private static HttpClient getHttpClient() {
+		return AndroidHttpClient.newInstance("");
 	}
 
 	public static HttpResponse performPostRequest(String query,
@@ -62,10 +69,17 @@ public class NetworkCalls {
 			e.printStackTrace();
 		}
 		return response;
-
 	}
 
-	private static HttpResponse execute(HttpUriRequest request) throws ClientProtocolException, IOException {
-		return AndroidHttpClient.newInstance("").execute(request);
+	private static HttpResponse execute(HttpUriRequest request)
+			throws ClientProtocolException, IOException {
+		if(!testing) {
+			return client.execute(request);
+		} else {
+			return getHttpClient().execute(request);
+		}
+	}
+	public static void setTesting(boolean b) {
+		testing = b;
 	}
 }

@@ -63,6 +63,7 @@ public class SessionHandler extends Observable implements NetworkOperationListen
 		this.password = password;
 		this.write();
 		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void saveSession(SessionInfo sessionInfo) {
@@ -70,6 +71,7 @@ public class SessionHandler extends Observable implements NetworkOperationListen
 		this.sessionId = sessionInfo.getSessionId();
 		this.write();
 		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public SessionInfo getSession() {
@@ -138,5 +140,11 @@ public class SessionHandler extends Observable implements NetworkOperationListen
 	
 	public boolean isLoggedIn() {
 		return this.loggedIn;
+	}
+
+	public void reset() {
+		this.saveCredentials(null, null);
+		this.saveSession(new SessionInfo(null, null));
+		this.deleteObservers();
 	}
 }

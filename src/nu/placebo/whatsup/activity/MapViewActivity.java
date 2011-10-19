@@ -10,6 +10,7 @@ import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
 import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
+import nu.placebo.whatsup.network.NetworkCalls;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;
 import nu.placebo.whatsup.network.OperationResult;
@@ -47,6 +48,8 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		NetworkCalls.setTesting(false);
 		
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapview);

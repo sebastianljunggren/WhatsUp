@@ -9,6 +9,7 @@ import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.Login;
+import nu.placebo.whatsup.network.NetworkCalls;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.network.SessionTest;
@@ -28,8 +29,8 @@ public class NetworkTest extends AndroidTestCase {
 	}
 
 	public void setUp() throws Exception {
-
 		super.setUp();
+		NetworkCalls.setTesting(true);
 	}
 
 	public void testAnnotationRetrieveFail() {
@@ -197,6 +198,7 @@ public class NetworkTest extends AndroidTestCase {
 		OperationResult<Annotation> result = ac.execute();
 		ac.notifyListeners(result);
 	}
+	
 	public void testAnnotationCreateFail() {
 		Login l = new Login("test", "BadPass!");
 		SessionInfo sessionInfo = l.execute().getResult();

@@ -16,12 +16,13 @@ import android.test.AndroidTestCase;
 public class SessionHandlerTest extends AndroidTestCase {
 	
 	public void setUp() throws Exception {
-
 		super.setUp();
 	}
 	
+	
 	public void testSaveSession() {
 			SessionHandler handler = SessionHandler.getInstance(this.getContext());
+			handler.reset();
 			SessionInfo si = new SessionInfo("Name", "Id");
 			handler.saveSession(si);
 			assertTrue("Session saved not equal to session returned", si.equals(handler.getSession()));
@@ -32,7 +33,7 @@ public class SessionHandlerTest extends AndroidTestCase {
 	
 	public void testLogInOut() throws InterruptedException {
 		final SessionHandler handler = SessionHandler.getInstance(this.getContext());
-		handler.saveSession(new SessionInfo(null, null));
+		handler.reset();
 		final CountDownLatch signal = new CountDownLatch(1);
 		handler.saveCredentials("Test", "WhatsUp!");
 		
