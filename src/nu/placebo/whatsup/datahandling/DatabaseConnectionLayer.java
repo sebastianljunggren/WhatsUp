@@ -225,8 +225,6 @@ public class DatabaseConnectionLayer {
 	 * @param name the name of the reference point.
 	 */
 	static void addReferencePoint(GeoPoint gp, String name) {
-		String[] args = {"'"+name+"'", Integer.toString(gp.getLatitudeE6()),
-										 Integer.toString(gp.getLongitudeE6())};
 		String whereName = "name = '"+name+"'";
 		Cursor c = dbHelper.getReadableDatabase().query(DatabaseHelper.REFERENCE_POINT_TABLE,
 				null,
@@ -246,7 +244,10 @@ public class DatabaseConnectionLayer {
 		c.close();
 	}
 	
-	
+	/**
+	 * 
+	 * @param gp
+	 */
 	static void updateCurrentLocation(GeoPoint gp) {
 		ContentValues values = new ContentValues();
 		values.put("latitude", gp.getLatitudeE6());
@@ -268,6 +269,13 @@ public class DatabaseConnectionLayer {
 				null);
 	}
 	
+	/**
+	 * 
+	 * @param nid
+	 * @param author
+	 * @param commentText
+	 * @param title
+	 */
 	static void storeComment(int nid, String author, String commentText, String title) {
 		ContentValues values = new ContentValues();
 		values.put("nid", nid);
@@ -319,6 +327,11 @@ public class DatabaseConnectionLayer {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param glList
+	 * @return
+	 */
 	static boolean storeGeoLocations(List<GeoLocation> glList) {
 		ContentValues values = new ContentValues();
 		SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -1,5 +1,9 @@
 package nu.placebo.whatsup.activity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
 import nu.placebo.whatsup.ctrl.MenuHandler;
@@ -16,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -32,6 +37,7 @@ public class PositionPickerActivity extends MapActivity implements
 
 	private MapView mapView;
 	private int requestCode;
+	private List<String> existingNames = new ArrayList<String>();
 
 	@Override
 	public void onCreate(Bundle savedInstance) {
@@ -39,6 +45,7 @@ public class PositionPickerActivity extends MapActivity implements
 		setContentView(R.layout.position_picker_view);
 
 		this.requestCode = this.getIntent().getExtras().getInt("requestCode");
+		existingNames = Arrays.asList(getIntent().getExtras().getStringArray("existing_names"));
 		TextView typeText = (TextView) this.findViewById(R.id.activity_name);
 		EditText refName = (EditText) this.findViewById(R.id.position_name);
 
@@ -87,7 +94,10 @@ public class PositionPickerActivity extends MapActivity implements
 			if (this.requestCode == Constants.REFERENCE_POINT) {
 				String refName = ((EditText) this
 						.findViewById(R.id.position_name)).getText().toString();
-				if (!refName.equals("")) {
+				if (existingNames.contains(refName)) {
+					Toast.makeText(getApplicationContext(), "Name already exists",
+															 Toast.LENGTH_SHORT);
+				} else if(!refName.equals("")) {
 					DataProvider.getDataProvider(this).addReferencePoint(p,
 							refName);
 					this.finish();

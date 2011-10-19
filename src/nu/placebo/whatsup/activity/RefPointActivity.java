@@ -83,6 +83,13 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 		if (v.getId() == R.id.add_reference) {
 			Intent intent = new Intent(this, PositionPickerActivity.class);
 			intent.putExtra("requestCode", Constants.REFERENCE_POINT);
+			String[] existingNames = new String[refs.size()];
+			
+			for(int i = 0; i < refs.size(); i++) {
+				existingNames[i] = refs.get(i).getName();
+			}
+			
+			intent.putExtra("existing_names", existingNames);
 			this.startActivity(intent);
 		}
 	}
@@ -153,13 +160,18 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 		public void onClick(View v) {
 			if (v.getId() == R.id.ref_item_delete) {
-				Log.d("whatsup",
-						"Delete reference point: "
-								+ ((Integer) v.getTag(R.id.ref_id)));
-				DataProvider.getDataProvider(ctx).removeReferencePoint(
-						(Integer) v.getTag(R.id.ref_id));
-				((RefPointActivity) ctx).refresh();
-
+				Log.i("Id in db: ", Integer.toString(DataProvider.getDataProvider(ctx).getCurrentReferencePoint().
+						getId()));
+				Log.i("Id in refpointactiviy: ", v.getTag(R.id.ref_id).toString());
+				if (DataProvider.getDataProvider(ctx).getCurrentReferencePoint().
+						getId() != (Integer) v.getTag(R.id.ref_id)) {
+					Log.d("whatsup",
+							"Delete reference point: "
+									+ ((Integer) v.getTag(R.id.ref_id)));
+					DataProvider.getDataProvider(ctx).removeReferencePoint(
+							(Integer) v.getTag(R.id.ref_id));
+					((RefPointActivity) ctx).refresh();
+				}
 			} else if (v.getId() == R.id.ref_id) {
 				Log.d("whatsup",
 						"Select reference point: "
