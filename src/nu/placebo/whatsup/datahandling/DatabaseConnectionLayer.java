@@ -146,7 +146,8 @@ public class DatabaseConnectionLayer {
 				glList.add(new ReferencePoint(c.getInt(c.getColumnIndex("_id")),
 						new GeoPoint(c.getInt(c.getColumnIndex("latitude")),
 						c.getInt(c.getColumnIndex("longitude"))), 
-						c.getString(c.getColumnIndex("name"))));
+						c.getString(c.getColumnIndex("name")).equals("physical_position") ? 
+										"My location" : c.getString(c.getColumnIndex("name"))));
 			} while(c.moveToNext());
 		}
 		c.close();

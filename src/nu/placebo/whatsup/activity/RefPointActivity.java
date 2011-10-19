@@ -120,6 +120,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				v = vi.inflate(R.layout.ref_item, null);
 			}
+
 			ReferencePoint gl = markers.get(position);
 			if (gl != null) {
 				TextView t_title = (TextView) v
