@@ -4,7 +4,8 @@
 	android:layout_height="match_parent">
 
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+		android:orientation="horizontal" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 		<ImageButton android:id="@+id/map_goto_list" android:src="@drawable/list"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_centerVertical="true"></ImageButton>
@@ -15,16 +16,24 @@
 		<ImageButton android:id="@+id/add_annotation" android:src="@drawable/add"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_alignParentRight="true" android:layout_centerVertical="true"></ImageButton>
-		<ImageButton android:layout_width="wrap_content" android:src="@drawable/crosshair_icon" android:layout_height="wrap_content" android:id="@+id/goto_refpoint" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/map_refresh"></ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/crosshair_icon" android:layout_height="wrap_content"
+			android:id="@+id/goto_refpoint" android:layout_alignParentTop="true"
+			android:layout_toRightOf="@+id/map_refresh"></ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/home" android:layout_height="wrap_content"
+			android:id="@+id/goto_home" android:layout_alignParentTop="true"
+			android:layout_toRightOf="@+id/goto_refpoint">
+		</ImageButton>
 	</RelativeLayout>
 
 	<FrameLayout android:layout_height="match_parent"
 		android:layout_width="match_parent" android:id="@+id/mapview_mapFrameLayout">
 
 		<com.google.android.maps.MapView
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:clickable="true"
-			android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA" android:id="@+id/mapview"/>
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:clickable="true" android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA"
+			android:id="@+id/mapview" />
 
 	</FrameLayout>
 

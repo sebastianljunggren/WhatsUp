@@ -4,19 +4,41 @@
 	android:layout_height="match_parent">
 
 	<FrameLayout android:layout_height="match_parent"
-		android:id="@+id/mapview_mapFrameLayout" android:layout_width="426dp" android:layout_weight="1">
+		android:id="@+id/mapview_mapFrameLayout" android:layout_width="426dp"
+		android:layout_weight="1">
 
 		<com.google.android.maps.MapView
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:clickable="true" android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA" android:id="@+id/mapview"/>
+			android:clickable="true" android:apiKey="01FhLVuIitwD0L9WnwXjUpwSzRZ99x4pQzZkcKA"
+			android:id="@+id/mapview" />
 
 	</FrameLayout>
-	<RelativeLayout android:layout_height="match_parent" android:layout_weight="1" android:layout_width="0dp">
-		<ImageButton android:layout_width="wrap_content" android:src="@drawable/list" android:layout_height="wrap_content" android:id="@+id/map_goto_list" android:layout_alignParentTop="true" android:layout_alignParentRight="true"></ImageButton>
-		<ImageButton android:layout_width="wrap_content" android:src="@drawable/refresh" android:layout_height="wrap_content" android:id="@+id/map_refresh" android:layout_below="@+id/map_goto_list" android:layout_alignParentRight="true"></ImageButton>
-		<ImageButton android:layout_width="wrap_content" android:src="@drawable/crosshair_icon" android:layout_height="wrap_content" android:id="@+id/goto_refpoint" android:layout_below="@+id/map_refresh" android:layout_alignParentRight="true"></ImageButton>
-		<ImageButton android:layout_width="wrap_content" android:src="@drawable/add" android:layout_height="wrap_content" android:id="@+id/add_annotation" android:layout_alignParentBottom="true" android:layout_alignParentRight="true"></ImageButton>
+	<RelativeLayout android:layout_height="match_parent"
+		android:layout_weight="1" android:layout_width="0dp">
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/list" android:layout_height="wrap_content"
+			android:id="@+id/map_goto_list" android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true">
+		</ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/refresh" android:layout_height="wrap_content"
+			android:id="@+id/map_refresh" android:layout_below="@+id/map_goto_list"
+			android:layout_alignParentRight="true">
+		</ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/crosshair_icon" android:layout_height="wrap_content"
+			android:id="@+id/goto_refpoint" android:layout_below="@+id/map_refresh"
+			android:layout_alignParentRight="true">
+		</ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/home" android:layout_height="wrap_content"
+			android:id="@+id/goto_home" android:layout_below="@+id/goto_refpoint"
+			android:layout_alignParentRight="true">
+		</ImageButton>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/add" android:layout_height="wrap_content"
+			android:id="@+id/add_annotation" android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"></ImageButton>
 	</RelativeLayout>
-
 </LinearLayout>
 

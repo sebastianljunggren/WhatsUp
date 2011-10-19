@@ -9,6 +9,7 @@ import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.ExtendedOverlayItem;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.Marker;
+import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkCalls;
 import nu.placebo.whatsup.network.NetworkOperationListener;
@@ -17,7 +18,6 @@ import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +30,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 /**
  * Activity that holds the map and control map actions. It's the "main"
@@ -42,25 +43,42 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 
 	private MapView mapView;
 	private Marker marker;
+	private Marker refPointMarker;
 	private List<Overlay> overlays;
 	private LocationManager locationManager;
+	private DataProvider dataProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		NetworkCalls.setTesting(false);
-		
 		setContentView(R.layout.map);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		overlays = mapView.getOverlays();
+		dataProvider = DataProvider.getDataProvider(this);
 		marker = new Marker(this.getResources().getDrawable(R.drawable.pin),
 				mapView, this);
+		refPointMarker = new Marker(this.getResources().getDrawable(
+				R.drawable.home), mapView, this);
+		addReferenceOverlay();
 		setupToolbar();
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 	}
-	
+
+	/**
+	 * Add the current reference point to the map.
+	 */
+	private void addReferenceOverlay() {
+		ReferencePoint p = dataProvider.getCurrentReferencePoint();
+		OverlayItem item = new OverlayItem(p.getGeoPoint(), p.getName(), null);
+		refPointMarker.addOverlay(item);
+		refPointMarker.callPopulate();
+		overlays.add(refPointMarker);
+		mapView.invalidate();
+	}
+
 	private void setupToolbar() {
 		ImageButton gotoListBtn = (ImageButton) this
 				.findViewById(R.id.map_goto_list);
@@ -70,8 +88,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		refreshBtn.setOnClickListener(this);
 		ImageButton addAnnotationButton = (ImageButton) findViewById(R.id.add_annotation);
 		addAnnotationButton.setOnClickListener(this);
-		ImageButton refPointBtn = (ImageButton) this.findViewById(R.id.goto_refpoint);
+		ImageButton refPointBtn = (ImageButton) this
+				.findViewById(R.id.goto_refpoint);
 		refPointBtn.setOnClickListener(this);
+		ImageButton goToHomeBtn = (ImageButton) findViewById(R.id.goto_home);
+		goToHomeBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -106,10 +127,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 					PositionPickerActivity.class);
 			intent.putExtra("requestCode", Constants.ANNOTATION);
 			this.startActivity(intent);
-		}
-		if(v.getId() == R.id.goto_refpoint){
+		} else if (v.getId() == R.id.goto_refpoint) {
 			Intent intent = new Intent(this, RefPointActivity.class);
 			this.startActivity(intent);
+		} else if (v.getId() == R.id.goto_home) {
+			mapView.getController().animateTo(dataProvider.getCurrentReferencePoint().getGeoPoint());
 		}
 	}
 
@@ -123,35 +145,34 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 				mapView.getMapCenter(), mapView.getLatitudeSpan(),
 				mapView.getLongitudeSpan());
 		double[] d = GeoPointUtil.convertAreaToDoubles(p[0], p[1]);
-		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2], d[3]);
+		GeoLocationsRetrieve gr = new GeoLocationsRetrieve(d[0], d[1], d[2],
+				d[3]);
 		gr.addOperationListener(this);
 		new NetworkTask<List<GeoLocation>>().execute(gr);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
-		locationManager.removeUpdates(DataProvider.getDataProvider(getApplicationContext()));
+
+		locationManager.removeUpdates(DataProvider
+				.getDataProvider(getApplicationContext()));
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		/*
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				30,
-				50,
-				DataProvider.getDataProvider(getApplicationContext())); */
+		refPointMarker.clear();
+		addReferenceOverlay();
 	}
 
 	public void operationExcecuted(
 			final OperationResult<List<GeoLocation>> result) {
 		if (!result.hasErrors()) {
-					addMarkers(result.getResult());
+			addMarkers(result.getResult());
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuHandler.inflate(menu, this.getMenuInflater());
