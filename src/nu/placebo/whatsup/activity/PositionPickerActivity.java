@@ -45,16 +45,15 @@ public class PositionPickerActivity extends MapActivity implements
 		setContentView(R.layout.position_picker_view);
 
 		this.requestCode = this.getIntent().getExtras().getInt("requestCode");
-		existingNames = Arrays.asList(getIntent().getExtras().getStringArray("existing_names"));
+		
 		TextView typeText = (TextView) this.findViewById(R.id.activity_name);
 		EditText refName = (EditText) this.findViewById(R.id.position_name);
 
 		if (this.requestCode == Constants.ANNOTATION) {
 			refName.setVisibility(View.GONE);
 			typeText.setText("New Annotation");
-
 		} else if (this.requestCode == Constants.REFERENCE_POINT) {
-
+			existingNames = Arrays.asList(getIntent().getExtras().getStringArray("existing_names"));
 			refName.setVisibility(View.VISIBLE);
 			typeText.setText("New Reference Point");
 
