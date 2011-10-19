@@ -202,7 +202,7 @@ public class DatabaseConnectionLayer {
 						new GeoPoint(
 								c.getInt(c.getColumnIndex("latitude")),
 								c.getInt(c.getColumnIndex("longitude"))), 
-			c.getString(c.getColumnIndex("name")));
+			(id < 0 ? "My location" : c.getString(c.getColumnIndex("name"))));
 		c.close();
 		return result;
 	}

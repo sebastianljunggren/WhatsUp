@@ -126,11 +126,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 						.findViewById(R.id.ref_item_title);
 
 				if (t_title != null) {
-					if(gl.getName().equals("physical_position")) {
-						t_title.setText("My location");
-					} else {
-						t_title.setText(gl.getName());
-					}
+					t_title.setText(gl.getName());
 				}
 				ImageView iv = (ImageView) v.findViewById(R.id.current_image);
 				if (gl.getId() == currentRefId) {
