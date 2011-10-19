@@ -294,7 +294,7 @@ public class DataProvider implements NetworkOperationListener<Annotation>, Locat
 	public void onLocationChanged(Location location) {
 		DatabaseConnectionLayer.updateCurrentLocation(
 				new GeoPoint((int)location.getLatitude(), (int)location.getLongitude()));
-;	}
+	}
 	public void onProviderDisabled(String provider) {}
 	public void onProviderEnabled(String provider) {}
 	public void onStatusChanged(String provider, int status, Bundle extras) {}

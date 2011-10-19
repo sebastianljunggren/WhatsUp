@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.model.Comment;
+import nu.placebo.whatsup.model.SessionInfo;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -13,13 +17,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
-
-import com.google.android.maps.GeoPoint;
-
-import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.model.Annotation;
-import nu.placebo.whatsup.model.Comment;
-import nu.placebo.whatsup.model.SessionInfo;
 
 public class CommentCreate extends AbstractNetworkOperation<Comment> {
 	

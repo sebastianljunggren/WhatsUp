@@ -37,7 +37,7 @@ public class CreateCommentActivity extends Activity implements OnClickListener,
 					.findViewById(R.id.create_commit_desc);
 			TextView title = (TextView) this
 					.findViewById(R.id.create_comment_title);
-			if (text.toString() != "" && title.toString() != "") {
+			if (!text.toString().equals("") && !title.toString().equals("")) {
 				
 				DataProvider.getDataProvider(getApplicationContext()).
 				createComment( id,

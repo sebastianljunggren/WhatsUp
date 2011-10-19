@@ -11,7 +11,6 @@ import nu.placebo.whatsup.network.OperationResult;
 import nu.placebo.whatsup.util.GeoPointUtil;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

@@ -37,12 +37,6 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 
 		refs = DataProvider.getDataProvider(this).getAllReferencePoints();
 
-		String values = "";
-		for (ReferencePoint rp : refs) {
-			values += rp.getName() + " " + rp.getGeoPoint() + " " + rp.getId();
-		}
-
-		Log.i("Value of refs:", values);
 		this.adapter = new MarkerAdapter(this, R.layout.ref_item,
 				new ArrayList<ReferencePoint>());
 		this.setListAdapter(adapter);
@@ -131,8 +125,13 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 				TextView t_title = (TextView) v
 						.findViewById(R.id.ref_item_title);
 
-				if (t_title != null)
-					t_title.setText(gl.getName());
+				if (t_title != null) {
+					if(gl.getName().equals("physical_position")) {
+						t_title.setText("My location");
+					} else {
+						t_title.setText(gl.getName());
+					}
+				}
 				ImageView iv = (ImageView) v.findViewById(R.id.current_image);
 				if (gl.getId() == currentRefId) {
 					iv.setVisibility(View.VISIBLE);
@@ -166,9 +165,7 @@ public class RefPointActivity extends ListActivity implements OnClickListener {
 						(Integer) v.getTag(R.id.ref_id));
 				ctx.finish();
 			}
-
 		}
-
 	}
 
 	@Override

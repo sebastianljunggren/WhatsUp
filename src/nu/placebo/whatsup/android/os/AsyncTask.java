@@ -112,7 +112,7 @@ public abstract class AsyncTask<Params, Result> {
 				Result result = null;
 
 				try {
-					result = get();
+					result = super.get();
 				} catch (InterruptedException e) {
 					android.util.Log.w(LOG_TAG, e);
 				} catch (ExecutionException e) {

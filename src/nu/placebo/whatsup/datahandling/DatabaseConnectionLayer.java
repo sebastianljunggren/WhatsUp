@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.android.maps.GeoPoint;
-
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
@@ -13,7 +11,8 @@ import nu.placebo.whatsup.model.ReferencePoint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
+import com.google.android.maps.GeoPoint;
 
 /**
  * Handles connection with the database.

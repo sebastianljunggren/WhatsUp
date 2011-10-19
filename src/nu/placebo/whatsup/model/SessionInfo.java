@@ -21,9 +21,17 @@ public class SessionInfo {
 		return this.sessionId;
 	}
 
-	public boolean equals(SessionInfo si) {
-		return this.getSessionId() == si.getSessionId()
-				&& this.getSessionName() == si.getSessionName();
-
+	public boolean equals(Object o) {
+		if (o instanceof SessionInfo) {
+			SessionInfo si = (SessionInfo) o;
+			return this.getSessionId().equals(si.getSessionId())
+					&& this.getSessionName().equals(si.getSessionName());
+		} else {
+			return false;
+		}
+	}
+	
+	public int hashCode() {
+		return sessionId.hashCode() + sessionName.hashCode();
 	}
 }

@@ -162,6 +162,11 @@ public class MapViewActivity extends MapActivity implements OnClickListener,
 		super.onResume();
 		refPointMarker.clear();
 		addReferenceOverlay();
+
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				30,
+				50,
+				DataProvider.getDataProvider(getApplicationContext()));
 	}
 
 	public void operationExcecuted(
