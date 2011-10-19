@@ -96,7 +96,7 @@ public class PositionPickerActivity extends MapActivity implements
 						.findViewById(R.id.position_name)).getText().toString();
 				if (existingNames.contains(refName)) {
 					Toast.makeText(getApplicationContext(), "Name already exists",
-															 Toast.LENGTH_SHORT);
+															 Toast.LENGTH_SHORT).show();
 				} else if(!refName.equals("")) {
 					DataProvider.getDataProvider(this).addReferencePoint(p,
 							refName);
