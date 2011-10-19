@@ -57,11 +57,15 @@ public class CreateAnnotationActivity extends Activity implements
 
 			String title = titleField.getText().toString();
 			String desc = descField.getText().toString();
-			SessionInfo sInfo = SessionHandler.getInstance(this).getSession();
-			String author = SessionHandler.getInstance(this).getUserName();
+			if(!title.equals("") && title != null){
+				SessionInfo sInfo = SessionHandler.getInstance(this).getSession();
+				String author = SessionHandler.getInstance(this).getUserName();
 
-			DataProvider.getDataProvider(getApplicationContext())
+				DataProvider.getDataProvider(getApplicationContext())
 					.createAnnotation(title, desc, author, gp, sInfo, this);
+			} else {
+				Toast.makeText(this, "Please write something in the title field", Toast.LENGTH_LONG).show();
+			}
 		}
 
 	}
