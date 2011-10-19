@@ -6,10 +6,10 @@ import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.datahandling.DataProvider;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ListMarker;
-import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.ReferencePoint;
 import nu.placebo.whatsup.network.GeoLocationsRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;

@@ -5,8 +5,8 @@ import java.util.List;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.datahandling.DataProvider;
-import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.model.ReferencePoint;
 import android.app.Activity;
 import android.app.ListActivity;

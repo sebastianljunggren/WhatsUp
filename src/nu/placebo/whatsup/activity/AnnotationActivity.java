@@ -1,8 +1,8 @@
 package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
+import nu.placebo.whatsup.ctrl.MenuHandler;
 import nu.placebo.whatsup.model.Annotation;
-import nu.placebo.whatsup.model.MenuHandler;
 import nu.placebo.whatsup.network.AnnotationRetrieve;
 import nu.placebo.whatsup.network.NetworkOperationListener;
 import nu.placebo.whatsup.network.NetworkTask;

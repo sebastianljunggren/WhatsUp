@@ -2,7 +2,7 @@ package nu.placebo.whatsup.activity;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.constants.Constants;
-import nu.placebo.whatsup.model.SessionHandler;
+import nu.placebo.whatsup.ctrl.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;

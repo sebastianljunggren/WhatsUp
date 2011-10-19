@@ -1,4 +1,4 @@
-package nu.placebo.whatsup.model;
+package nu.placebo.whatsup.ctrl;
 
 import nu.placebo.whatsup.R;
 import nu.placebo.whatsup.activity.LoginRegTabActivity;

@@ -3,11 +3,11 @@ package nu.placebo.whatsup.datahandling;
 import java.util.ArrayList;
 import java.util.List;
 
+import nu.placebo.whatsup.ctrl.SessionHandler;
 import nu.placebo.whatsup.model.Annotation;
 import nu.placebo.whatsup.model.Comment;
 import nu.placebo.whatsup.model.GeoLocation;
 import nu.placebo.whatsup.model.ReferencePoint;
-import nu.placebo.whatsup.model.SessionHandler;
 import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.AnnotationCreate;
 import nu.placebo.whatsup.network.AnnotationRetrieve;

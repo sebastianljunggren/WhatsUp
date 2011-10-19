@@ -1,8 +1,9 @@
-package nu.placebo.whatsup.model;
+package nu.placebo.whatsup.ctrl;
 
 import java.util.Observable;
 
 import nu.placebo.whatsup.constants.Constants;
+import nu.placebo.whatsup.model.SessionInfo;
 import nu.placebo.whatsup.network.Action;
 import nu.placebo.whatsup.network.Login;
 import nu.placebo.whatsup.network.NetworkOperationListener;
