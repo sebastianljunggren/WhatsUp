@@ -20,3 +20,5 @@ Connect to the Issue queue with Eclipse using Mylyn
 - Add a new repository with of the type _GitHub Issues_. Enter the repository details and your GitHub credentials.
 - Make sure _Focus on workweek_ is not ticked in the _Task List_.
  Optionally setup a few filters to show open and close issues and issues assigned to you. To do this the _Task Repositories_ view needs to be visible.
+
+ This project is no longer maintained, as it was a school project in a "proof of concept" manner
